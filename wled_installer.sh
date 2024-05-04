@@ -9,10 +9,10 @@ for cmd in grep sed awk; do
 done
 
 # Directory for G-code macro files
-gcode_dir="/path/to/gcode"
+gcode_dir="/usr/data/printer_data/config"
 
 # List of macros to search for
-macros="Start_print End_print Cancel Pause Resume"
+macros="START_PRINT END_PRINT CANCEL PAUSE RESUME"
 
 # Temporary file for storing findings
 temp_file="found_macros.txt"
