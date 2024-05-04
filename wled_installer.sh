@@ -38,24 +38,26 @@ fi
 echo "==========================="
 echo "    Review Found Macros    "
 echo "==========================="
+temp_confirmed="temp_confirmed.txt"
+echo "" > "$temp_confirmed" # Clear the contents initially
 while IFS= read -r line; do
     set -- $line
     file=$1
     line_number=$2
-    content=$3
+    content="$3"
     echo "--------------------------------"
     echo "Found: '$content'"
     echo "Location: $file at line $line_number"
     echo "--------------------------------"
     echo "Confirm this is correct (y/n): "
     read confirm
-    if [ "$confirm" != "y" ]; then
-        sed -i "/$line/d" "$temp_file" # Remove unconfirmed entries from the temp file
+    if [ "$confirm" = "y" ]; then
+        echo "$line" >> "$temp_confirmed"
     fi
 done < "$temp_file"
 
 # Check if there are confirmed macros to modify
-if [ ! -s "$temp_file" ]; then
+if [ ! -s "$temp_confirmed" ]; then
     echo "No macros confirmed for modification."
     exit 1
 fi
@@ -63,7 +65,8 @@ fi
 echo "==========================="
 echo "   Confirmed Macros to Modify  "
 echo "==========================="
-cat "$temp_file"
+cat "$temp_confirmed"
 
 # Cleanup
 rm "$temp_file"
+rm "$temp_confirmed"
