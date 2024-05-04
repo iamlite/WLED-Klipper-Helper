@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Check for necessary commands
 commands=("grep" "sed" "awk")

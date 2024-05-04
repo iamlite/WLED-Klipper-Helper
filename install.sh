@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Variables
 SCRIPT_NAME="wled_installer.sh"
