@@ -3,7 +3,7 @@
 # Variables
 SCRIPT_NAME="wled_installer.sh"
 REPO_URL="https://github.com/iamlite/klipperwled/blob/main"
-INSTALL_DIR="/usr/data" # e.g., /usr/local/bin
+INSTALL_DIR="/usr/data/klipperwled" # e.g., /usr/local/bin
 
 # Download the script
 curl -s "$REPO_URL/$SCRIPT_NAME" -o "$INSTALL_DIR/$SCRIPT_NAME"
