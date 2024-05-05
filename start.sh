@@ -18,12 +18,12 @@ chmod +x "$INSTALL_DIR/$SCRIPT_NAME"
 echo "Installation complete. Script installed at: $INSTALL_DIR/$SCRIPT_NAME"
 
 # Ask user if they want to run the script
-echo "Do you want to run the script now? (yes/no)"
+echo "Do you want to run the script now? (y/n)"
 read answer
 
 # Check user's response
-if [ "$answer" = "yes" ]; then
-    echo "Running Script now: $INSTALL_DIR/$SCRIPT_NAME"
+if [ "$answer" = "y" ]; then
+    echo "Running The Script now: $INSTALL_DIR/$SCRIPT_NAME"
     # Run the script
     "$INSTALL_DIR/$SCRIPT_NAME"
 else
