@@ -15,7 +15,17 @@ curl -s "$REPO_URL/$SCRIPT_NAME" -o "$INSTALL_DIR/$SCRIPT_NAME"
 chmod +x "$INSTALL_DIR/$SCRIPT_NAME"
 
 # Feedback to user
-echo "Installation complete. Running Script now: $INSTALL_DIR/$SCRIPT_NAME"
+echo "Installation complete. Script installed at: $INSTALL_DIR/$SCRIPT_NAME"
 
-# Run the script
-"$INSTALL_DIR/$SCRIPT_NAME"
+# Ask user if they want to run the script
+echo "Do you want to run the script now? (yes/no)"
+read answer
+
+# Check user's response
+if [ "$answer" = "yes" ]; then
+    echo "Running Script now: $INSTALL_DIR/$SCRIPT_NAME"
+    # Run the script
+    "$INSTALL_DIR/$SCRIPT_NAME"
+else
+    echo "Script installation complete. You can run the script later by executing: $INSTALL_DIR/$SCRIPT_NAME"
+fi
