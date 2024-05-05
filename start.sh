@@ -15,4 +15,7 @@ curl -s "$REPO_URL/$SCRIPT_NAME" -o "$INSTALL_DIR/$SCRIPT_NAME"
 chmod +x "$INSTALL_DIR/$SCRIPT_NAME"
 
 # Feedback to user
-echo "Installation complete. You can run the script with: $INSTALL_DIR/$SCRIPT_NAME"
+echo "Installation complete. Running Script now: $INSTALL_DIR/$SCRIPT_NAME"
+
+# Run the script
+"$INSTALL_DIR/$SCRIPT_NAME"
