@@ -2,12 +2,7 @@
 
 # ASCII Art and Colors
 echo "\033[1;34m"
-echo "     __          __        _     _ _             _    _ _____ _     _ "
-echo "     \ \        / /       | |   | | |           | |  | |_   _| |   | |"
-echo "      \ \  /\  / /__  _ __| | __| | | ___  _   _| |  | | | | | |   | |"
-echo "       \ \/  \/ / _ \| '__| |/ _\` | |/ _ \| | | | |/\| | | | | |   | |"
-echo "        \  /\  / (_) | |  | | (_| | | (_) | |_| \  /\  /_| |_| |___| |___"
-echo "         \/  \/ \___/|_|  |_|\__,_|_|\___/ \__,_|\/  \/|_____|_____|_____|"
+echo "WLED Klipper Helper Installation"
 echo "\033[0m"
 
 # Define the installation directory and repository URL
