@@ -36,7 +36,7 @@ confirm_proceed() {
     printf "${GREEN}Proceed? (y/n): ${NC}"
     read yn
     if [ "$yn" = "y" ] || [ "$yn" = "Y" ]; then
-        sh "./Scripts/$3"
+        sh "$3"  # Use just the script name, assuming it's in the same directory
     else
         printf "${RED}Action cancelled by the user.${NC}\n"
     fi
