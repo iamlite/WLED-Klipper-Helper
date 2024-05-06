@@ -17,7 +17,9 @@ print_line() {
 show_menu() {
     clear
     print_line
+    printf ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     printf "${GREEN}%s\n" "WLED Klipper Setup Helper"
+    printf ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     print_line
     printf "${YELLOW}%s\n" "1. Setup WLED"
     printf "${YELLOW}%s\n" "2. Setup WLED Presets"
@@ -25,7 +27,10 @@ show_menu() {
     printf "${YELLOW}%s\n" "4. View and Edit Preset Numbers"
     printf "${YELLOW}%s\n" "5. Quit"
     print_line
+    print_line
+    printf ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     printf "${MAGENTA}Please enter your choice: ${NC}"
+    printf ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 }
 
 # Function to display a confirmation before proceeding
