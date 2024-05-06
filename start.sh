@@ -1,31 +1,28 @@
 #!/bin/sh
 
-# Variables
-SCRIPT_NAME="wled_installer.sh"
-REPO_URL="https://raw.githubusercontent.com/iamlite/WLED-Klipper-Helper/main"
-INSTALL_DIR="/usr/data/WLED-Klipper-Helper" # e.g., /usr/local/bin
+# Define the installation directory and repository URL
+INSTALL_DIR="/usr/data/WLED-Klipper-Helper"
+REPO_URL="https://github.com/iamlite/WLED-Klipper-Helper.git"
 
-# Create the installation directory if it doesn't exist
-mkdir -p "$INSTALL_DIR"
-
-# Download the script
-curl -s "$REPO_URL/$SCRIPT_NAME" -o "$INSTALL_DIR/$SCRIPT_NAME"
-
-# Make the script executable
-chmod +x "$INSTALL_DIR/$SCRIPT_NAME"
-
-# Feedback to user
-echo "Installation complete. Script installed at: $INSTALL_DIR/$SCRIPT_NAME"
-
-# Ask user if they want to run the script
-echo "Do you want to run the script now? (y/n)"
-read answer
-
-# Check user's response
-if [ "$answer" = "y" ]; then
-    echo "Running The Script now: $INSTALL_DIR/$SCRIPT_NAME"
-    # Run the script
-    "$INSTALL_DIR/$SCRIPT_NAME"
-else
-    echo "Script installation complete. You can run the script later by executing: $INSTALL_DIR/$SCRIPT_NAME"
+# Ensure the script is run as root
+if [ "$(id -u)" -ne 0 ]; then
+    echo "This script must be run as root."
+    exit 1
 fi
+
+# Clone the repository
+if [ -d "$INSTALL_DIR" ]; then
+    echo "The directory $INSTALL_DIR already exists. Removing..."
+    rm -rf "$INSTALL_DIR"
+fi
+echo "Cloning repository to $INSTALL_DIR..."
+git clone "$REPO_URL" "$INSTALL_DIR"
+echo "Repository cloned."
+
+# Set permissions for all scripts
+echo "Setting executable permissions on scripts..."
+find "$INSTALL_DIR" -type f -name "*.sh" -exec chmod +x {} \;
+
+# Output instruction for starting the menu
+echo "Setup complete. To run the main menu, execute:"
+echo "$INSTALL_DIR/Scripts/Menu/menu.sh"

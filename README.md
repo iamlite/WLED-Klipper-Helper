@@ -11,3 +11,4 @@ chmod +x start.sh
 
 ./start.sh
 
+sudo sh -c "$(curl -fsSL https://raw.githubusercontent.com/iamlite/WLED-Klipper-Helper/main/start.sh)"
