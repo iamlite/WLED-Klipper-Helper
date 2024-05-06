@@ -1,13 +1,10 @@
 # klipperwled
 
-curl -s https://raw.githubusercontent.com/iamlite/klipperwled/main/start.sh | sh
-
-curl -s -o start.sh https://raw.githubusercontent.com/iamlite/klipperwled/main/start.sh
+curl -s -o start.sh https://raw.github.com/iamlite/WLED-Klipper-Helper/main/start.sh
 
 chmod +x start.sh
 
 ./start.sh
-
 
 /wled_klipper_helper
 │
