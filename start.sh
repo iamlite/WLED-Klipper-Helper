@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# ASCII Art and Colors
+# Title
 echo "\033[1;34m"
 echo "WLED Klipper Helper Installation"
 echo "\033[0m"
