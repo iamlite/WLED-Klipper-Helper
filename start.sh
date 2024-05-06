@@ -2,8 +2,8 @@
 
 # Variables
 SCRIPT_NAME="wled_installer.sh"
-REPO_URL="https://raw.githubusercontent.com/iamlite/klipperwled/main"
-INSTALL_DIR="/usr/data/klipperwled" # e.g., /usr/local/bin
+REPO_URL="https://raw.githubusercontent.com/iamlite/WLED-Klipper-Helper/main"
+INSTALL_DIR="/usr/data/WLED-Klipper-Helper" # e.g., /usr/local/bin
 
 # Create the installation directory if it doesn't exist
 mkdir -p "$INSTALL_DIR"

@@ -8,7 +8,7 @@ fi
 
 # Fixed directory and list of macros
 search_dir="/usr/data/printer_data/config"
-base_dir="/usr/data/klipperwled"
+base_dir="/usr/data/WLED-Klipper-Helper"
 macros="START_PRINT END_PRINT PAUSE CANCEL RESUME"
 
 # Max number of rejections allowed

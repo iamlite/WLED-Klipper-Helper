@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Config file path
-config_file="/usr/data/klipperwled/config/presets.conf"
+config_file="/usr/data/WLED-Klipper-Helper/config/presets.conf"
 
 # Function to display the stored presets with options A, B, C, etc.
 show_presets() {

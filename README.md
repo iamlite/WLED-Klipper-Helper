@@ -1,4 +1,8 @@
-# klipperwled
+# WLED-Klipper-Helper
+
+A helper script for installing and configuring WLED with Klipper.
+This script will automatically add triggers to your macros to control WLED's behavior based on your printers status. 
+
 
 curl -s -o start.sh https://raw.github.com/iamlite/WLED-Klipper-Helper/main/start.sh
 
@@ -6,6 +10,7 @@ chmod +x start.sh
 
 ./start.sh
 
+```
 /wled_klipper_helper
 │
 ├── main.sh               # Main menu script
@@ -16,3 +21,4 @@ chmod +x start.sh
 └── config                # Directory for configuration files and logs
     ├── presets.conf      # Stores user-defined preset numbers
     └── wled_config.conf  # Stores configuration details entered by the user
+```
