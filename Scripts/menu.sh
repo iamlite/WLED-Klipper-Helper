@@ -9,6 +9,8 @@ MAGENTA='\033[0;35m'
 CYAN='\033[0;36m'
 NC='\033[0m' # No Color
 
+SCRIPT_DIR="$(dirname "$(realpath "$0")")"  # Determines the absolute path of the directory of this script
+
 print_line() {
     printf "${CYAN}%*s\n" 80 | tr ' ' -
 }
@@ -16,6 +18,9 @@ print_line() {
 # Function to display the main menu
 show_menu() {
     clear
+    echo "Current directory: $(pwd)"
+    echo "Listing files in the current directory:"
+    ls -l
     print_line
     printf "${GREEN}%s\n" "WLED Klipper Setup Helper"
     print_line
@@ -36,7 +41,7 @@ confirm_proceed() {
     printf "${GREEN}Proceed? (y/n): ${NC}"
     read yn
     if [ "$yn" = "y" ] || [ "$yn" = "Y" ]; then
-        sh "$3"  # Use just the script name, assuming it's in the same directory
+        sh "${SCRIPT_DIR}/$3"  # Execute the script using its absolute path
     else
         printf "${RED}Action cancelled by the user.${NC}\n"
     fi
