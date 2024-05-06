@@ -6,9 +6,12 @@ REPO_URL="https://github.com/iamlite/WLED-Klipper-Helper.git"
 
 # Ensure the script is run as root
 if [ "$(id -u)" -ne 0 ]; then
-    echo "This script must be run as root."
+    echo "Error: This script must be run as root."
     exit 1
 fi
+
+# Echo commands as they are executed, and exit immediately on error
+set -ex
 
 # Clone the repository
 if [ -d "$INSTALL_DIR" ]; then
