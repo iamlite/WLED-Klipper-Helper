@@ -12,6 +12,11 @@ print_line() {
     echo -e "${CYAN}+--------------------------------------------------------------------------------+${NC}"
 }
 
+# Function to print a blank line with border for spacing
+print_spacer() {
+    echo -e "${CYAN}|${NC}                                                                                ${CYAN}|${NC}"
+}
+
 # Function to print centered text within the ASCII border, preserving color
 print_centered() {
     local message=$1
@@ -26,21 +31,21 @@ print_centered() {
 show_menu() {
     clear
     print_line
-    echo -e "${CYAN}|${NC}${CYAN}|${NC}" # Blank line for spacing
+    print_spacer # Blank line for spacing
     print_centered "WLED Klipper Setup Helper" "$GREEN"
-    echo -e "${CYAN}|${NC}" # Blank line for spacing
+    print_spacer # Blank line for spacing
     print_line
-    echo -e "${CYAN}|${NC}" # Blank line for spacing
+    print_spacer # Blank line for spacing
     print_centered "1. Setup WLED" "$YELLOW"
-    echo -e "${CYAN}|${NC}" # Blank line for spacing
+    print_spacer # Blank line for spacing
     print_centered "2. Setup WLED Presets" "$YELLOW"
-    echo -e "${CYAN}|${NC}" # Blank line for spacing
+    print_spacer # Blank line for spacing
     print_centered "3. Add Macros" "$YELLOW"
-    echo -e "${CYAN}|${NC}" # Blank line for spacing
+    print_spacer # Blank line for spacing
     print_centered "4. View and Edit Preset Numbers" "$YELLOW"
-    echo -e "${CYAN}|${NC}" # Blank line for spacing
+    print_spacer # Blank line for spacing
     print_centered "5. Quit" "$YELLOW"
-    echo -e "${CYAN}|${NC}" # Blank line for spacing
+    print_spacer # Blank line for spacing
     print_line
     echo -e "${MAGENTA}Please enter your choice: ${NC}"
 }
