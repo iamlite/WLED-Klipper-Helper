@@ -40,7 +40,7 @@ show_menu() {
     print_spacer
     print_menu_item "1. Setup WLED" "$YELLOW"
     print_spacer
-    print_menu_item "2. Setup WLED Presets" "$YELLOW"
+    print_menu_item "2. Assign WLED Presets" "$YELLOW"
     print_spacer
     print_menu_item "3. Add Macros" "$YELLOW"
     print_spacer
@@ -74,7 +74,7 @@ while true; do
     read choice
     case "$choice" in
         1) confirm_proceed "Setup WLED" "This will configure your WLED instance with moonraker. It will add your WLED instance to moonraker.conf." "setup_wled.sh" ;;
-        2) confirm_proceed "Setup WLED Presets" "This will help you create and configure presets in your WLED setup for various printer events like pause, cancel, or resume." "setup_presets.sh" ;;
+        2) confirm_proceed "Assign WLED Presets" "This will help you create and configure presets in your WLED setup for various printer events like pause, cancel, or resume." "assign_presets.sh" ;;
         3) confirm_proceed "Add Macros" "This allows you to add macros to your WLED instance to control WLED's behavior based on your printers status." "add_macros.sh" ;;
         4) confirm_proceed "View & Edit Preset Numbers" "This allows you to view and modify the preset numbers assigned to different printer states." "view_edit_presets.sh" ;;
         5) printf "${BLUE}Exiting...${NC}\n"; break ;;

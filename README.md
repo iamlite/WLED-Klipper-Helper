@@ -13,7 +13,7 @@ curl -sSL "https://raw.githubusercontent.com/iamlite/WLED-Klipper-Helper/main/st
   ├─ Scripts/
   │  ├─ menu.sh
   │  ├─ macro_search.sh
-  │  ├─ setup_presets.sh
+  │  ├─ assign_presets.sh
   │  ├─ setup_wled.sh
   │  └─ view_edit_presets.sh
   ├─ .gitignore
