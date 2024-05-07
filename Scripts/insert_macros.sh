@@ -50,18 +50,24 @@ insert_wled_update() {
 
     echo "Attempting to update file: $file in macro starting at line $start_line"
     if [ "$match_pattern" = "end_macro" ]; then
-        # Special handling to place text at the end of the macro
-        awk -v line_num="$start_line" -v text="$insert_text" 'BEGIN {p=0}
+        # Handle insertion at the end of the macro
+        awk -v line_num="$start_line" -v text="$insert_text" 'BEGIN {p=0; inserted=0}
             NR == line_num {p=1}  # Start processing at the macro title
-            p && /^\s*$/ && !f {print text; f=1}  # Insert at the first empty line after content starts
+            p && (/^\s*$/ || /^$/ || /^\[gcode_macro/) && !inserted {
+                print text; inserted=1; next
+            }
             {print}
         ' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
     else
-        awk -v line_num="$start_line" -v line="$match_pattern" -v text="$insert_text" 'BEGIN {p=0}
+        # Insert after the specified pattern, avoiding duplicates
+        awk -v line_num="$start_line" -v line="$match_pattern" -v text="$insert_text" 'BEGIN {p=0; f=0}
             NR == line_num {p=1}  # Start processing at the macro title
-            p && /'"$match_pattern"'/ && !f {print $0 "\n" text; f=1; next}  # Insert after the specified pattern
+            p && /'"$match_pattern"'/ && !f {if (!seen[text]++) print $0 "\n" text; f=1; next}
             {print}
         ' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
+        if [ $(seen[text]) -gt 0 ]; then
+            echo "Skipping insertion as it already exists."
+        fi
     fi
 }
 
