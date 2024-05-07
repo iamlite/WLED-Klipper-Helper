@@ -9,9 +9,13 @@ BLUE='\033[0;34m'
 RED='\033[0;31m'
 NC='\033[0m' # No Color
 
+SCRIPT_DIR="$(dirname "$(realpath "$0")")"  # Determines the absolute path of the directory of this script
+
 # Function to print a horizontal line separator
 print_separator() {
-    printf "${CYAN}================================================================================${NC}\n"
+    local separator_length=$(tput cols)
+    local separator_char="="
+    printf "${CYAN}%s${NC}\n" "$(printf "%${separator_length}s" | tr ' ' "$separator_char")"
 }
 
 # Function to print menu items with a double border on the left
