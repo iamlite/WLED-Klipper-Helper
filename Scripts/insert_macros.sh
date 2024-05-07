@@ -46,15 +46,18 @@ insert_wled_update() {
     local match_pattern="$4"
 
     local preset_value=$(apply_preset "$preset_key")
-    local insert_text="UPDATE_WLED PRESET=$preset_value"
+    local insert_text="\tUPDATE_WLED PRESET=$preset_value" # Tab added for indentation
 
     echo "Attempting to update file: $file"
     if [ "$position" = "start" ]; then
-        sed -i "1i $insert_text" "$file" && echo "Inserted at start: $insert_text"
+        # Insert after macro definition start (after "gcode:")
+        sed -i "/$match_pattern/a $insert_text" "$file" && echo "Inserted after $match_pattern: $insert_text"
     elif [ "$position" = "after" ] && [ -n "$match_pattern" ]; then
+        # Insert immediately after the specific pattern
         sed -i "/$match_pattern/a $insert_text" "$file" && echo "Inserted after $match_pattern: $insert_text"
     elif [ "$position" = "end" ]; then
-        echo "$insert_text" >> "$file" && echo "Inserted at end: $insert_text"
+        # Insert before the end of macro (before next macro definition or file end)
+        sed -i "/\[gcode_macro/!b;n;/\[gcode_macro\|$/i $insert_text" "$file" && echo "Inserted at end of macro: $insert_text"
     fi
 }
 
@@ -64,8 +67,8 @@ while IFS=':' read -r file line_number content; do
     echo "Processing macro: $macro_name in file $file"
     case "$macro_name" in
         "START_PRINT")
-            insert_wled_update "$file" "Heating" "after" "CLEAR_PAUSE"
-            insert_wled_update "$file" "Printing" "end"
+            insert_wled_update "$file" "Heating" "start" "gcode:"
+            insert_wled_update "$file" "Printing" "end" 
             ;;
         "PAUSE")
             insert_wled_update "$file" "Pause" "start"
