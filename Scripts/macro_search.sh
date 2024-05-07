@@ -13,12 +13,15 @@ if [ "$(id -u)" != "0" ]; then
     exit 1
 fi
 
+printf "${GREEN}Running as user ID: $(id -u)${NC}\n"
+
 # Directory for configuration and macros
 search_dir="/usr/data/printer_data/config"
 base_dir="/WLED-Klipper-Helper/Config"
 
 # Create the directory if it does not exist
 mkdir -p "$base_dir"
+printf "${GREEN}Ensured directory exists: $base_dir${NC}\n"
 
 # List of macros
 macros="START_PRINT END_PRINT PAUSE CANCEL RESUME"
@@ -36,9 +39,11 @@ fi
 # Temporary file for storing findings and a file to store confirmed macros
 temp_file=$(mktemp)
 confirmed_macros_file="$base_dir/confirmed_macros.txt"
+printf "${GREEN}Temporary file for findings: $temp_file${NC}\n"
 
 # Initialize or clear the confirmed macros file
 echo "" > "$confirmed_macros_file"
+printf "${GREEN}Initialized confirmed macros file: $confirmed_macros_file${NC}\n"
 
 # Process each macro one by one
 for macro in $macros; do
