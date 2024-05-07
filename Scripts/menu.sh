@@ -12,27 +12,33 @@ print_line() {
     echo -e "${CYAN}+--------------------------------------------------------------------------------+${NC}"
 }
 
-# Function to print centered text within the ASCII border
+# Function to print centered text within the ASCII border, preserving color
 print_centered() {
-    printf "${CYAN}|${NC}"
-    printf "%*s" $(( (${#1} + 80) / 2 )) "$1"
-    printf "%*s\n" $(( 80 - (${#1} + 80) / 2 )) "${CYAN}|${NC}"
+    local message=$1
+    local color=$2
+    printf "${CYAN}|"
+    # Calculate the padding needed to center the text
+    printf "${color}%*s" $(( (${#message} + 80) / 2 )) "$message"
+    printf "%*s${NC}\n" $(( 80 - (${#message} + 80) / 2 )) "|"
 }
 
 # Function to display the main menu
 show_menu() {
     clear
     print_line
-    print_centered "${GREEN}WLED Klipper Setup Helper${NC}"
+    print_centered "WLED Klipper Setup Helper" "$GREEN"
     print_line
-    print_centered "${YELLOW}1. Setup WLED${NC}"
-    print_centered "${YELLOW}2. Setup WLED Presets${NC}"
-    print_centered "${YELLOW}3. Add Macros${NC}"
-    print_centered "${YELLOW}4. View and Edit Preset Numbers${NC}"
-    print_centered "${YELLOW}5. Quit${NC}"
+    print_centered "1. Setup WLED" "$YELLOW"
+    print_centered "2. Setup WLED Presets" "$YELLOW"
+    print_centered "3. Add Macros" "$YELLOW"
+    print_centered "4. View and Edit Preset Numbers" "$YELLOW"
+    print_centered "5. Quit" "$YELLOW"
     print_line
     echo -e "${MAGENTA}Please enter your choice: ${NC}"
 }
+
+# Show the menu
+show_menu
 
 # Show the menu
 show_menu
