@@ -9,66 +9,54 @@ BLUE='\033[0;34m'
 RED='\033[0;31m'
 NC='\033[0m' # No Color
 
-# Function to print an ASCII line border
-print_line() {
-    echo -e "${CYAN}+--------------------------------------------------------------------------------+${NC}"
+# Function to print a horizontal line separator
+print_separator() {
+    printf "${CYAN}================================================================================${NC}\n"
 }
 
-# Function to print a blank line with border for spacing
-print_spacer() {
-    echo -e "${CYAN}|${NC}                                                                                ${CYAN}|${NC}"
-}
-
-# Function to print centered text within the ASCII border, preserving color
-print_centered() {
-    local message=$1
+# Function to print menu items with a double border on the left
+print_menu_item() {
+    local item=$1
     local color=$2
-    printf "${CYAN}|${NC}"
-    # Calculate the padding needed to center the text
-    printf "${color}%*s" $(( (${#message} + 80) / 2 )) "$message"
-    printf "${NC}%*s${CYAN}|${NC}\n" $(( 80 - (${#message} + 80) / 2 )) ""
+    printf "${CYAN}||${NC} ${color}${item}${NC}\n"
 }
 
-# Function to display the main menu with spacing between options
+print_spacer() {
+    printf "${CYAN}||${NC}\n"
+}
+
+# Function to display the main menu with spacing
 show_menu() {
     clear
-    print_line
+    print_separator
+    print_menu_item "WLED Klipper Setup Helper" "$GREEN"
+    print_separator
     print_spacer
-    print_centered "WLED Klipper Setup Helper" "$GREEN"
+    print_menu_item "1. Setup WLED" "$YELLOW"
     print_spacer
-    print_line
+    print_menu_item "2. Setup WLED Presets" "$YELLOW"
     print_spacer
-    print_centered "1. Setup WLED" "$YELLOW"
+    print_menu_item "3. Add Macros" "$YELLOW"
     print_spacer
-    print_centered "2. Setup WLED Presets" "$YELLOW"
+    print_menu_item "4. View and Edit Preset Numbers" "$YELLOW"
     print_spacer
-    print_centered "3. Add Macros" "$YELLOW"
+    print_menu_item "5. Quit" "$YELLOW"
     print_spacer
-    print_centered "4. View and Edit Preset Numbers" "$YELLOW"
-    print_spacer
-    print_centered "5. Quit" "$YELLOW"
-    print_spacer
-    print_line
-    echo -e "${MAGENTA}Please enter your choice: ${NC}"
+    print_separator
+    printf "${CYAN}================================================================================${NC}\n"
+    printf "${MAGENTA}Please enter your choice: ${NC}"
 }
 
 # Confirmation before proceeding
 confirm_proceed() {
-    clear
-    print_line
-    print_spacer
-    print_centered "You chose to $1" "$BLUE"
-    print_spacer
-    print_centered "$2" "$MAGENTA"
-    print_spacer
-    print_line
-    echo -e "${GREEN}Proceed? (y/n): ${NC}"
+    printf "${BLUE}You chose to $1.${NC}\n"
+    printf "${MAGENTA}$2${NC}\n"
+    printf "${GREEN}Proceed? (y/n): ${NC}"
     read yn
     if [ "$yn" = "y" ] || [ "$yn" = "Y" ]; then
         sh "${SCRIPT_DIR}/$3"  # Execute the script using its absolute path
     else
-        echo -e "${RED}Action cancelled by the user.${NC}"
-        print_spacer
+        printf "${RED}Action cancelled by the user.${NC}\n"
     fi
 }
 
@@ -81,9 +69,9 @@ while true; do
         2) confirm_proceed "setup WLED Presets" "This will help you create and configure presets in your WLED setup for various printer events like pause, cancel, or resume." "setup_presets.sh" ;;
         3) confirm_proceed "add Macros" "This option allows you to search and add specific macros to your printer's configuration, enabling more sophisticated control over your printer's behaviors." "add_macros.sh" ;;
         4) confirm_proceed "view and edit preset numbers" "This allows you to view and modify the preset numbers assigned to different printer states, ensuring they match your current WLED setup." "view_edit_presets.sh" ;;
-        5) echo -e "${BLUE}Exiting...${NC}"; print_spacer; break ;;
-        *) echo -e "${RED}Invalid option, try again...${NC}"; print_spacer ;;
+        5) printf "${BLUE}Exiting...${NC}\n"; break ;;
+        *) printf "${RED}Invalid option, try again...${NC}\n" ;;
     esac
-    echo -e "${BLUE}Press enter to continue...${NC}"
+    printf "${BLUE}Press enter to continue...${NC}\n"
     read dummy
 done
