@@ -33,7 +33,9 @@ print_spacer() {
 show_menu() {
     clear
     print_separator
+    print_spacer
     print_menu_item "WLED Klipper Setup Helper" "$GREEN"
+    print_spacer
     print_separator
     print_spacer
     print_menu_item "1. Setup WLED" "$YELLOW"
@@ -47,13 +49,15 @@ show_menu() {
     print_menu_item "5. Quit" "$YELLOW"
     print_spacer
     print_separator
-    printf "${CYAN}================================================================================${NC}\n"
-    printf "${MAGENTA}Please enter your choice: ${NC}"
+    print_spacer
+    print_spacer
+    print_spacer
+    print_menu_item "${MAGENTA}Please enter your choice: ${NC}"
 }
 
 # Confirmation before proceeding
 confirm_proceed() {
-    printf "${BLUE}You chose to $1.${NC}\n"
+    printf "${BLUE}Selection: $1.${NC}\n"
     printf "${MAGENTA}$2${NC}\n"
     printf "${GREEN}Proceed? (y/n): ${NC}"
     read yn
@@ -69,10 +73,10 @@ while true; do
     show_menu
     read choice
     case "$choice" in
-        1) confirm_proceed "setup WLED" "This will configure your WLED instance including IP address, LED count, and initial presets. It's essential for integrating WLED with your Klipper printer." "setup_wled.sh" ;;
-        2) confirm_proceed "setup WLED Presets" "This will help you create and configure presets in your WLED setup for various printer events like pause, cancel, or resume." "setup_presets.sh" ;;
-        3) confirm_proceed "add Macros" "This option allows you to search and add specific macros to your printer's configuration, enabling more sophisticated control over your printer's behaviors." "add_macros.sh" ;;
-        4) confirm_proceed "view and edit preset numbers" "This allows you to view and modify the preset numbers assigned to different printer states, ensuring they match your current WLED setup." "view_edit_presets.sh" ;;
+        1) confirm_proceed "Setup WLED" "This will configure your WLED instance with moonraker. It will add your WLED instance to moonraker.conf." "setup_wled.sh" ;;
+        2) confirm_proceed "Setup WLED Presets" "This will help you create and configure presets in your WLED setup for various printer events like pause, cancel, or resume." "setup_presets.sh" ;;
+        3) confirm_proceed "Add Macros" "This allows you to add macros to your WLED instance to control WLED's behavior based on your printers status." "add_macros.sh" ;;
+        4) confirm_proceed "View & Edit Preset Numbers" "This allows you to view and modify the preset numbers assigned to different printer states." "view_edit_presets.sh" ;;
         5) printf "${BLUE}Exiting...${NC}\n"; break ;;
         *) printf "${RED}Invalid option, try again...${NC}\n" ;;
     esac
