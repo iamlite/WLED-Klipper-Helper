@@ -25,63 +25,44 @@ if [ ! -f "$CONFIRMED_MACROS_FILE" ] || [ ! -f "$PRESET_ASSIGNMENTS_FILE" ]; the
     exit 1
 fi
 
-# Function to read and apply presets from file
-apply_preset() {
-    local preset_key="$1"
-    local preset_value
-    while IFS=': ' read -r key value; do
-        if [ "$key" = "$preset_key" ]; then
-            preset_value="$value"
-            break
-        fi
-    done < "$PRESET_ASSIGNMENTS_FILE"
-    echo "$preset_value"
-}
-
-# Function to insert WLED update line into the macro file after the 'gcode:' line
+# Function to insert WLED update line into the macro file after 'gcode:'
 insert_wled_update() {
     local file="$1"
     local preset_key="$2"
-    local line_number="$3"
+    local match_pattern="$3"
+    local start_line="$4"  # This is the line number of the macro title
 
     local preset_value=$(apply_preset "$preset_key")
-    local insert_text="    UPDATE_WLED PRESET=$preset_value"  # 4 spaces for indentation
+    local insert_text="    UPDATE_WLED PRESET=$preset_value"  # Using spaces for indentation
 
-    echo "Attempting to update file: $file at line $line_number"
-    # Use awk to insert text after 'gcode:' within the macro, ensuring no duplicate lines
-    awk -v line_num="$line_number" -v text="$insert_text" -v patt="gcode:" '
-    NR==line_num {
-        print
-        getline
-        if ($0 !~ text) {
-            print text
-        }
-        print
-        next
-    }
-    1' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
+    echo "Attempting to update file: $file in macro starting at line $start_line"
+    awk -v line_num="$start_line" -v line="$match_pattern" -v text="$insert_text" 'BEGIN {p=0}
+        NR == line_num {p=1}  # Start processing when reaching the macro title
+        p && /'"$match_pattern"'/ && !f {print $0 "\n" text; f=1; next}  # Find "gcode:" after the title, insert once
+        {print}
+    ' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
 }
 
-# Read each confirmed macro entry
+# Reading entries and processing updates
 while IFS=':' read -r file line_number content; do
     macro_name=$(echo "$content" | grep -oE '\[gcode_macro\s+\w+\]' | cut -d ' ' -f 2 | tr -d '[]')
     echo "Processing macro: $macro_name in file $file at line $line_number"
     case "$macro_name" in
         "START_PRINT")
-            insert_wled_update "$file" "Heating" "$((line_number+1))"
-            insert_wled_update "$file" "Printing" "$((line_number+1))"
+            insert_wled_update "$file" "Heating" "CLEAR_PAUSE" "$line_number"
+            insert_wled_update "$file" "Printing" "gcode:" "$line_number"
             ;;
         "PAUSE")
-            insert_wled_update "$file" "Pause" "$((line_number+1))"
+            insert_wled_update "$file" "Pause" "gcode:" "$line_number"
             ;;
         "RESUME")
-            insert_wled_update "$file" "Resume" "$((line_number+1))"
+            insert_wled_update "$file" "Resume" "gcode:" "$line_number"
             ;;
         "END_PRINT")
-            insert_wled_update "$file" "Complete" "$((line_number+1))"
+            insert_wled_update "$file" "Complete" "gcode:" "$line_number"
             ;;
         "CANCEL_PRINT")
-            insert_wled_update "$file" "Cancel" "$((line_number+1))"
+            insert_wled_update "$file" "Cancel" "gcode:" "$line_number"
             ;;
     esac
 done < "$CONFIRMED_MACROS_FILE"
