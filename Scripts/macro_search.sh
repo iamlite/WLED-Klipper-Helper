@@ -13,26 +13,27 @@ if [ "$(id -u)" != "0" ]; then
     exit 1
 fi
 
-printf "${GREEN}Running as user ID: $(id -u), which should be 0 for root.${NC}\n"
+# Determine the script's directory
+SCRIPT_DIR="$(dirname "$(realpath "$0")")"
+BASE_DIR="$(dirname "$SCRIPT_DIR")/Config"
 
 # Directory for configuration and macros
 search_dir="/usr/data/printer_data/config"
-base_dir="/WLED-Klipper-Helper/Config"
 
-# Create the directory if it does not exist
-mkdir -p "$base_dir"
+# Create the Config directory if it does not exist
+mkdir -p "$BASE_DIR"
 if [ $? -ne 0 ]; then
-    printf "${RED}Failed to create directory: $base_dir${NC}\n"
+    printf "${RED}Failed to create directory: $BASE_DIR${NC}\n"
     exit 1
 fi
 
-# Check if the directory is writable
-if [ ! -w "$base_dir" ]; then
-    printf "${RED}Directory $base_dir is not writable.${NC}\n"
+# Check if the Config directory is writable
+if [ ! -w "$BASE_DIR" ]; then
+    printf "${RED}Directory $BASE_DIR is not writable.${NC}\n"
     exit 1
 fi
 
-printf "${GREEN}Directory $base_dir is confirmed to be writable.${NC}\n"
+printf "${GREEN}Directory $BASE_DIR is confirmed to be writable.${NC}\n"
 
 # List of macros
 macros="START_PRINT END_PRINT PAUSE CANCEL RESUME"
@@ -49,7 +50,7 @@ fi
 
 # Temporary file for storing findings and a file to store confirmed macros
 temp_file=$(mktemp)
-confirmed_macros_file="$base_dir/confirmed_macros.txt"
+confirmed_macros_file="$BASE_DIR/confirmed_macros.txt"
 printf "${GREEN}Temporary file for findings: $temp_file${NC}\n"
 
 # Initialize or clear the confirmed macros file
