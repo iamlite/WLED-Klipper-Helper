@@ -13,7 +13,7 @@ SCRIPT_DIR="$(dirname "$(realpath "$0")")"  # Determines the absolute path of th
 
 # Function to print a horizontal line separator
 print_separator() {
-    local separator_length=$(tput cols)
+    local separator_length=$(stty size | awk '{print $2}')
     local separator_char="="
     printf "${CYAN}%s${NC}\n" "$(printf "%${separator_length}s" | tr ' ' "$separator_char")"
 }
