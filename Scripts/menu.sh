@@ -34,7 +34,7 @@ show_menu() {
     clear
     print_separator
     print_spacer
-    print_menu_item "WLED Klipper Setup Helper" "$GREEN"
+    print_menu_item "WLED Klipper Setup Helper Script" "$GREEN"
     print_spacer
     print_separator
     print_spacer
