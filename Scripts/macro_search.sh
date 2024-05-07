@@ -13,9 +13,14 @@ if [ "$(id -u)" != "0" ]; then
     exit 1
 fi
 
-# Fixed directory and list of macros
+# Directory for configuration and macros
 search_dir="/usr/data/printer_data/config"
 base_dir="/WLED-Klipper-Helper/Config"
+
+# Create the directory if it does not exist
+mkdir -p "$base_dir"
+
+# List of macros
 macros="START_PRINT END_PRINT PAUSE CANCEL RESUME"
 
 # Max number of rejections allowed
@@ -24,7 +29,7 @@ rejection_count=0
 
 # Check if the directory exists
 if [ ! -d "$search_dir" ]; then
-    printf "${RED}Error: Directory does not exist.${NC}\n"
+    printf "${RED}Error: Directory $search_dir does not exist.${NC}\n"
     exit 1
 fi
 
@@ -58,9 +63,12 @@ for macro in $macros; do
         printf "${CYAN}Preview of macro content starting at line $line_number in file $file:${NC}\n"
         sed -n "${start_line},${end_line}p" "$file"
         printf "${CYAN}--------------------------------${NC}\n"
-        printf "${GREEN}Confirm this is correct (y/n): ${NC}"
+        printf "${GREEN}Confirm this is correct (y/n/q to quit): ${NC}"
         read confirm </dev/tty
-        if [ "$confirm" = "y" ]; then
+        if [ "$confirm" = "q" ] || [ "$confirm" = "Q" ]; then
+            printf "${RED}Quitting process as requested.${NC}\n"
+            break 2  # Exit from both loops
+        elif [ "$confirm" = "y" ]; then
             printf "${YELLOW}Confirmed for modification. Saving...${NC}\n"
             echo "$file:$line_number:$content" >> "$confirmed_macros_file"
             rejection_count=0
@@ -78,6 +86,10 @@ done
 
 # Cleanup and finish
 rm "$temp_file"
-printf "${GREEN}Process completed. Confirmed macros are stored in $confirmed_macros_file${NC}\n"
+if [ -s "$confirmed_macros_file" ]; then
+    printf "${GREEN}Process completed. Confirmed macros are stored in $confirmed_macros_file${NC}\n"
+else
+    printf "${YELLOW}No macros confirmed for modification.${NC}\n"
+fi
 printf "${CYAN}Press enter to continue...${NC}\n"
 read dummy
