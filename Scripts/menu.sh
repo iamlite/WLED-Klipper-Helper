@@ -46,11 +46,11 @@ show_menu() {
     print_spacer
     print_menu_item "4. View and Edit Preset Numbers" "$YELLOW"
     print_spacer
-    print_menu_item "5. Quit" "$YELLOW"
-    print_spacer
     print_separator
     print_spacer
+    print_menu_item "Q. Quit" "$YELLOW"
     print_spacer
+    print_separator
     print_spacer
     print_menu_item "${MAGENTA}Please enter your choice: ${NC}"
 }
@@ -75,9 +75,9 @@ while true; do
     case "$choice" in
         1) confirm_proceed "Setup WLED" "This will configure your WLED instance with moonraker. It will add your WLED instance to moonraker.conf." "setup_wled.sh" ;;
         2) confirm_proceed "Assign WLED Presets" "This will help you create and configure presets in your WLED setup for various printer events like pause, cancel, or resume." "assign_presets.sh" ;;
-        3) confirm_proceed "Add Macros" "This allows you to add macros to your WLED instance to control WLED's behavior based on your printers status." "add_macros.sh" ;;
+        3) sh "${SCRIPT_DIR}/add_macros.sh" ;;
         4) confirm_proceed "View & Edit Preset Numbers" "This allows you to view and modify the preset numbers assigned to different printer states." "view_edit_presets.sh" ;;
-        5) printf "${BLUE}Exiting...${NC}\n"; break ;;
+        q) printf "${BLUE}Exiting...${NC}\n"; break ;;
         *) printf "${RED}Invalid option, try again...${NC}\n" ;;
     esac
     printf "${BLUE}Press enter to continue...${NC}\n"
