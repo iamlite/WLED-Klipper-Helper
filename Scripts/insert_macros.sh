@@ -7,13 +7,19 @@ YELLOW='\033[1;33m'
 RED='\033[0;31m'
 NC='\033[0m' # No Color
 
+# Determine the script's directory
+SCRIPT_DIR="$(dirname "$(realpath "$0")")"
+BASE_DIR="$(dirname "$SCRIPT_DIR")"  # Assuming the script is in a subdirectory of the project root
+
 # Configuration and script paths
-CONFIRMED_MACROS_FILE="/WLED-Klipper-Helper/Config/confirmed_macros.txt"
-PRESET_ASSIGNMENTS_FILE="/WLED-Klipper-Helper/Config/presets.conf"
+CONFIRMED_MACROS_FILE="$BASE_DIR/Config/confirmed_macros.txt"
+PRESET_ASSIGNMENTS_FILE="$BASE_DIR/Config/presets.conf"
 
 # Check existence of necessary files
 if [ ! -f "$CONFIRMED_MACROS_FILE" ] || [ ! -f "$PRESET_ASSIGNMENTS_FILE" ]; then
     printf "${RED}Necessary configuration files are missing. Exiting.${NC}\n"
+    printf "${CYAN}Press enter to continue...${NC}\n"
+    read dummy
     exit 1
 fi
 
@@ -52,43 +58,25 @@ while IFS=':' read -r file line_number content; do
     macro_name=$(echo "$content" | sed -n 's/^\s*\[gcode_macro\s\+\(\w\+\)\]\s*$/\1/p')
     case "$macro_name" in
         "START_PRINT")
-            printf "${YELLOW}Do you want to insert WLED update lines for START_PRINT macro? (y/n)${NC}\n"
-            read -r answer
-            if [ "$answer" = "y" ] || [ "$answer" = "Y" ]; then
-                insert_wled_update "$file" "UPDATE_WLED PRESET=${presets[Heating]}" "after" "CLEAR_PAUSE"
-                insert_wled_update "$file" "UPDATE_WLED PRESET=${presets[Printing]}" "end"
-            fi
+            insert_wled_update "$file" "UPDATE_WLED PRESET=${presets[Heating]}" "after" "CLEAR_PAUSE"
+            insert_wled_update "$file" "UPDATE_WLED PRESET=${presets[Printing]}" "end"
             ;;
         "PAUSE")
-            printf "${YELLOW}Do you want to insert WLED update lines for PAUSE macro? (y/n)${NC}\n"
-            read -r answer
-            if [ "$answer" = "y" ] || [ "$answer" = "Y" ]; then
-                insert_wled_update "$file" "UPDATE_WLED PRESET=${presets[Pause]}" "start"
-            fi
+            insert_wled_update "$file" "UPDATE_WLED PRESET=${presets[Pause]}" "start"
             ;;
         "RESUME")
-            printf "${YELLOW}Do you want to insert WLED update lines for RESUME macro? (y/n)${NC}\n"
-            read -r answer
-            if [ "$answer" = "y" ] || [ "$answer" = "Y" ]; then
-                insert_wled_update "$file" "UPDATE_WLED PRESET=${presets[Resume]}" "start"
-                insert_wled_update "$file" "UPDATE_WLED PRESET=${presets[Printing]}" "end"
-            fi
+            insert_wled_update "$file" "UPDATE_WLED PRESET=${presets[Resume]}" "start"
+            insert_wled_update "$file" "UPDATE_WLED PRESET=${presets[Printing]}" "end"
             ;;
         "END_PRINT")
-            printf "${YELLOW}Do you want to insert WLED update lines for END_PRINT macro? (y/n)${NC}\n"
-            read -r answer
-            if [ "$answer" = "y" ] || [ "$answer" = "Y" ]; then
-                insert_wled_update "$file" "UPDATE_WLED PRESET=${presets[Complete]}" "start"
-            fi
+            insert_wled_update "$file" "UPDATE_WLED PRESET=${presets[Complete]}" "start"
             ;;
         "CANCEL_PRINT")
-            printf "${YELLOW}Do you want to insert WLED update lines for CANCEL_PRINT macro? (y/n)${NC}\n"
-            read -r answer
-            if [ "$answer" = "y" ] || [ "$answer" = "Y" ]; then
-                insert_wled_update "$file" "UPDATE_WLED PRESET=${presets[Cancel]}" "start"
-            fi
+            insert_wled_update "$file" "UPDATE_WLED PRESET=${presets[Cancel]}" "start"
             ;;
     esac
 done < "$CONFIRMED_MACROS_FILE"
 
 printf "${GREEN}All modifications completed.${NC}\n"
+printf "${CYAN}Press enter to continue...${NC}\n"
+read dummy
