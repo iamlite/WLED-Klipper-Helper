@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Color definitions
 CYAN='\033[0;36m'
@@ -16,29 +16,34 @@ print_line() {
 print_centered() {
     local message=$1
     local color=$2
-    printf "${CYAN}|"
+    printf "${CYAN}|${NC}"
     # Calculate the padding needed to center the text
     printf "${color}%*s" $(( (${#message} + 80) / 2 )) "$message"
-    printf "%*s${NC}\n" $(( 80 - (${#message} + 80) / 2 )) "|"
+    printf "${NC}%*s${CYAN}|${NC}\n" $(( 80 - (${#message} + 80) / 2 )) ""
 }
 
-# Function to display the main menu
+# Function to display the main menu with spacing between options
 show_menu() {
     clear
     print_line
+    echo -e "${CYAN}|${NC}${CYAN}|${NC}" # Blank line for spacing
     print_centered "WLED Klipper Setup Helper" "$GREEN"
+    echo -e "${CYAN}|${NC}" # Blank line for spacing
     print_line
+    echo -e "${CYAN}|${NC}" # Blank line for spacing
     print_centered "1. Setup WLED" "$YELLOW"
+    echo -e "${CYAN}|${NC}" # Blank line for spacing
     print_centered "2. Setup WLED Presets" "$YELLOW"
+    echo -e "${CYAN}|${NC}" # Blank line for spacing
     print_centered "3. Add Macros" "$YELLOW"
+    echo -e "${CYAN}|${NC}" # Blank line for spacing
     print_centered "4. View and Edit Preset Numbers" "$YELLOW"
+    echo -e "${CYAN}|${NC}" # Blank line for spacing
     print_centered "5. Quit" "$YELLOW"
+    echo -e "${CYAN}|${NC}" # Blank line for spacing
     print_line
     echo -e "${MAGENTA}Please enter your choice: ${NC}"
 }
-
-# Show the menu
-show_menu
 
 # Show the menu
 show_menu
