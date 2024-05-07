@@ -28,4 +28,4 @@ find "$INSTALL_DIR" -type f -name "*.sh" -exec chmod +x {} \;
 
 # Output instruction for starting the menu
 printf "\033[0;36m%s\033[0m\n" "Setup complete. To run the main menu, execute:"
-printf "\033[0;35m%s\033[0m\n" "$INSTALL_DIR/Scripts/Menu/menu.sh"
+printf "\033[0;35m%s\033[0m\n" "$INSTALL_DIR/Scripts/menu.sh"
