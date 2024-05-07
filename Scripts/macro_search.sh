@@ -13,7 +13,7 @@ if [ "$(id -u)" != "0" ]; then
     exit 1
 fi
 
-printf "${GREEN}Running as user ID: $(id -u)${NC}\n"
+printf "${GREEN}Running as user ID: $(id -u), which should be 0 for root.${NC}\n"
 
 # Directory for configuration and macros
 search_dir="/usr/data/printer_data/config"
@@ -21,7 +21,18 @@ base_dir="/WLED-Klipper-Helper/Config"
 
 # Create the directory if it does not exist
 mkdir -p "$base_dir"
-printf "${GREEN}Ensured directory exists: $base_dir${NC}\n"
+if [ $? -ne 0 ]; then
+    printf "${RED}Failed to create directory: $base_dir${NC}\n"
+    exit 1
+fi
+
+# Check if the directory is writable
+if [ ! -w "$base_dir" ]; then
+    printf "${RED}Directory $base_dir is not writable.${NC}\n"
+    exit 1
+fi
+
+printf "${GREEN}Directory $base_dir is confirmed to be writable.${NC}\n"
 
 # List of macros
 macros="START_PRINT END_PRINT PAUSE CANCEL RESUME"
@@ -30,7 +41,7 @@ macros="START_PRINT END_PRINT PAUSE CANCEL RESUME"
 max_rejections=5
 rejection_count=0
 
-# Check if the directory exists
+# Check if the search directory exists
 if [ ! -d "$search_dir" ]; then
     printf "${RED}Error: Directory $search_dir does not exist.${NC}\n"
     exit 1
