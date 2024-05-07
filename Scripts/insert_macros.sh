@@ -21,27 +21,32 @@ echo "Base directory: $BASE_DIR"
 # Check existence of necessary files
 if [ ! -f "$CONFIRMED_MACROS_FILE" ] || [ ! -f "$PRESET_ASSIGNMENTS_FILE" ]; then
     printf "${RED}Necessary configuration files are missing. Exiting.${NC}\n"
-    read -p "Press enter to continue..."
+    read dummy
     exit 1
 fi
 
-# Load presets into an associative array
-declare -A presets
-while IFS=': ' read -r key value; do
-    presets[$key]=$value
-done < "$PRESET_ASSIGNMENTS_FILE"
-
-# Debug: Print loaded presets
-for key in "${!presets[@]}"; do
-    printf "Loaded preset: %s = %s\n" "$key" "${presets[$key]}"
-done
+# Function to read and apply presets from file
+apply_preset() {
+    local preset_key="$1"
+    local preset_value
+    while IFS=': ' read -r key value; do
+        if [ "$key" = "$preset_key" ]; then
+            preset_value="$value"
+            break
+        fi
+    done < "$PRESET_ASSIGNMENTS_FILE"
+    echo "$preset_value"
+}
 
 # Function to insert WLED update line into the macro file
 insert_wled_update() {
     local file="$1"
-    local insert_text="$2"
+    local preset_key="$2"
     local position="$3" # 'start', 'after', 'end'
     local match_pattern="$4"
+
+    local preset_value=$(apply_preset "$preset_key")
+    local insert_text="UPDATE_WLED PRESET=$preset_value"
 
     echo "Attempting to update file: $file"
     if [ "$position" = "start" ]; then
@@ -55,25 +60,25 @@ insert_wled_update() {
 
 # Read each confirmed macro entry
 while IFS=':' read -r file line_number content; do
-    macro_name=$(echo "$content" | sed -n 's/^\s*\[gcode_macro\s\+\(\w\+\)\]\s*$/\1/p')
+    macro_name=$(echo "$content" | grep -oE '\[gcode_macro\s+\w+\]' | cut -d ' ' -f 2 | tr -d '[]')
     echo "Processing macro: $macro_name in file $file"
     case "$macro_name" in
         "START_PRINT")
-            insert_wled_update "$file" "UPDATE_WLED PRESET=${presets[Heating]}" "after" "CLEAR_PAUSE"
-            insert_wled_update "$file" "UPDATE_WLED PRESET=${presets[Printing]}" "end"
+            insert_wled_update "$file" "Heating" "after" "CLEAR_PAUSE"
+            insert_wled_update "$file" "Printing" "end"
             ;;
         "PAUSE")
-            insert_wled_update "$file" "UPDATE_WLED PRESET=${presets[Pause]}" "start"
+            insert_wled_update "$file" "Pause" "start"
             ;;
         "RESUME")
-            insert_wled_update "$file" "UPDATE_WLED PRESET=${presets[Resume]}" "start"
-            insert_wled_update "$file" "UPDATE_WLED PRESET=${presets[Printing]}" "end"
+            insert_wled_update "$file" "Resume" "start"
+            insert_wled_update "$file" "Printing" "end"
             ;;
         "END_PRINT")
-            insert_wled_update "$file" "UPDATE_WLED PRESET=${presets[Complete]}" "start"
+            insert_wled_update "$file" "Complete" "start"
             ;;
         "CANCEL_PRINT")
-            insert_wled_update "$file" "UPDATE_WLED PRESET=${presets[Cancel]}" "start"
+            insert_wled_update "$file" "Cancel" "start"
             ;;
     esac
 done < "$CONFIRMED_MACROS_FILE"
