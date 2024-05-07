@@ -50,24 +50,29 @@ insert_wled_update() {
 
     echo "Attempting to update file: $file in macro starting at line $start_line"
     if [ "$match_pattern" = "end_macro" ]; then
-        # Handle insertion at the end of the macro
-        awk -v line_num="$start_line" -v text="$insert_text" 'BEGIN {p=0; inserted=0}
-            NR == line_num {p=1}  # Start processing at the macro title
-            p && (/^\s*$/ || /^$/ || /^\[gcode_macro/) && !inserted {
-                print text; inserted=1; next
+        awk -v start_line="$start_line" -v insert_text="$insert_text" '
+            BEGIN {inserted = 0}
+            NR == start_line {inside_macro = 1}  # Detect start of the macro
+            NR > start_line && /^\[gcode_macro/ {inside_macro = 0}  # Detect start of next macro
+            inside_macro && !inserted && /^$/ {  # Find the first empty line to insert
+                print insert_text;
+                inserted = 1;
             }
             {print}
         ' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
     else
-        # Insert after the specified pattern, avoiding duplicates
-        awk -v line_num="$start_line" -v line="$match_pattern" -v text="$insert_text" 'BEGIN {p=0; f=0}
-            NR == line_num {p=1}  # Start processing at the macro title
-            p && /'"$match_pattern"'/ && !f {if (!seen[text]++) print $0 "\n" text; f=1; next}
+        awk -v start_line="$start_line" -v match_pattern="$match_pattern" -v insert_text="$insert_text" '
+            BEGIN {inserted = 0}
+            NR == start_line {inside_macro = 1}  # Detect start of the macro
+            NR > start_line && /^\[gcode_macro/ {inside_macro = 0}  # Detect start of next macro
+            inside_macro && !inserted && $0 ~ match_pattern {  # Match the pattern within the macro
+                print $0;
+                print insert_text;
+                inserted = 1;
+                next;
+            }
             {print}
         ' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
-        if [ $(seen[text]) -gt 0 ]; then
-            echo "Skipping insertion as it already exists."
-        fi
     fi
 }
 
