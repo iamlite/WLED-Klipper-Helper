@@ -1,39 +1,42 @@
 #!/bin/sh
 
-# Color Definitions
-RED='\033[0;31m'
+# Color definitions
+CYAN='\033[0;36m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-MAGENTA='\033[0;35m'
-CYAN='\033[0;36m'
+MAGENTA='\033[1;35m'
 NC='\033[0m' # No Color
 
-SCRIPT_DIR="$(dirname "$(realpath "$0")")"  # Determines the absolute path of the directory of this script
-
+# Function to print an ASCII line border
 print_line() {
-    printf "${CYAN}%*s\n" 80 | tr ' ' -
+    echo -e "${CYAN}+--------------------------------------------------------------------------------+${NC}"
+}
+
+# Function to print centered text within the ASCII border
+print_centered() {
+    printf "${CYAN}|${NC}"
+    printf "%*s" $(( (${#1} + 80) / 2 )) "$1"
+    printf "%*s\n" $(( 80 - (${#1} + 80) / 2 )) "${CYAN}|${NC}"
 }
 
 # Function to display the main menu
 show_menu() {
     clear
-    echo "Current directory: $(pwd)"
-    echo "Listing files in the current directory:"
-    ls -l
     print_line
-    printf "${GREEN}%s\n" "WLED Klipper Setup Helper"
+    print_centered "${GREEN}WLED Klipper Setup Helper${NC}"
     print_line
-    printf "${YELLOW}%s\n" "1. Setup WLED"
-    printf "${YELLOW}%s\n" "2. Setup WLED Presets"
-    printf "${YELLOW}%s\n" "3. Add Macros"
-    printf "${YELLOW}%s\n" "4. View and Edit Preset Numbers"
-    printf "${YELLOW}%s\n" "5. Quit"
+    print_centered "${YELLOW}1. Setup WLED${NC}"
+    print_centered "${YELLOW}2. Setup WLED Presets${NC}"
+    print_centered "${YELLOW}3. Add Macros${NC}"
+    print_centered "${YELLOW}4. View and Edit Preset Numbers${NC}"
+    print_centered "${YELLOW}5. Quit${NC}"
     print_line
-    printf "${MAGENTA}Please enter your choice: ${NC}"
+    echo -e "${MAGENTA}Please enter your choice: ${NC}"
 }
 
-# Function to display a confirmation before proceeding
+# Show the menu
+show_menu
+irmation before proceeding
 confirm_proceed() {
     printf "${BLUE}You chose to $1. Here's what this will do:\n${NC}"
     printf "${MAGENTA}$2\n${NC}"
