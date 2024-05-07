@@ -25,7 +25,20 @@ if [ ! -f "$CONFIRMED_MACROS_FILE" ] || [ ! -f "$PRESET_ASSIGNMENTS_FILE" ]; the
     exit 1
 fi
 
-# Function to insert WLED update line into the macro file after 'gcode:'
+# Function to read and apply presets from file
+apply_preset() {
+    local preset_key="$1"
+    local preset_value=""
+    while IFS=': ' read -r key value; do
+        if [ "$key" = "$preset_key" ]; then
+            preset_value="$value"
+            break
+        fi
+    done < "$PRESET_ASSIGNMENTS_FILE"
+    echo "$preset_value"
+}
+
+# Function to insert WLED update line into the macro file
 insert_wled_update() {
     local file="$1"
     local preset_key="$2"
@@ -33,14 +46,23 @@ insert_wled_update() {
     local start_line="$4"  # This is the line number of the macro title
 
     local preset_value=$(apply_preset "$preset_key")
-    local insert_text="    UPDATE_WLED PRESET=$preset_value"  # Using spaces for indentation
+    local insert_text="  UPDATE_WLED PRESET=$preset_value"  # Using spaces for indentation
 
     echo "Attempting to update file: $file in macro starting at line $start_line"
-    awk -v line_num="$start_line" -v line="$match_pattern" -v text="$insert_text" 'BEGIN {p=0}
-        NR == line_num {p=1}  # Start processing when reaching the macro title
-        p && /'"$match_pattern"'/ && !f {print $0 "\n" text; f=1; next}  # Find "gcode:" after the title, insert once
-        {print}
-    ' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
+    if [ "$match_pattern" = "end_macro" ]; then
+        # Special handling to place text at the end of the macro
+        awk -v line_num="$start_line" -v text="$insert_text" 'BEGIN {p=0}
+            NR == line_num {p=1}  # Start processing at the macro title
+            p && /^\s*$/ && !f {print text; f=1}  # Insert at the first empty line after content starts
+            {print}
+        ' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
+    else
+        awk -v line_num="$start_line" -v line="$match_pattern" -v text="$insert_text" 'BEGIN {p=0}
+            NR == line_num {p=1}  # Start processing at the macro title
+            p && /'"$match_pattern"'/ && !f {print $0 "\n" text; f=1; next}  # Insert after the specified pattern
+            {print}
+        ' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
+    fi
 }
 
 # Reading entries and processing updates
@@ -50,7 +72,7 @@ while IFS=':' read -r file line_number content; do
     case "$macro_name" in
         "START_PRINT")
             insert_wled_update "$file" "Heating" "CLEAR_PAUSE" "$line_number"
-            insert_wled_update "$file" "Printing" "gcode:" "$line_number"
+            insert_wled_update "$file" "Printing" "end_macro" "$line_number"
             ;;
         "PAUSE")
             insert_wled_update "$file" "Pause" "gcode:" "$line_number"
