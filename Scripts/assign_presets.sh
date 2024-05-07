@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Config file and directory
-config_dir="/usr/data/WLED-Klipper-Helper/config"
+config_dir="/usr/data/WLED-Klipper-Helper/Config"
 config_file="$config_dir/presets.conf"
 
 # Introductory message

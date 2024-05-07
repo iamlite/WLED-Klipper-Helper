@@ -36,7 +36,7 @@ fi
 printf "${GREEN}Directory $BASE_DIR is confirmed to be writable.${NC}\n"
 
 # List of macros
-macros="START_PRINT END_PRINT PAUSE CANCEL RESUME"
+macros="START_PRINT END_PRINT CANCEL_PRINT PAUSE RESUME"
 
 # Max number of rejections allowed
 max_rejections=5

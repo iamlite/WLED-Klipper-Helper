@@ -29,7 +29,7 @@ print_spacer() {
     printf "${CYAN}||${NC}\n"
 }
 
-# Function to display the add macros menu with spacing. menu is: search, add, edit, rescan, and quit. 
+# Function to show the menu
 show_menu() {
     clear
     print_separator
@@ -40,7 +40,7 @@ show_menu() {
     print_spacer
     print_menu_item "1. Search for Macros" "$YELLOW"
     print_spacer
-    print_menu_item "2. Add Macros" "$YELLOW"
+    print_menu_item "2. Insert Macros" "$YELLOW"
     print_spacer
     print_menu_item "3. Edit Macros" "$YELLOW"
     print_spacer
@@ -57,7 +57,7 @@ while true; do
     read -p "Enter your choice: " choice
     case $choice in
         1) $SCRIPT_DIR/macro_search.sh ;;
-        2) $SCRIPT_DIR/add_macros.sh ;;
+        2) $SCRIPT_DIR/insert_macros.sh ;;
         3) $SCRIPT_DIR/edit_macros.sh ;;
         4) $SCRIPT_DIR/rescan_macros.sh ;;
         5) break ;;
