@@ -23,11 +23,10 @@ print_spacer() {
 print_centered() {
     local message=$1
     local color=$2
-    local len=$((${#message} + ${#color} + ${#NC}))
     printf "${CYAN}|${NC}"
     # Calculate the padding needed to center the text
-    printf "${color}%*s" $(( (len + 80) / 2 )) "$message"
-    printf "${NC}%*s${CYAN}|${NC}\n" $(( 80 - (len + 80) / 2 )) ""
+    printf "${color}%*s" $(( (${#message} + 80) / 2 )) "$message"
+    printf "${NC}%*s${CYAN}|${NC}\n" $(( 80 - (${#message} + 80) / 2 )) ""
 }
 
 # Function to display the main menu with spacing between options
@@ -50,9 +49,7 @@ show_menu() {
     print_centered "5. Quit" "$YELLOW"
     print_spacer
     print_line
-    print_spacer
-    print_centered "Please enter your choice:" "$MAGENTA"
-    print_spacer
+    echo -e "${MAGENTA}Please enter your choice: ${NC}"
 }
 
 # Confirmation before proceeding
@@ -65,7 +62,6 @@ confirm_proceed() {
     print_centered "$2" "$MAGENTA"
     print_spacer
     print_line
-    print_spacer
     echo -e "${GREEN}Proceed? (y/n): ${NC}"
     read yn
     if [ "$yn" = "y" ] || [ "$yn" = "Y" ]; then
@@ -88,7 +84,6 @@ while true; do
         5) echo -e "${BLUE}Exiting...${NC}"; print_spacer; break ;;
         *) echo -e "${RED}Invalid option, try again...${NC}"; print_spacer ;;
     esac
-    print_spacer
     echo -e "${BLUE}Press enter to continue...${NC}"
     read dummy
 done
