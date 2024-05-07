@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Color definitions
 CYAN='\033[0;36m'
