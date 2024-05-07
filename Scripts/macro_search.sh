@@ -76,3 +76,4 @@ done
 # Cleanup and finish
 rm "$temp_file"
 echo "Process completed. Confirmed macros are stored in $confirmed_macros_file"
+read -p "Press enter to continue..."
