@@ -52,23 +52,42 @@ while IFS=':' read -r file line_number content; do
     macro_name=$(echo "$content" | sed -n 's/^\s*\[gcode_macro\s\+\(\w\+\)\]\s*$/\1/p')
     case "$macro_name" in
         "START_PRINT")
-            insert_wled_update "$file" "UPDATE_WLED PRESET=${presets[Heating]}" "after" "CLEAR_PAUSE"
-            insert_wled_update "$file" "UPDATE_WLED PRESET=${presets[Printing]}" "end"
+            printf "${YELLOW}Do you want to insert WLED update lines for START_PRINT macro? (y/n)${NC}\n"
+            read -r answer
+            if [ "$answer" = "y" ] || [ "$answer" = "Y" ]; then
+                insert_wled_update "$file" "UPDATE_WLED PRESET=${presets[Heating]}" "after" "CLEAR_PAUSE"
+                insert_wled_update "$file" "UPDATE_WLED PRESET=${presets[Printing]}" "end"
+            fi
             ;;
         "PAUSE")
-            insert_wled_update "$file" "UPDATE_WLED PRESET=${presets[Pause]}" "start"
+            printf "${YELLOW}Do you want to insert WLED update lines for PAUSE macro? (y/n)${NC}\n"
+            read -r answer
+            if [ "$answer" = "y" ] || [ "$answer" = "Y" ]; then
+                insert_wled_update "$file" "UPDATE_WLED PRESET=${presets[Pause]}" "start"
+            fi
             ;;
         "RESUME")
-            insert_wled_update "$file" "UPDATE_WLED PRESET=${presets[Resume]}" "start"
-            insert_wled_update "$file" "UPDATE_WLED PRESET=${presets[Printing]}" "end"
+            printf "${YELLOW}Do you want to insert WLED update lines for RESUME macro? (y/n)${NC}\n"
+            read -r answer
+            if [ "$answer" = "y" ] || [ "$answer" = "Y" ]; then
+                insert_wled_update "$file" "UPDATE_WLED PRESET=${presets[Resume]}" "start"
+                insert_wled_update "$file" "UPDATE_WLED PRESET=${presets[Printing]}" "end"
+            fi
             ;;
         "END_PRINT")
-            insert_wled_update "$file" "UPDATE_WLED PRESET=${presets[Complete]}" "start"
+            printf "${YELLOW}Do you want to insert WLED update lines for END_PRINT macro? (y/n)${NC}\n"
+            read -r answer
+            if [ "$answer" = "y" ] || [ "$answer" = "Y" ]; then
+                insert_wled_update "$file" "UPDATE_WLED PRESET=${presets[Complete]}" "start"
+            fi
             ;;
         "CANCEL_PRINT")
-            insert_wled_update "$file" "UPDATE_WLED PRESET=${presets[Cancel]}" "start"
-
-        
+            printf "${YELLOW}Do you want to insert WLED update lines for CANCEL_PRINT macro? (y/n)${NC}\n"
+            read -r answer
+            if [ "$answer" = "y" ] || [ "$answer" = "Y" ]; then
+                insert_wled_update "$file" "UPDATE_WLED PRESET=${presets[Cancel]}" "start"
+            fi
+            ;;
     esac
 done < "$CONFIRMED_MACROS_FILE"
 
