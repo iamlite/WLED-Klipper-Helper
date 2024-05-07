@@ -23,6 +23,11 @@ while IFS=': ' read -r key value; do
     presets[$key]=$value
 done < "$PRESET_ASSIGNMENTS_FILE"
 
+# Debug: Print loaded presets
+for key in "${!presets[@]}"; do
+    printf "Loaded preset: %s = %s\n" "$key" "${presets[$key]}"
+done
+
 # Function to insert WLED update line into the macro file
 insert_wled_update() {
     local file="$1"
