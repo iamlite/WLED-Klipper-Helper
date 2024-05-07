@@ -13,9 +13,6 @@ if [ "$(id -u)" -ne 0 ]; then
     exit 1
 fi
 
-# Echo commands as they are executed, and exit immediately on error
-set -ex
-
 # Clone the repository
 if [ -d "$INSTALL_DIR" ]; then
     printf "\033[0;33m%s\033[0m\n" "The directory $INSTALL_DIR already exists. Removing..."
