@@ -49,30 +49,24 @@ insert_wled_update() {
     local insert_text="  UPDATE_WLED PRESET=$preset_value"  # Using spaces for indentation
 
     echo "Attempting to update file: $file in macro starting at line $start_line"
-    if [ "$match_pattern" = "end_macro" ]; then
-        awk -v start_line="$start_line" -v insert_text="$insert_text" '
-            BEGIN {inserted = 0}
-            NR == start_line {inside_macro = 1}  # Detect start of the macro
-            NR > start_line && /^\[gcode_macro/ {inside_macro = 0}  # Detect start of next macro
-            inside_macro && !inserted && /^$/ {  # Find the first empty line to insert
-                print insert_text;
-                inserted = 1;
-            }
-            {print}
-        ' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
-    else
-        awk -v start_line="$start_line" -v match_pattern="$match_pattern" -v insert_text="$insert_text" '
-            BEGIN {inserted = 0}
-            NR == start_line {inside_macro = 1}  # Detect start of the macro
-            NR > start_line && /^\[gcode_macro/ {inside_macro = 0}  # Detect start of next macro
-            inside_macro && !inserted && $0 ~ match_pattern {  # Match the pattern within the macro
+    awk -v line_num="$start_line" -v insert_text="$insert_text" -v match_pattern="$match_pattern" '
+        BEGIN {p=0; inserted=0}
+        NR == line_num {p=1}  # Start processing at the macro title
+        p && /'"$match_pattern"'/ {
+            if (!inserted && !seen[$0]++) {
                 print $0;
                 print insert_text;
                 inserted = 1;
-                next;
+            } else {
+                print;
             }
-            {print}
-        ' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
+            next;
+        }
+        {print}
+    ' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
+
+    if [ "$inserted" -eq 0 ]; then
+        echo "Skipped insertion for $preset_key as it already exists."
     fi
 }
 
