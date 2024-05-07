@@ -1,9 +1,7 @@
 #!/bin/sh
 
-# Title
-echo "\033[1;34m"
-echo "WLED Klipper Helper Installation"
-echo "\033[0m"
+# ASCII Art and Header
+printf "\033[0;34m%s\033[0m\n" "WLED Klipper Helper Installation"
 
 # Define the installation directory and repository URL
 INSTALL_DIR="/usr/data/WLED-Klipper-Helper"
@@ -11,7 +9,7 @@ REPO_URL="https://github.com/iamlite/WLED-Klipper-Helper.git"
 
 # Ensure the script is run as root
 if [ "$(id -u)" -ne 0 ]; then
-    echo "\033[1;31mError: This script must be run as root.\033[0m"
+    printf "\033[0;31m%s\033[0m\n" "Error: This script must be run as root."
     exit 1
 fi
 
@@ -20,17 +18,17 @@ set -ex
 
 # Clone the repository
 if [ -d "$INSTALL_DIR" ]; then
-    echo "\033[1;33mThe directory $INSTALL_DIR already exists. Removing...\033[0m"
+    printf "\033[0;33m%s\033[0m\n" "The directory $INSTALL_DIR already exists. Removing..."
     rm -rf "$INSTALL_DIR"
 fi
-echo "\033[1;32mCloning repository to $INSTALL_DIR...\033[0m"
+printf "\033[0;32m%s\033[0m\n" "Cloning repository to $INSTALL_DIR..."
 git clone "$REPO_URL" "$INSTALL_DIR"
-echo "\033[1;32mRepository cloned.\033[0m"
+printf "\033[0;32m%s\033[0m\n" "Repository cloned."
 
 # Set permissions for all scripts
-echo "\033[1;34mSetting executable permissions on scripts...\033[0m"
+printf "\033[0;34m%s\033[0m\n" "Setting executable permissions on scripts..."
 find "$INSTALL_DIR" -type f -name "*.sh" -exec chmod +x {} \;
 
 # Output instruction for starting the menu
-echo "\033[1;36mSetup complete. To run the main menu, execute:\033[0m"
-echo "\033[1;35m$INSTALL_DIR/Scripts/Menu/menu.sh\033[0m"
+printf "\033[0;36m%s\033[0m\n" "Setup complete. To run the main menu, execute:"
+printf "\033[0;35m%s\033[0m\n" "$INSTALL_DIR/Scripts/Menu/menu.sh"
