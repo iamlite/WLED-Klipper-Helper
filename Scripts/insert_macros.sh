@@ -38,42 +38,37 @@ apply_preset() {
     echo "$preset_value"
 }
 
-# Additional debug to check the numeric value
-echo "Line number before passing to awk: $line_number"
-
-# Improved AWK logic
+# Function to insert WLED update line into the macro file
 insert_wled_update() {
     local file="$1"
     local preset_key="$2"
     local match_pattern="$3"
-    local start_line="$4"
+    local start_line="$4"  # This is the line number of the macro title
 
     local preset_value=$(apply_preset "$preset_key")
-    local insert_text="  UPDATE_WLED PRESET=$preset_value"
+    local insert_text="  UPDATE_WLED PRESET=$preset_value"  # Using spaces for indentation
 
     echo "Attempting to update file: $file in macro starting at line $start_line"
     if [ "$match_pattern" = "end_macro" ]; then
-        awk -v line_num="$start_line" -v text="$insert_text" 'BEGIN {inserted = 0}
-            NR >= line_num && !inserted {
-                if (/^\s*$/ || /^$/ || /^\[gcode_macro/) {
-                    print text;  # Insert the text at the first suitable spot
-                    inserted = 1;
-                    next;
-                }
-            }
+        # Insert at the end of the macro, before any potential new macro starts or file ends
+        awk -v line_num="$start_line" -v insert_text="$insert_text" -v pattern="$match_pattern" 'BEGIN {p=0; found=0}
+            NR >= line_num && !found && /^\s*$/ {print insert_text; found=1}
             {print}
         ' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
-        if [ "$inserted" -eq 0 ]; then echo "Inserted at end of macro for $preset_key."; fi
     else
-        awk -v line_num="$start_line" -v line="$match_pattern" -v text="$insert_text" 'BEGIN {p=0; f=0}
+        # Insert after a specific pattern, checking for duplicates
+        awk -v line_num="$start_line" -v pattern="$match_pattern" -v insert_text="$insert_text" 'BEGIN {p=0}
             NR == line_num {p=1}
-            p && /'"$match_pattern"'/ && !f {print $0 "\n" text; f=1; next}
+            p && $0 ~ pattern && !seen {print; print insert_text; seen=1; next}
             {print}
         ' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
-        if [ "$f" -eq 0 ]; then echo "Skipped duplicate insertion for $preset_key."; fi
+        if [ seen -eq 1 ]; then
+            echo "Inserted for $preset_key in $file."
+        else
+            echo "Skipped insertion for $preset_key as it already exists in $file."
+        fi
     fi
 }
-
 
 # Reading entries and processing updates
 while IFS=':' read -r file line_number content; do
