@@ -15,7 +15,7 @@ fi
 
 # Fixed directory and list of macros
 search_dir="/usr/data/printer_data/config"
-base_dir="/usr/data/WLED-Klipper-Helper"
+base_dir="/WLED-Klipper-Helper/Config"
 macros="START_PRINT END_PRINT PAUSE CANCEL RESUME"
 
 # Max number of rejections allowed
@@ -39,19 +39,16 @@ echo "" > "$confirmed_macros_file"
 for macro in $macros; do
     printf "${GREEN}Searching for $macro in $search_dir...${NC}\n"
     grep -RIHn "^\s*\[gcode_macro\s\+$macro\]" "$search_dir" > "$temp_file"
-    # Check if the temporary file has contents
     if [ ! -s "$temp_file" ]; then
         printf "${YELLOW}No active instances of $macro found.${NC}\n"
         continue
     fi
 
-    # Review found macros with the user
     printf "${CYAN}Review the found instances of $macro:${NC}\n"
     while IFS=: read -r file line_number content; do
-        # Ensure the line number calculations stay within valid file bounds
         total_lines=$(wc -l < "$file")
         start_line=$line_number
-        end_line=$((line_number+10)) # Showing 10 lines after the found line for better context
+        end_line=$((line_number+10))
         if [ "$end_line" -gt "$total_lines" ]; then
             end_line=$total_lines
         fi
@@ -66,7 +63,7 @@ for macro in $macros; do
         if [ "$confirm" = "y" ]; then
             printf "${YELLOW}Confirmed for modification. Saving...${NC}\n"
             echo "$file:$line_number:$content" >> "$confirmed_macros_file"
-            rejection_count=0 # Reset rejection count on confirmation
+            rejection_count=0
         else
             printf "${RED}Skipped modification.${NC}\n"
             rejection_count=$((rejection_count + 1))
@@ -76,7 +73,6 @@ for macro in $macros; do
             fi
         fi
     done < "$temp_file"
-    # Cleanup the temporary file after each macro
     echo "" > "$temp_file"
 done
 
