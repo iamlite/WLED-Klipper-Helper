@@ -56,6 +56,15 @@ if grep -q "wled" "${search_dir}/moonraker.conf"; then
     print_item "WLED instances found:" $GREEN
     grep "wled" "${search_dir}/moonraker.conf"
     continue_prompt
+    print_item "Do you want to add another WLED instance? (y/n)" $BLUE
+    read add_instance
+    if [ "$add_instance" = "y" ]; then
+        "${SCRIPT_DIR}/setup_wled.sh"
+        continue_prompt
+    else
+        print_item "Skipping adding another WLED instance." $GREEN
+        continue_prompt
+    fi
 else
     print_item "No WLED instances found. Let's add one!" $RED
     "${SCRIPT_DIR}/setup_wled.sh"
