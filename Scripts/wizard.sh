@@ -45,7 +45,6 @@ chmod +x "${SCRIPT_DIR}/assign_presets.sh"
 chmod +x "${SCRIPT_DIR}/macro_search.sh"
 chmod +x "${SCRIPT_DIR}/insert_macros.sh"
 print_item "Permissions set. Continuing with the wizard." $GREEN
-continue_prompt
 
 # Search directory for configurations
 search_dir="/usr/data/printer_data/config"
