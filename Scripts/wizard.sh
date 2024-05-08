@@ -49,25 +49,11 @@ print_item "Permissions set. Continuing with the wizard." $GREEN
 # Search directory for configurations
 search_dir="/usr/data/printer_data/config"
 
-# Step 1: Check for WLED instances
+# Step 1: Delegate WLED setup to setup_wled.sh
 print_separator
-print_item "Checking for WLED instances in Moonraker config..." $YELLOW
-if grep -q "wled" "${search_dir}/moonraker.conf"; then
-    print_item "WLED instances found:" $GREEN
-    grep "wled" "${search_dir}/moonraker.conf"
-    print_item "Do you want to add another WLED instance? (y/n)" $BLUE
-    read add_instance
-    if [ "$add_instance" = "y" ]; then
-        "${SCRIPT_DIR}/setup_wled.sh"
-        continue_prompt
-    else
-        print_item "Skipping adding another WLED instance." $GREEN
-    fi
-else
-    print_item "No WLED instances found. Let's add one!" $RED
-    "${SCRIPT_DIR}/setup_wled.sh"
-    continue_prompt
-fi
+print_item "Configuring WLED..." $YELLOW
+"${SCRIPT_DIR}/setup_wled.sh"
+continue_prompt
 
 # Step 2: Handle presets
 print_separator

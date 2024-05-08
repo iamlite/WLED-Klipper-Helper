@@ -47,7 +47,22 @@ add_wled_config() {
     fi
 }
 
-# Main logic
+# Main logic for checking existing WLED instances and adding new ones
+conf_file="/usr/data/printer_data/config/moonraker.conf" 
+printf "${YELLOW}Checking for existing WLED instances...${NC}\n"
+if grep -q "wled" "$conf_file"; then
+    printf "${GREEN}Existing WLED configurations found in moonraker.conf:${NC}\n"
+    grep "wled" "$conf_file"
+    printf "${YELLOW}Do you want to add another WLED instance? (Y/N): ${NC}"
+    read answer
+    if [ "$answer" != "Y" ] && [ "$answer" != "y" ]; then
+        printf "${GREEN}No new WLED instance will be added. Exiting setup.${NC}\n"
+        exit 0
+    fi
+else
+    printf "${GREEN}No existing WLED configurations found. Proceeding with new setup.${NC}\n"
+fi
+
 printf "${YELLOW}Enter your WLED instance name (e.g., keled): ${NC}"
 read wled_name
 printf "${YELLOW}Enter WLED IP address (e.g., x.x.x.x): ${NC}"
@@ -70,3 +85,4 @@ validate_number "$preset_num"
 
 # Call function to add the WLED configuration
 add_wled_config "$wled_name" "$wled_ip" "$led_count" "$preset_num"
+printf "${GREEN}All done!${NC}\n"
