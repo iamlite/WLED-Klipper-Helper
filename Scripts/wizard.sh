@@ -40,11 +40,9 @@ continue_prompt() {
 # Ensure all scripts are executable
 print_separator
 print_item "Setting script permissions..." $BLUE
-chmod +x "${SCRIPT_DIR}/setup_wled.sh"
-chmod +x "${SCRIPT_DIR}/assign_presets.sh"
-chmod +x "${SCRIPT_DIR}/macro_search.sh"
-chmod +x "${SCRIPT_DIR}/insert_macros.sh"
+chmod +x "${SCRIPT_DIR}"/*.sh
 print_item "Permissions set. Continuing with the wizard." $GREEN
+
 
 # Search directory for configurations
 search_dir="/usr/data/printer_data/config"

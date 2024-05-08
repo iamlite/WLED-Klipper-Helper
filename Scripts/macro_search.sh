@@ -1,11 +1,7 @@
 #!/bin/sh
 
-# Color definitions
-CYAN='\033[0;36m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-RED='\033[0;31m'
-NC='\033[0m' # No Color
+# Source common functions
+. /"$SCRIPT_DIR"/common_functions.sh
 
 # Ensure script is run as root
 if [ "$(id -u)" != "0" ]; then
