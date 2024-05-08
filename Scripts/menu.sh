@@ -38,17 +38,21 @@ show_menu() {
     print_spacer
     print_separator
     print_spacer
-    print_menu_item "1. Setup WLED" "$YELLOW"
-    print_spacer
-    print_menu_item "2. Assign WLED Presets" "$YELLOW"
-    print_spacer
-    print_menu_item "3. Add Macros" "$YELLOW"
-    print_spacer
-    print_menu_item "4. View and Edit Preset Numbers" "$YELLOW"
+    print_menu_item "1. WLED Setup Wizard" "$YELLOW"
     print_spacer
     print_separator
     print_spacer
-    print_menu_item "Q. Quit" "$YELLOW"
+    print_menu_item "2. Setup WLED" "$BLUE"
+    print_spacer
+    print_menu_item "3. Assign WLED Presets" "$BLUE"
+    print_spacer
+    print_menu_item "4. Add Macros" "$BLUE"
+    print_spacer
+    print_menu_item "5. View and Edit Preset Numbers" "$BLUE"
+    print_spacer
+    print_separator
+    print_spacer
+    print_menu_item "Q. Quit" "$RED"
     print_spacer
     print_separator
     print_spacer
@@ -73,10 +77,11 @@ while true; do
     show_menu
     read choice
     case "$choice" in
-        1) confirm_proceed "Setup WLED" "This will configure your WLED instance with moonraker. It will add your WLED instance to moonraker.conf." "setup_wled.sh" ;;
-        2) confirm_proceed "Assign WLED Presets" "This will help you create and configure presets in your WLED setup for various printer events like pause, cancel, or resume." "assign_presets.sh" ;;
-        3) sh "${SCRIPT_DIR}/add_macros.sh" ;;
-        4) confirm_proceed "View & Edit Preset Numbers" "This allows you to view and modify the preset numbers assigned to different printer states." "view_edit_presets.sh" ;;
+        1) sh "${SCRIPT_DIR}/wizard.sh" ;;
+        2) confirm_proceed "Setup WLED" "This will configure your WLED instance with moonraker. It will add your WLED instance to moonraker.conf." "setup_wled.sh" ;;
+        3) confirm_proceed "Assign WLED Presets" "This will help you create and configure presets in your WLED setup for various printer events like pause, cancel, or resume." "assign_presets.sh" ;;
+        4) sh "${SCRIPT_DIR}/add_macros.sh" ;;
+        5) confirm_proceed "View & Edit Preset Numbers" "This allows you to view and modify the preset numbers assigned to different printer states." "view_edit_presets.sh" ;;
         q) printf "${BLUE}Exiting...${NC}\n"; break ;;
         *) printf "${RED}Invalid option, try again...${NC}\n" ;;
     esac
