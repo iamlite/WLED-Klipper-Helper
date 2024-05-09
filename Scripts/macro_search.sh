@@ -1,8 +1,5 @@
 #!/bin/sh
 
-# Source common functions
-. /"$SCRIPT_DIR"/common_functions.sh
-
 # Ensure script is run as root
 if [ "$(id -u)" != "0" ]; then
     printf "${RED}This script must be run as root${NC}\n" 1>&2
@@ -12,6 +9,9 @@ fi
 # Determine the script's directory
 SCRIPT_DIR="$(dirname "$(realpath "$0")")"
 BASE_DIR="$(dirname "$SCRIPT_DIR")/Config"
+
+# Source common functions
+. /"$SCRIPT_DIR"/common_functions.sh
 
 # Directory for configuration and macros
 search_dir="/usr/data/printer_data/config"

@@ -1,11 +1,10 @@
 #!/bin/sh
 
 # Script directory
-SCRIPT_DIR="$(dirname "$(realpath "$0")")" # Determines the absolute path of the directory of this script
+SCRIPT_DIR="$(dirname "$(realpath "$0")")"
 
 # Source common functions
 . /"$SCRIPT_DIR"/common_functions.sh
-
 
 # Function to display the main menu with spacing
 show_main_menu() {
@@ -36,8 +35,6 @@ show_main_menu() {
     printf "${CYAN}||${NC} ${MAGENTA}Please enter your choice: ${NC}"
 }
 
-
-
 # Function to show the macro menu
 show_macro_menu() {
     clear
@@ -62,8 +59,6 @@ show_macro_menu() {
     printf "${CYAN}||${NC} ${MAGENTA}Please enter your choice: ${NC}"
 }
 
-
-
 # Confirmation before proceeding
 confirm_proceed() {
     print_item "${BLUE}Selection: $1.${NC}\n"
@@ -81,14 +76,15 @@ confirm_proceed() {
 macro_menu_loop() {
     while true; do
         show_macro_menu
-        read -p "" macro_choice 
+        read -p "" macro_choice
         case $macro_choice in
-            1) $SCRIPT_DIR/macro_search.sh ;;
-            2) $SCRIPT_DIR/insert_macros.sh ;;
-            3) $SCRIPT_DIR/edit_macros.sh ;;
-            b|B) return ;;
-            *) printf "${RED}Invalid choice. Please try again.${NC}\n" ;;
+        1) ./macro_search.sh ;;
+        2) ./insert_macros.sh ;;
+        3) ./edit_macros.sh ;;
+        b | B) return ;;
+        *) printf "${RED}Invalid choice. Please try again.${NC}\n" ;;
         esac
+
     done
 }
 
@@ -97,11 +93,17 @@ while true; do
     show_main_menu
     read -p "" choice
     case "$choice" in
-        1) sh "${SCRIPT_DIR}/wizard.sh" ;;
-        2) confirm_proceed "Setup WLED" "This will configure your WLED instance with Moonraker. It will add your WLED instance to moonraker.conf." "setup_wled.sh" ;;
-        3) confirm_proceed "Assign WLED Presets" "This will help you create and configure presets in your WLED setup for various printer events like pause, cancel, or resume." "assign_presets.sh" ;;
-        4) macro_menu_loop; continue ;;
-        q|Q) printf "${BLUE}Exiting...${NC}\n"; break ;;
-        *) printf "${RED}Invalid option, try again...${NC}\n" ;;
+    1) sh "${SCRIPT_DIR}/wizard.sh" ;;
+    2) confirm_proceed "Setup WLED" "This will configure your WLED instance with Moonraker. It will add your WLED instance to moonraker.conf." "setup_wled.sh" ;;
+    3) confirm_proceed "Assign WLED Presets" "This will help you create and configure presets in your WLED setup for various printer events like pause, cancel, or resume." "assign_presets.sh" ;;
+    4)
+        macro_menu_loop
+        continue
+        ;;
+    q | Q)
+        printf "${BLUE}Exiting...${NC}\n"
+        break
+        ;;
+    *) printf "${RED}Invalid option, try again...${NC}\n" ;;
     esac
 done
