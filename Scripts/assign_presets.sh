@@ -8,7 +8,7 @@ config_dir="/usr/data/WLED-Klipper-Helper/Config"
 config_file="$config_dir/presets.conf"
 
 # Source common functions
-. /"$SCRIPT_DIR"/common_functions.sh
+. "$SCRIPT_DIR/common_functions.sh"
 
 # Introductory message
 show_intro() {

@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Source common functions
-. /"$SCRIPT_DIR"/common_functions.sh
+. "$SCRIPT_DIR/common_functions.sh"
 
 # Determine the script's directory
 SCRIPT_DIR="$(dirname "$(realpath "$0")")"

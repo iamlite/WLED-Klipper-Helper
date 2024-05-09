@@ -4,7 +4,7 @@
 SCRIPT_DIR="$(dirname "$(realpath "$0")")"
 
 # Source common functions
-. /"$SCRIPT_DIR"/common_functions.sh
+. "$SCRIPT_DIR/common_functions.sh"
 
 # Function to display the main menu with spacing
 show_main_menu() {

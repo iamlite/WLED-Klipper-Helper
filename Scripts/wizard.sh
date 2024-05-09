@@ -1,34 +1,9 @@
 #!/bin/sh
-
-# Color definitions
-CYAN='\033[0;36m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-MAGENTA='\033[1;35m'
-BLUE='\033[0;34m'
-RED='\033[0;31m'
-NC='\033[0m' # No Color
-
 # Script directory determination
 SCRIPT_DIR="$(dirname "$(realpath "$0")")"
 
-# Function to print a horizontal line separator
-print_separator() {
-    local separator_length=$(stty size | awk '{print $2}')
-    local separator_char="="
-    printf "${CYAN}%s${NC}\n" "$(printf "%${separator_length}s" | tr ' ' "$separator_char")"
-}
-
-# Function to print items with a double border on the left
-print_item() {
-    local item=$1
-    local color=$2
-    printf "${CYAN}||${NC} ${color}${item}${NC}\n"
-}
-
-print_spacer() {
-    printf "${CYAN}||${NC}\n"
-}
+# Source common functions
+. "$SCRIPT_DIR/common_functions.sh"
 
 # Function to wait for user input to continue
 continue_prompt() {
