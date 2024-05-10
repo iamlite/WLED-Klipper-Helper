@@ -3,8 +3,12 @@
 # Script directory
 SCRIPT_DIR="$(dirname "$(realpath "$0")")"
 
+# Ensure all necessary scripts are executable
+chmod +x "$SCRIPT_DIR"/*.sh
+
 # Source common functions
 . "$SCRIPT_DIR/common_functions.sh"
+
 
 # Function to display the main menu with spacing
 show_main_menu() {
@@ -77,14 +81,25 @@ macro_menu_loop() {
     while true; do
         show_macro_menu
         read -p "" macro_choice
+        echo "You selected: $macro_choice"  # Diagnostic output
         case $macro_choice in
-        1) ./macro_search.sh ;;
-        2) ./insert_macros.sh ;;
-        3) ./edit_macros.sh ;;
-        b | B) return ;;
-        *) printf "${RED}Invalid choice. Please try again.${NC}\n" ;;
+            1) 
+                echo "Running macro_search.sh from $SCRIPT_DIR/macro_search.sh"  # Diagnostic output
+                sh "$SCRIPT_DIR/macro_search.sh"
+                ;;
+            2) 
+                echo "Running insert_macros.sh from $SCRIPT_DIR/insert_macros.sh"  # Diagnostic output
+                sh "$SCRIPT_DIR/insert_macros.sh"
+                ;;
+            3) 
+                echo "Running edit_macros.sh from $SCRIPT_DIR/edit_macros.sh"  # Diagnostic output
+                sh "$SCRIPT_DIR/edit_macros.sh"
+                ;;
+            b|B) return ;;
+            *) 
+                printf "${RED}Invalid choice. Please try again.${NC}\n" 
+                ;;
         esac
-
     done
 }
 
