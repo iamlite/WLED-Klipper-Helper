@@ -145,15 +145,15 @@ confirm_proceed() {
 }
 
 
-print_ascii_art() {
-    local idx=0
-    print_ascii_line "${BOLD_WHITE[idx%6]}    _   _  _   ___ __     _  ___   _ ___ ___ ___ ___    _  _ ___ _   ___ ___ ___  ${NC}"
-    idx=$((idx+1))
-    print_ascii_line "${BOLD_WHITE[idx%6]}   | | | || | | __| _\\ __| |/ / | | | _,\\ _,\\ __| _ \\__| || | __| | | _,\\ __| _ \\ ${NC}"
-    idx=$((idx+1))
-    print_ascii_line "${BOLD_WHITE[idx%6]}   | 'V' || |_| _|| v |__|   <| |_| | v_/ v_/ _|| v /__| >< | _|| |_| v_/ _|| v / ${NC}"
-    idx=$((idx+1))
-    print_ascii_line "${BOLD_WHITE[idx%6]}   !_/ \\_!|___|___|__/   |_|\\_\\___|_|_| |_| |___|_|_\\  |_||_|___|___|_| |___|_|_\\ ${NC}"
-}
+# print_ascii_art() {
+#     local idx=0
+#     print_ascii_line "${BOLD_WHITE[idx%6]}    _   _  _   ___ __     _  ___   _ ___ ___ ___ ___    _  _ ___ _   ___ ___ ___  ${NC}"
+#     idx=$((idx+1))
+#     print_ascii_line "${BOLD_WHITE[idx%6]}   | | | || | | __| _\\ __| |/ / | | | _,\\ _,\\ __| _ \\__| || | __| | | _,\\ __| _ \\ ${NC}"
+#     idx=$((idx+1))
+#     print_ascii_line "${BOLD_WHITE[idx%6]}   | 'V' || |_| _|| v |__|   <| |_| | v_/ v_/ _|| v /__| >< | _|| |_| v_/ _|| v / ${NC}"
+#     idx=$((idx+1))
+#     print_ascii_line "${BOLD_WHITE[idx%6]}   !_/ \\_!|___|___|__/   |_|\\_\\___|_|_| |_| |___|_|_\\  |_||_|___|___|_| |___|_|_\\ ${NC}"
+# }
 
 
