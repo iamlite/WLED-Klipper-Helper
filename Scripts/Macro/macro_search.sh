@@ -10,8 +10,9 @@ fi
 SCRIPT_DIR="$(dirname "$(realpath "$0")")"
 BASE_DIR="$(dirname "$SCRIPT_DIR")/Config"
 
-# Source common functions
-. "$SCRIPT_DIR/common_functions.sh"
+# Source common functions from the Scripts directory
+. "$SCRIPT_DIR/../common_functions.sh"
+
 
 # Directory for configuration and macros
 search_dir="/usr/data/printer_data/config"

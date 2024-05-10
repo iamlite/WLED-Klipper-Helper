@@ -1,10 +1,11 @@
 #!/bin/sh
 
-# Script directory
-SCRIPT_DIR="$(dirname "$(realpath "$0")")" # Determines the absolute path of the directory of this script
 
-# Source common functions
-. "$SCRIPT_DIR/common_functions.sh"
+# Script directory
+SCRIPT_DIR="$(dirname "$(realpath "$0")")"
+
+# Source common functions from the Scripts directory
+. "$SCRIPT_DIR/../common_functions.sh"
 
 # Config file path
 config_file="/usr/data/WLED-Klipper-Helper/config/presets.conf"

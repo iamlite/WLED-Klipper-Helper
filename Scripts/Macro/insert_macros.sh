@@ -1,11 +1,14 @@
 #!/bin/sh
 
-# Determine the script's directory
+
+# Script directory
 SCRIPT_DIR="$(dirname "$(realpath "$0")")"
+
+# Source common functions from the Scripts directory
+. "$SCRIPT_DIR/../common_functions.sh"
+
 BASE_DIR="$(dirname "$SCRIPT_DIR")"
 
-# Source common functions
-. "$SCRIPT_DIR/common_functions.sh"
 
 # Configuration and script paths
 CONFIRMED_MACROS_FILE="$BASE_DIR/Config/confirmed_macros.txt"

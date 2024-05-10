@@ -7,7 +7,6 @@ SCRIPT_DIR="$(dirname "$(realpath "$0")")"
 # Source common functions from the Scripts directory
 . "$SCRIPT_DIR/../common_functions.sh"
 
-
 config_dir="/usr/data/WLED-Klipper-Helper/Config"
 config_file="$config_dir/presets.conf"
 
