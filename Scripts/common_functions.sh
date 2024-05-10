@@ -144,16 +144,16 @@ confirm_proceed() {
     fi
 }
 
-
-# print_ascii_art() {
-#     local idx=0
-#     print_ascii_line "${BOLD_WHITE[idx%6]}    _   _  _   ___ __     _  ___   _ ___ ___ ___ ___    _  _ ___ _   ___ ___ ___  ${NC}"
-#     idx=$((idx+1))
-#     print_ascii_line "${BOLD_WHITE[idx%6]}   | | | || | | __| _\\ __| |/ / | | | _,\\ _,\\ __| _ \\__| || | __| | | _,\\ __| _ \\ ${NC}"
-#     idx=$((idx+1))
-#     print_ascii_line "${BOLD_WHITE[idx%6]}   | 'V' || |_| _|| v |__|   <| |_| | v_/ v_/ _|| v /__| >< | _|| |_| v_/ _|| v / ${NC}"
-#     idx=$((idx+1))
-#     print_ascii_line "${BOLD_WHITE[idx%6]}   !_/ \\_!|___|___|__/   |_|\\_\\___|_|_| |_| |___|_|_\\  |_||_|___|___|_| |___|_|_\\ ${NC}"
-# }
-
-
+print_ascii_art() {
+    local idx=0
+    local colors=("$BOLD_CYAN" "$BOLD_RED" "$BOLD_BLUE" "$BOLD_YELLOW" "$BOLD_BLUE" "$BOLD_MAGENTA")
+    
+    for line in "    _   _  _   ___ __     _  ___   _ ___ ___ ___ ___    _  _ ___ _   ___ ___ ___  " \
+                "   | | | || | | __| _\\ __| |/ / | | | _,\\ _,\\ __| _ \\__| || | __| | | _,\\ __| _ \\ " \
+                "   | 'V' || |_| _|| v |__|   <| |_| | v_/ v_/ _|| v /__| >< | _|| |_| v_/ _|| v / " \
+                "   !_/ \\_!|___|___|__/   |_|\\_\\___|_|_| |_| |___|_|_\\  |_||_|___|___|_| |___|_|_\\ "
+    do
+        printf "${CYAN}||${NC} ${colors[idx % 6]}""${colors[idx % 6]}%s${NC}\n" "$line"
+        idx=$((idx + 1))
+    done
+}
