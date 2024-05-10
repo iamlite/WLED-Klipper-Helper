@@ -27,16 +27,16 @@ else
     INSTALL_DIR="$DEFAULT_INSTALL_DIR"
 fi
 
-# Write the installation directory to a configuration file
-mkdir -p "$(dirname "$CONFIG_FILE")"
-echo "INSTALL_DIR=$INSTALL_DIR" > "$CONFIG_FILE"
-
-# Clone the repository
+# Remove existing installation directory if it exists
 if [ -d "$INSTALL_DIR" ]; then
     printf "\033[0;33m%s\033[0m\n" "The directory $INSTALL_DIR already exists. Removing..."
     rm -rf "$INSTALL_DIR"
 fi
-mkdir -p "$INSTALL_NAME"
+
+# Create the installation directory
+mkdir -p "$INSTALL_DIR"
+
+# Clone the repository
 printf "\033[0;32m%s\033[0m\n" "Cloning repository to $INSTALL_DIR..."
 git clone "$REPO_URL" "$INSTALL_DIR"
 printf "\033[0;32m%s\033[0m\n" "Repository cloned."
@@ -44,6 +44,10 @@ printf "\033[0;32m%s\033[0m\n" "Repository cloned."
 # Set permissions for all scripts
 printf "\033[0;34m%s\033[0m\n" "Setting executable permissions on scripts..."
 find "$INSTALL_DIR" -type f -name "*.sh" -exec chmod +x {} \;
+
+# Write the installation directory to a configuration file
+mkdir -p "$(dirname "$CONFIG_file")"
+echo "INSTALL_DIR=$INSTALL_DIR" > "$CONFIG_FILE"
 
 # Output instruction for starting the menu
 printf "\033[0;36m%s\033[0m\n" "Setup complete. To run the main menu, execute:"
