@@ -146,14 +146,20 @@ confirm_proceed() {
 
 print_ascii_art() {
     local idx=0
-    local colors=("$BOLD_CYAN" "$BOLD_RED" "$BOLD_BLUE" "$BOLD_YELLOW" "$BOLD_BLUE" "$BOLD_MAGENTA")
     
     for line in "    _   _  _   ___ __     _  ___   _ ___ ___ ___ ___    _  _ ___ _   ___ ___ ___  " \
                 "   | | | || | | __| _\\ __| |/ / | | | _,\\ _,\\ __| _ \\__| || | __| | | _,\\ __| _ \\ " \
                 "   | 'V' || |_| _|| v |__|   <| |_| | v_/ v_/ _|| v /__| >< | _|| |_| v_/ _|| v / " \
                 "   !_/ \\_!|___|___|__/   |_|\\_\\___|_|_| |_| |___|_|_\\  |_||_|___|___|_| |___|_|_\\ "
     do
-        printf "${CYAN}||${NC} ${colors[idx % 6]}""${colors[idx % 6]}%s${NC}\n" "$line"
+        case $idx in
+            0) printf "${CYAN}||${NC}""${BOLD_BLUE}%s${NC}\n" "$line";;
+            1) printf "${CYAN}||${NC}""${BOLD_RED}%s${NC}\n" "$line";;
+            2) printf "${CYAN}||${NC}""${BOLD_CYAN}%s${NC}\n" "$line";;
+            3) printf "${CYAN}||${NC}""${BOLD_YELLOW}%s${NC}\n" "$line";;
+            4) printf "${CYAN}||${NC}""${BOLD_BLUE}%s${NC}\n" "$line";;
+            5) printf "${CYAN}||${NC}""${BOLD_MAGENTA}%s${NC}\n" "$line";;
+        esac
         idx=$((idx + 1))
     done
 }
