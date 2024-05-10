@@ -7,6 +7,10 @@ This script will automatically add triggers to your macros to control WLED's beh
 
 curl -sSL "https://raw.githubusercontent.com/iamlite/WLED-Klipper-Helper/main/start.sh?$(date +%s)" | sudo sh
 
+curl -sSL "https://raw.githubusercontent.com/iamlite/WLED-Klipper-Helper/main/start.sh?$(date +%s)" | INSTALL_DIR=/usr/data2/WLED-Klipper-Helper sudo sh
+
+
+
 ```bash
   ├─ Config/
   │  └─ presets.conf
