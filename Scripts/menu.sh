@@ -3,22 +3,11 @@
 # Script directory
 SCRIPT_DIR="$(dirname "$(realpath "$0")")"
 
-# Ensure all necessary scripts are executable
-chmod +x "$SCRIPT_DIR"/*.sh
+# Apply executable permissions recursively to all .sh files
+find "$SCRIPT_DIR" -type f -name "*.sh" -exec chmod +x {} \;
 
 # Source common functions
 . "$SCRIPT_DIR/common_functions.sh"
-
-
-
-print_ascii_art() {
-    print_menu_item '    _   _  _   ___ __     _  ___   _ ___ ___ ___ ___    _  _ ___ _   ___ ___ ___  '
-    print_menu_item '   | | | || | | __| _\ __| |/ / | | | _,\ _,\ __| _ \__| || | __| | | _,\ __| _ \ '
-    print_menu_item '   | '\''V'\'' || |_| _|| v |__|   <| |_| | v_/ v_/ _|| v /__| >< | _|| |_| v_/ _|| v / '
-    print_menu_item '   !_/ \_!|___|___|__/   |_|\_\___|_|_| |_| |___|_|_\  |_||_|___|___|_| |___|_|_\ '
-}
-
-
 
 # Function to display the main menu with spacing
 show_main_menu() {
@@ -46,11 +35,11 @@ show_main_menu() {
     print_spacer
     print_separator
     print_spacer
-    print_menu_item "4. Search for Macros" "$YELLOW"
+    print_menu_item "5. Search for Macros" "$YELLOW"
     print_spacer
-    print_menu_item "5. Inject WLED Macros" "$YELLOW"
+    print_menu_item "6. Inject WLED Macros" "$YELLOW"
     print_spacer
-    print_menu_item "6. Edit Macros" "$YELLOW"
+    print_menu_item "7. Edit Macros" "$YELLOW"
     print_spacer
     print_separator
     print_spacer
@@ -66,13 +55,16 @@ while true; do
     show_main_menu
     read -p "" choice
     case "$choice" in
+
     1) sh "$SCRIPT_DIR/wizard.sh" ;;
     2) sh "$SCRIPT_DIR/WLED/setup_wled.sh" ;;
     3) sh "$SCRIPT_DIR/WLED/assign_presets.sh" ;;
-    4) sh "$SCRIPT_DIR/Macro/macro_search.sh" ;;
-    5) sh "$SCRIPT_DIR/Macro/insert_macros.sh" ;;
-    6) sh "$SCRIPT_DIR/Macro/edit_macros.sh" ;;
-    q|Q) 
+    4) sh "$SCRIPT_DIR/WLED/edit_presets.sh" ;;
+    5) sh "$SCRIPT_DIR/Macro/macro_search.sh" ;;
+    6) sh "$SCRIPT_DIR/Macro/insert_macros.sh" ;;
+    7) sh "$SCRIPT_DIR/Macro/edit_macros.sh" ;;
+
+    q | Q)
         print_input_item "${BLUE}Exiting...${NC}\n"
         break
         ;;

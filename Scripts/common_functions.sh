@@ -1,12 +1,22 @@
 #!/bin/sh
 
+################################
+########### VARIABLES ##########
+################################
 
-VERSIONNUMBER=$(cat "/VERSION")  
+
+VERSIONNUMBER=$(curl -s "https://raw.githubusercontent.com/iamlite/WLED-Klipper-Helper/master/VERSION")
 COMMIT_HASH=$(git rev-parse --short HEAD) 
 VERSION="$VERSIONNUMBER ($COMMIT_HASH)"
 AUTHOR="Tariel Davidashvili"
 GITHUB="https://github.com/iamlite/WLED-Klipper-Helper"
 WIKI="https://github.com/iamlite/WLED-Klipper-Helper/wiki"
+
+
+################################
+############ COLORS ############
+################################
+
 
 # Basic Colors
 BLACK='\033[0;30m'
@@ -68,10 +78,17 @@ BG_IMAGENTA='\033[0;105m'
 BG_ICYAN='\033[0;106m'
 BG_IWHITE='\033[0;107m'
 
+RAINBOW_COLORS=('\033[0;31m' '\033[0;33m' '\033[0;32m' '\033[0;36m' '\033[0;34m' '\033[0;35m')
+
 # No Color (to reset to default)
 NC='\033[0m'
 
-# Function to print a horizontal line separator
+
+###########################################
+############ STYLING FUNCTIONS ############
+###########################################
+
+
 print_separator() {
     local separator_length=$(stty size | awk '{print $2}')
     local separator_char="="
@@ -80,7 +97,7 @@ print_separator() {
     printf "${CYAN}||${NC}\n"
 }
 
-# Function to print menu items with a double border on the left
+
 print_menu_item() {
     local item=$1
     local color=$2
@@ -106,8 +123,17 @@ print_spacer() {
     printf "${CYAN}||${NC}\n"
 }
 
+print_ascii_line() {
+    printf "${CYAN}||${NC} $1\n"
+}
 
-# Confirmation before proceeding
+
+#########################################
+############### FUNCTIONS ###############
+#########################################
+
+
+
 confirm_proceed() {
     print_item "${BLUE}Selection: $1.${NC}\n"
     print_item "${MAGENTA}$2${NC}\n"
@@ -119,4 +145,17 @@ confirm_proceed() {
         print_item "${RED}Action cancelled by the user.${NC}\n"
     fi
 }
+
+
+print_ascii_art() {
+    local idx=0
+    print_ascii_line "${RAINBOW_COLORS[idx%6]}    _   _  _   ___ __     _  ___   _ ___ ___ ___ ___    _  _ ___ _   ___ ___ ___  ${NC}"
+    idx=$((idx+1))
+    print_ascii_line "${RAINBOW_COLORS[idx%6]}   | | | || | | __| _\\ __| |/ / | | | _,\\ _,\\ __| _ \\__| || | __| | | _,\\ __| _ \\ ${NC}"
+    idx=$((idx+1))
+    print_ascii_line "${RAINBOW_COLORS[idx%6]}   | 'V' || |_| _|| v |__|   <| |_| | v_/ v_/ _|| v /__| >< | _|| |_| v_/ _|| v / ${NC}"
+    idx=$((idx+1))
+    print_ascii_line "${RAINBOW_COLORS[idx%6]}   !_/ \\_!|___|___|__/   |_|\\_\\___|_|_| |_| |___|_|_\\  |_||_|___|___|_| |___|_|_\\ ${NC}"
+}
+
 

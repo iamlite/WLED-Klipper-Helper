@@ -1,9 +1,22 @@
 #!/bin/sh
 
+#!/bin/sh
 
+# Define the script directory
 SCRIPT_DIR="$(dirname "$(realpath "$0")")"
 
-. "$SCRIPT_DIR/common_functions.sh"
+# Debugging: Echo the path that will be used for sourcing
+echo "Script directory: $SCRIPT_DIR"
+echo "Path to source: $SCRIPT_DIR/../../common_functions.sh"
+
+# Source common functions from two levels up
+COMMON_FUNCTIONS_PATH="$SCRIPT_DIR/../../common_functions.sh"
+if [ -f "$COMMON_FUNCTIONS_PATH" ]; then
+    . "$COMMON_INS_PATH"
+else
+    echo "Failed to find common_functions.sh at $COMMON_FUNCTIONS_PATH"
+    exit 1
+fi
 
 # Validate IP address format
 validate_ip() {

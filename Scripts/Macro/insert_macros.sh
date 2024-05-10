@@ -1,7 +1,5 @@
 #!/bin/sh
 
-
-
 # Determine the script's directory
 SCRIPT_DIR="$(dirname "$(realpath "$0")")"
 BASE_DIR="$(dirname "$SCRIPT_DIR")"
