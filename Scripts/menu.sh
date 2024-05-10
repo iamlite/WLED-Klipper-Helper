@@ -12,15 +12,15 @@ find "$SCRIPT_DIR" -type f -name "*.sh" -exec chmod +x {} \;
 # Function to display the main menu with spacing
 show_main_menu() {
     clear
+    print_menu_item  "${BLUE}Script directory: ${NC}$SCRIPT_DIR"
+    print_spacer
     print_ascii_art
     print_spacer
     print_separator
-    print_spacer
     print_menu_item "Version: $VERSION" "$DIM_WHITE"
     print_menu_item "Author: $AUTHOR" "$DIM_WHITE"
     print_menu_item "GitHub: $GITHUB" "$DIM_WHITE"
     print_menu_item "Wiki: $WIKI" "$DIM_WHITE"
-    print_spacer
     print_separator
     print_spacer
     print_menu_item "1. WLED Setup Wizard" "$YELLOW"
