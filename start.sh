@@ -28,37 +28,28 @@ if [ "$(id -u)" -ne 0 ]; then
 fi
 
 # Use environment variable or default for the installation directory
-INSTALL_DIR="${INSTALL_DIR:-$DEFAULT_INSTALL_POOL}"
-CONFIG_DIR="$(dirname "$INSTALL_DIR/$CONFIG_FILE")"
+INSTALL_DIR="${INSTALL_DIR:-$DEFAULT_INSTALL_DIR}"
 
 printf "\033[0;33m%s\033[0m\n" "Installation directory is set to $INSTALL_DIR"
 
+# Clone the repository first into a temporary location
+TEMP_DIR=$(mktemp -d)
+printf "\033[0;32m%s\033[0m\n" "Cloning repository to temporary directory $TEMP_DIR..."
+git clone "$REPO_URL" "$TEMP_DIR"
+printf "\033[0;32m%s\033[0m\n" "Repository cloned."
+
 # Ensure the configuration directory exists
-if mkdir -p "$CONFIG_DIR"; then
-    printf "\033[0;32m%s\033[0m\n" "Configuration directory created at $CONFIG_DIR."
+mkdir -p "$INSTALL_DIR"
+if mkdir -p "$(dirname "$INSTALL_DIR/$CONFIG_FILE")"; then
+    printf "\033[0;32m%s\033[0m\n" "Configuration directory created at $(dirname "$INSTALL_DIR/$CONFIG_SYS")"
 else
     printf "\033[0;31m%s\033[0m\n" "Failed to create configuration directory."
     exit 1
 fi
 
-
-
-# Check if the target directory exists and clear it
-if [ -d "$INSTALL_DIR" ]; then
-    printf "\033[0;33m%s\033[0m\n" "The directory $INSTALL_DIR already exists. Removing..."
-    rm -rf "$INSTALL_DIR"
-fi
-
-# Create the installation directory
-mkdir -p "$INSTALL_DIR"
-
-printf "\033[0;32m%s\033[0m\n" "Cloning repository to $INSTALL_DIR..."
-git clone "$REPO_URL" "$INSTALL_DIR"
-printf "\033[0;32m%s\033[0m\n" "Repository cloned."
-
-# Set permissions for all scripts
-printf "\033[0;34m%s\033[0m\n" "Setting executable permissions on scripts..."
-find "$INSTALL_DIR" -type f -name "*.sh" -exec chmod +x {} \;
+# Move files from temp directory to final installation directory
+mv "$TEMP_DIR"/* "$INSTALL_DIR"
+rm -rf "$TEMP_DIR"
 
 # Write the installation directory to a configuration file
 if echo "INSTALL_DIR=$INSTALL_DIR" > "$INSTALL_DIR/$CONFIG_FILE"; then
@@ -67,6 +58,10 @@ else
     printf "\033[0;31m%s\033[0m\n" "Failed to write installation directory to settings file."
     exit 1
 fi
+
+# Set permissions for all scripts
+printf "\033[0;34m%s\033[0m\n" "Setting executable permissions on scripts..."
+find "$INSTALL_DIR" -type f -name "*.sh" -exec chmod +x {} \;
 
 # Output instruction for starting the menu
 printf "\033[0;36m%s\033[0m\n" "Setup complete. To run the main menu, execute:"
