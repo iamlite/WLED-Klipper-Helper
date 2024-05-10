@@ -1,9 +1,8 @@
 #!/bin/sh
 
-# Script directory
-SCRIPT_DIR="$(dirname "$(realpath "$0")")" # Determines the absolute path of the directory of this script
 
-# Source common functions
+SCRIPT_DIR="$(dirname "$(realpath "$0")")"
+
 . "$SCRIPT_DIR/common_functions.sh"
 
 # Validate IP address format

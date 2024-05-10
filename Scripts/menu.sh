@@ -10,25 +10,47 @@ chmod +x "$SCRIPT_DIR"/*.sh
 . "$SCRIPT_DIR/common_functions.sh"
 
 
+
+print_ascii_art() {
+    print_menu_item '    _   _  _   ___ __     _  ___   _ ___ ___ ___ ___    _  _ ___ _   ___ ___ ___  '
+    print_menu_item '   | | | || | | __| _\ __| |/ / | | | _,\ _,\ __| _ \__| || | __| | | _,\ __| _ \ '
+    print_menu_item '   | '\''V'\'' || |_| _|| v |__|   <| |_| | v_/ v_/ _|| v /__| >< | _|| |_| v_/ _|| v / '
+    print_menu_item '   !_/ \_!|___|___|__/   |_|\_\___|_|_| |_| |___|_|_\  |_||_|___|___|_| |___|_|_\ '
+}
+
+
+
 # Function to display the main menu with spacing
 show_main_menu() {
     clear
+    print_ascii_art
+    print_spacer
     print_separator
-    print_menu_item "WLED Klipper Helper Script" "$GREEN"
+    print_spacer
+    print_menu_item "Version: $VERSION" "$DIM_WHITE"
+    print_menu_item "Author: $AUTHOR" "$DIM_WHITE"
+    print_menu_item "GitHub: $GITHUB" "$DIM_WHITE"
+    print_menu_item "Wiki: $WIKI" "$DIM_WHITE"
+    print_spacer
     print_separator
     print_spacer
     print_menu_item "1. WLED Setup Wizard" "$YELLOW"
     print_spacer
-    print_separator
-    print_menu_item "If this is your first time running the script, please select option 1." "$GREEN"
-    print_menu_item "Below are manual configuration options for your convenience." "$GREEN"
     print_separator
     print_spacer
     print_menu_item "2. Configure WLED with Moonraker" "$BLUE"
     print_spacer
     print_menu_item "3. Assign WLED Presets" "$BLUE"
     print_spacer
-    print_menu_item "4. Macro Menu" "$BLUE"
+    print_menu_item "4. Edit WLED Presets" "$BLUE"
+    print_spacer
+    print_separator
+    print_spacer
+    print_menu_item "4. Search for Macros" "$YELLOW"
+    print_spacer
+    print_menu_item "5. Inject WLED Macros" "$YELLOW"
+    print_spacer
+    print_menu_item "6. Edit Macros" "$YELLOW"
     print_spacer
     print_separator
     print_spacer
@@ -36,71 +58,7 @@ show_main_menu() {
     print_spacer
     print_separator
     print_spacer
-    printf "${CYAN}||${NC} ${MAGENTA}Please enter your choice: ${NC}"
-}
-
-# Function to show the macro menu
-show_macro_menu() {
-    clear
-    print_separator
-    print_spacer
-    print_menu_item "WLED Klipper Helper Macro Configurator" "$GREEN"
-    print_spacer
-    print_separator
-    print_spacer
-    print_menu_item "1. Search for Macros" "$YELLOW"
-    print_spacer
-    print_menu_item "2. Inject WLED Macros" "$YELLOW"
-    print_spacer
-    print_menu_item "3. Edit Macros" "$YELLOW"
-    print_spacer
-    print_separator
-    print_spacer
-    print_menu_item "B. Back" "$RED"
-    print_spacer
-    print_separator
-    print_spacer
-    printf "${CYAN}||${NC} ${MAGENTA}Please enter your choice: ${NC}"
-}
-
-# Confirmation before proceeding
-confirm_proceed() {
-    print_item "${BLUE}Selection: $1.${NC}\n"
-    print_item "${MAGENTA}$2${NC}\n"
-    printf "${CYAN}||${NC} ${GREEN}Proceed? (y/n): ${NC}"
-    read yn
-    if [ "$yn" = "y" ] || [ "$yn" = "Y" ]; then
-        sh "${SCRIPT_DIR}/$3"
-    else
-        print_item "${RED}Action cancelled by the user.${NC}\n"
-    fi
-}
-
-# Macro menu loop
-macro_menu_loop() {
-    while true; do
-        show_macro_menu
-        read -p "" macro_choice
-        echo "You selected: $macro_choice"  # Diagnostic output
-        case $macro_choice in
-            1) 
-                echo "Running macro_search.sh from $SCRIPT_DIR/macro_search.sh"  # Diagnostic output
-                sh "$SCRIPT_DIR/macro_search.sh"
-                ;;
-            2) 
-                echo "Running insert_macros.sh from $SCRIPT_DIR/insert_macros.sh"  # Diagnostic output
-                sh "$SCRIPT_DIR/insert_macros.sh"
-                ;;
-            3) 
-                echo "Running edit_macros.sh from $SCRIPT_DIR/edit_macros.sh"  # Diagnostic output
-                sh "$SCRIPT_DIR/edit_macros.sh"
-                ;;
-            b|B) return ;;
-            *) 
-                printf "${RED}Invalid choice. Please try again.${NC}\n" 
-                ;;
-        esac
-    done
+    print_input_item "${MAGENTA}Please enter your choice: ${NC}"
 }
 
 # Main loop
@@ -108,17 +66,16 @@ while true; do
     show_main_menu
     read -p "" choice
     case "$choice" in
-    1) sh "${SCRIPT_DIR}/wizard.sh" ;;
-    2) confirm_proceed "Setup WLED" "This will configure your WLED instance with Moonraker. It will add your WLED instance to moonraker.conf." "setup_wled.sh" ;;
-    3) confirm_proceed "Assign WLED Presets" "This will help you create and configure presets in your WLED setup for various printer events like pause, cancel, or resume." "assign_presets.sh" ;;
-    4)
-        macro_menu_loop
-        continue
-        ;;
-    q | Q)
-        printf "${BLUE}Exiting...${NC}\n"
+    1) sh "$SCRIPT_DIR/wizard.sh" ;;
+    2) sh "$SCRIPT_DIR/WLED/setup_wled.sh" ;;
+    3) sh "$SCRIPT_DIR/WLED/assign_presets.sh" ;;
+    4) sh "$SCRIPT_DIR/Macro/macro_search.sh" ;;
+    5) sh "$SCRIPT_DIR/Macro/insert_macros.sh" ;;
+    6) sh "$SCRIPT_DIR/Macro/edit_macros.sh" ;;
+    q|Q) 
+        print_input_item "${BLUE}Exiting...${NC}\n"
         break
         ;;
-    *) printf "${RED}Invalid option, try again...${NC}\n" ;;
+    *) print_input_item "${RED}Invalid option, try again...${NC}\n" ;;
     esac
 done

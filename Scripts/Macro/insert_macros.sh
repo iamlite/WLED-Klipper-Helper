@@ -1,15 +1,23 @@
 #!/bin/sh
 
-# Source common functions
-. "$SCRIPT_DIR/common_functions.sh"
+
 
 # Determine the script's directory
 SCRIPT_DIR="$(dirname "$(realpath "$0")")"
 BASE_DIR="$(dirname "$SCRIPT_DIR")"
 
+# Source common functions
+. "$SCRIPT_DIR/common_functions.sh"
+
 # Configuration and script paths
 CONFIRMED_MACROS_FILE="$BASE_DIR/Config/confirmed_macros.txt"
 PRESET_ASSIGNMENTS_FILE="$BASE_DIR/Config/presets.conf"
+
+# Ensure script is run as root
+if [ "$(id -u)" != "0" ]; then
+    print_item "${RED}This script must be run as root${NC}\n" 1>&2
+    exit 1
+fi
 
 echo "Script directory: $SCRIPT_DIR"
 echo "Base directory: $BASE_DIR"
