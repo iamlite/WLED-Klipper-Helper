@@ -8,7 +8,12 @@ if ! command -v git &> /dev/null
 then
     printf "\033[0;33m%s\033[0m\n" "Git is not installed. Installing..."
     apt-get update && apt-get install -y git
-    printf "\033[0;32m%s\033[0m\n" "Git has been installed."
+    if [ $? -eq 0 ]; then
+        printf "\033[0;32m%s\033[0m\n" "Git has been installed."
+    else
+        printf "\033[0;31m%s\033[0m\n" "Failed to install Git."
+        exit 1
+    fi
 fi
 
 # Define default installation directory and repository URL
@@ -23,7 +28,7 @@ if [ "$(id -u)" -ne 0 ]; then
 fi
 
 # Use environment variable or default for the installation directory
-INSTALL_DIR="${INSTALL_DIR:-$DEFAULT_INSTALL_DIR}"
+INSTALL_DIR="${INSTALL_DIR:-$DEFAULT_INSTALL_POOL}"
 CONFIG_DIR="$(dirname "$INSTALL_DIR/$CONFIG_FILE")"
 
 printf "\033[0;33m%s\033[0m\n" "Installation directory is set to $INSTALL_DIR"
@@ -63,4 +68,4 @@ find "$INSTALL_DIR" -type f -name "*.sh" -exec chmod +x {} \;
 
 # Output instruction for starting the menu
 printf "\033[0;36m%s\033[0m\n" "Setup complete. To run the main menu, execute:"
-printf "\033[0;35m%s\033[0m\n" "$INSTALL_ALLOC_DIR/Scripts/menu.sh"
+printf "\033[0;35m%s\033[0m\n" "$INSTALL_DIR/Scripts/menu.sh"

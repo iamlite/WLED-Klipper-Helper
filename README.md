@@ -17,13 +17,6 @@ curl -sSL "https://raw.githubusercontent.com/iamlite/WLED-Klipper-Helper/main/st
 curl -sSL "https://raw.githubusercontent.com/iamlite/WLED-Klipper-Helper/main/start.sh?$(date +%s)" | sudo INSTALL_DIR=/YOUR/CUSTOM/PATH/WLED-Klipper-Helper sh
 ```
 
-## test
-
-```shell
-curl -sSL "https://raw.githubusercontent.com/iamlite/WLED-Klipper-Helper/main/start.sh?$(date +%s)" | sudo INSTALL_DIR=/usr/data2/WLED-Klipper-Helper sh
-```
-
-
 ```bash
   ├─ Config/
   │  └─ presets.conf
@@ -36,4 +29,10 @@ curl -sSL "https://raw.githubusercontent.com/iamlite/WLED-Klipper-Helper/main/st
   ├─ .gitignore
   ├─ README.md
   └─ start.sh
+```
+
+## test
+
+```shell
+curl -sSL "https://raw.githubusercontent.com/iamlite/WLED-Klipper-Helper/main/start.sh?$(date +%s)" | sudo INSTALL_DIR=/usr/data2/WLED-Klipper-Helper sh
 ```
