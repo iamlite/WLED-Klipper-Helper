@@ -41,13 +41,7 @@ else
     exit 1
 fi
 
-# Write the installation directory to a configuration file
-if echo "INSTALL_DIR=$INSTALL_DIR" > "$INSTALL_DIR/$CONFIG_FILE"; then
-    printf "\033[0;32m%s\033[0m\n" "Installation directory saved in settings file."
-else
-    printf "\033[0;31m%s\033[0m\n" "Failed to write installation directory to settings file."
-    exit 1
-fi
+
 
 # Check if the target directory exists and clear it
 if [ -d "$INSTALL_DIR" ]; then
@@ -65,6 +59,14 @@ printf "\033[0;32m%s\033[0m\n" "Repository cloned."
 # Set permissions for all scripts
 printf "\033[0;34m%s\033[0m\n" "Setting executable permissions on scripts..."
 find "$INSTALL_DIR" -type f -name "*.sh" -exec chmod +x {} \;
+
+# Write the installation directory to a configuration file
+if echo "INSTALL_DIR=$INSTALL_DIR" > "$INSTALL_DIR/$CONFIG_FILE"; then
+    printf "\033[0;32m%s\033[0m\n" "Installation directory saved in settings file."
+else
+    printf "\033[0;31m%s\033[0m\n" "Failed to write installation directory to settings file."
+    exit 1
+fi
 
 # Output instruction for starting the menu
 printf "\033[0;36m%s\033[0m\n" "Setup complete. To run the main menu, execute:"
