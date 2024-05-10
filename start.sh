@@ -13,6 +13,13 @@ if [ "$(id -u)" -ne 0 ]; then
     printf "\033[0;31m%s\033[0m\n" "Error: This script must be run as root."
     exit 1
 fi
+# Check if Git is installed and install it if not
+if ! command -v git &> /dev/null
+then
+    printf "\033[0;33m%s\033[0m\n" "Git is not installed. Installing..."
+    apt-get update && apt-get install -y git
+    printf "\033[0;32m%s\033[0m\n" "Git has been installed."
+fi
 
 # Ask user for the installation directory
 printf "\033[0;33m%s\033[0m\n" "Default installation directory is $DEFAULT_INSTALL_DIR"
