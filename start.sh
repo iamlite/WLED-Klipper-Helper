@@ -6,7 +6,7 @@ printf "\033[0;34m%s\033[0m\n" "WLED Klipper Helper Installation"
 # Define default installation directory and repository URL
 DEFAULT_INSTALL_DIR="/usr/data/WLED-Klipper-Helper"
 REPO_URL="https://github.com/iamlite/WLED-Klipper-Helper.git"
-CONFIG_FILE="/Config/settings.conf"
+CONFIG_FILE="Config/settings.conf"  # Changed the path to save inside Config folder
 
 # Ensure the script is run as root
 if [ "$(id -u)" -ne 0 ]; then
@@ -22,16 +22,16 @@ read user_choice
 if [ "$user_choice" = "y" ] || [ "$user_choice" = "Y" ]; then
     printf "\033[0;33m%s\033[0m" "Enter new installation directory: "
     read user_added_dir
-    INSTALL_DIR="$user_added.usr/data"
+    INSTALL_DIR="$user_added_dir"
 else
     INSTALL_DIR="$DEFAULT_INSTALL_DIR"
 fi
 
 # Ensure the configuration directory exists
-mkdir -p "$(dirname "$CONFIG_FILE")"
+mkdir -p "$(dirname "$INSTALL_DIR/$CONFIG_FILE")"  # Updated path to include INSTALL_DIR
 
 # Write the installation directory to a configuration file
-echo "INSTALL_DIR=$INSTALL_DIR" > "$CONFIG_FILE"
+echo "INSTALL_DIR=$INSTALL_DIR" > "$INSTALL_DIR/$CONFIG_FILE"  # Updated path to include INSTALL_DIR
 
 # Clone the repository
 if [ -d "$INSTALL_DIR" ]; then
