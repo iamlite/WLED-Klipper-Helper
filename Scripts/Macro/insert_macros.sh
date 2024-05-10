@@ -20,9 +20,6 @@ if [ "$(id -u)" != "0" ]; then
     exit 1
 fi
 
-echo "Script directory: $SCRIPT_DIR"
-echo "Base directory: $BASE_DIR"
-
 # Check existence of necessary files
 if [ ! -f "$CONFIRMED_MACROS_FILE" ] || [ ! -f "$PRESET_ASSIGNMENTS_FILE" ]; then
     printf "${RED}Necessary configuration files are missing. Exiting.${NC}\n"
