@@ -193,7 +193,7 @@ print_spacer
 # Create the installation directory
 mkdir -p "$INSTALL_DIR"
 print_item "Cloning repository to $INSTALL_DIR..." $GREEN
-{ git clone "$REPO_URL" "$INSTALL_DIR"; } | while read line; do
+{ git clone "$REPO_URL" "$INSTALL_DIR" 2>&1; } | while read line; do
     print_item "$line" $GREEN
 done
 print_item "Repository cloned." $GREEN
