@@ -1,13 +1,38 @@
 #!/bin/sh
-# Script directory determination
-SCRIPT_DIR="$(dirname "$(realpath "$0")")"
+
+########################################################################
+########################################################################
+########################################################################
+
+# Start from the directory of the current script and find the base directory
+DIR=$(dirname "$(realpath "$0")")
+while [ "$DIR" != "/" ]; do
+    if [ -f "$DIR/VERSION" ]; then
+        BASE_DIR=$DIR
+        break
+    fi
+    DIR=$(dirname "$DIR")
+done
+
+if [ -z "$BASE_DIR" ]; then
+    echo "Failed to find the base directory. Please check your installation." >&2
+    exit 1
+fi
+
+# Script directory
+SCRIPT_DIR="$BASE_DIR/Scripts"
 
 # Source common functions
 . "$SCRIPT_DIR/common_functions.sh"
 
+########################################################################
+########################################################################
+########################################################################
+
+
 # Function to wait for user input to continue
 continue_prompt() {
-    printf "${GREEN}Press enter to continue...${NC}"
+    print_item "${GREEN}Press enter to continue...${NC}"
     read dummy
     print_spacer
 }

@@ -37,10 +37,10 @@ show_intro() {
     print_separator
     print_item "Welcome to the WLED Klipper Setup Helper" "$MAGENTA"
     print_separator
-    print_item "This guide will help you link WLED lighting presets to specific events on your Klipper 3D printer." "$GREEN"
-    print_item "Start by opening your WLED instance in a web browser and navigate to the 'Presets' tab."
-    print_item "Click on the 'Add Preset' button to begin creating presets."
-    print_item "You will create presets that correspond to various printer events, each triggered by a unique macro."
+    print_nospaces "This guide will help you link WLED lighting presets to specific events on your Klipper 3D printer." "$GREEN"
+    print_nospaces "Start by opening your WLED instance in a web browser and navigate to the 'Presets' tab."
+    print_nospaces "Click on the 'Add Preset' button to begin creating presets."
+    print_nospaces "You will create presets that correspond to various printer events, each triggered by a unique macro."
     print_spacer
     print_item "Please follow these steps to create a preset for each printer status. You can choose any visual effect and color you like for each event:"
     print_item "Idle - The printer is not active." "$YELLOW"
@@ -52,7 +52,7 @@ show_intro() {
     print_item "Homing - The printer is preparing to print by homing its axes." "$YELLOW"
     print_item "Printing - The printer is in the process of printing." "$YELLOW"
     print_spacer
-    print_item "Assign each preset a unique number in WLED. This number will be used in your printer's configuration to trigger the correct lighting effect for each event."
+    print_nospaces "Assign each preset a unique number in WLED. This number will be used in your printer's configuration to trigger the correct lighting effect for each event."
     print_spacer
 }
 
