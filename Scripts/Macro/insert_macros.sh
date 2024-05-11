@@ -87,7 +87,7 @@ insert_wled_update() {
             p && index($0, insert_text) {found=1}
             {print}
         ' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
-        if [ seen -eq 1 ]; then
+        if [ $seen -eq 1 ]; then
             print_nospaces "Inserted for $preset_key in $file."
         else
             print_item "Skipped insertion for $preset_key as it already exists in $file."
