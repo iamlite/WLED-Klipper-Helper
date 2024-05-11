@@ -45,27 +45,27 @@ show_main_menu() {
     print_menu_item "Wiki: $WIKI" "$DIM_WHITE"
     print_separator
     print_spacer
-    print_menu_item "1. WLED Setup Wizard" "$BOLD_YELLOW"
+    print_menu_item "1. WLED Setup Wizard" "$BOLD_MAGENTA"
     print_spacer
     print_separator
-    print_menu_item "2. Configure WLED with Moonraker" "$BLUE"
+    print_menu_item "2. Configure WLED with Moonraker" "$RED"
     print_spacer
     print_menu_item "3. Assign WLED Presets" "$BLUE"
     print_spacer
-    print_menu_item "4. Edit WLED Presets" "$BLUE"
+    print_menu_item "4. Edit WLED Presets (not implemented yet)" "$DIM_CYAN"
     print_separator
     print_menu_item "5. Search for Macros" "$YELLOW"
     print_spacer
-    print_menu_item "6. Inject WLED Macros" "$YELLOW"
+    print_menu_item "6. Inject WLED Macros" "$GREEN"
     print_spacer
-    print_menu_item "7. Edit Macros" "$YELLOW"
+    print_menu_item "7. Edit Macros (not implemented yet)" "$DIM_CYAN" 
     print_separator
     print_spacer
     print_menu_item "Q. Quit" "$RED"
     print_spacer
     print_separator
     print_spacer
-    print_input_item "${MAGENTA}Please enter your choice: ${NC}"
+    print_input_item "Please enter your choice:" "$MAGENTA"
 }
 
 # Main loop
