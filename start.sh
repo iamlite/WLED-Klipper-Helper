@@ -187,7 +187,6 @@ if [ -d "$INSTALL_DIR" ]; then
         count=$((count + 1))
     done
     mv "$INSTALL_DIR" "$INSTALL_DIR.old$count"
-    cp -r "$INSTALL_DIR.old$count" "$INSTALL_DIR"
 fi
 
 # Create the installation directory
