@@ -138,6 +138,11 @@ print_ascii_art() {
     done
 }
 
+
+#########################################
+###########   ### LOOP ###   ############
+#########################################
+
 print_separator
 print_ascii_art
 print_separator
@@ -146,7 +151,9 @@ print_separator
 if ! command -v git &> /dev/null
 then
     print_item "Git is not installed. Installing..." $YELLOW
-    apt-get update && apt-get install -y git
+    { apt-get update && apt-get install -y git; } | while read line; do
+        print_item "$line" $YELLOW
+    done
     if [ $? -eq 0 ]; then
         print_item "Git has been installed." $GREEN
     else
@@ -186,7 +193,9 @@ print_spacer
 # Create the installation directory
 mkdir -p "$INSTALL_DIR"
 print_item "Cloning repository to $INSTALL_DIR..." $GREEN
-git clone "$REPO_URL" "$INSTALL_DIR"
+{ git clone "$REPO_URL" "$INSTALL_DIR"; } | while read line; do
+    print_item "$line" $GREEN
+done
 print_item "Repository cloned." $GREEN
 
 print_spacer

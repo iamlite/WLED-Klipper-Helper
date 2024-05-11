@@ -34,5 +34,5 @@ curl -sSL "https://raw.githubusercontent.com/iamlite/WLED-Klipper-Helper/main/st
 ## test
 
 ```shell
-curl -sSL -H "Cache-Control: no-cache" "https://raw.githubusercontent.com/iamlite/WLED-Klipper-Helper/main/start.sh" | sudo INSTALL_DIR=/usr/data2/WLED-Klipper-Helper sh
+curl -sSL -H "Cache-Control: no-cache" "https://raw.githubusercontent.com/iamlite/WLED-Klipper-Helper/main/start.sh" | sudo INSTALL_DIR=/usr/data/WLED-Klipper-Helper sh
 ```
