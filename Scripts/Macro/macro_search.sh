@@ -69,22 +69,22 @@ fi
 # Temporary file for storing findings and a file to store confirmed macros
 temp_file=$(mktemp)
 confirmed_macros_file="$BASE_DIR/Config/confirmed_macros.txt"
-print_nospacers "${GREEN}Temporary file for findings: $temp_file${NC}\n"
+print_nospaces "${GREEN}Temporary file for findings: $temp_file${NC}\n"
 
 # Initialize or clear the confirmed macros file
 echo "" > "$confirmed_macros_file"
-print_nospacers "${GREEN}Initialized confirmed macros file: $confirmed_macros_file${NC}\n"
+print_nospaces "${GREEN}Initialized confirmed macros file: $confirmed_macros_file${NC}\n"
 
 # Process each macro one by one
 for macro in $macros; do
-    print_nospacers "${GREEN}Searching for $macro in $search_dir...${NC}\n"
+    print_nospaces "${GREEN}Searching for $macro in $search_dir...${NC}\n"
     grep -RIHn "^\s*\[gcode_macro\s\+$macro\]" "$search_dir" > "$temp_file"
     if [ ! -s "$temp_file" ]; then
         print_item "${YELLOW}No active instances of $macro found.${NC}\n"
         continue
     fi
 
-    print_nospacers "${CYAN}Review the found instances of $macro:${NC}\n"
+    print_nospaces "${CYAN}Review the found instances of $macro:${NC}\n"
     while IFS=: read -r file line_number content; do
         total_lines=$(wc -l < "$file")
         start_line=$line_number
@@ -92,8 +92,8 @@ for macro in $macros; do
         if [ "$end_line" -gt "$total_lines" ]; then
             end_line=$total_lines
         fi
-        print_nospacers "${GREEN}Macro: $content${NC}\n"
-        print_nospacers "${CYAN}Preview of macro content starting at line $line_number in file $file:${NC}\n"
+        print_nospaces "${GREEN}Macro: $content${NC}\n"
+        print_nospaces "${CYAN}Preview of macro content starting at line $line_number in file $file:${NC}\n"
         sed -n "${start_line},${end_line}p" "$file"
 
         print_input_item "${GREEN}Confirm this is correct (y/n/q to quit): ${NC}"
@@ -120,9 +120,9 @@ done
 # Cleanup and finish
 rm "$temp_file"
 if [ -s "$confirmed_macros_file" ]; then
-    print_nospacers "${GREEN}Process completed. Confirmed macros are stored in $confirmed_macros_file${NC}\n"
+    print_nospaces "${GREEN}Process completed. Confirmed macros are stored in $confirmed_macros_file${NC}\n"
 else
-    print_nospacers "${YELLOW}No macros confirmed for modification.${NC}\n"
+    print_nospaces "${YELLOW}No macros confirmed for modification.${NC}\n"
 fi
 print_input_item "${CYAN}Press enter to continue...${NC}\n"
 read dummy
