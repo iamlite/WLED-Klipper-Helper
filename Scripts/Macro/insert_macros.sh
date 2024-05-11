@@ -69,7 +69,7 @@ insert_wled_update() {
     local preset_value=$(apply_preset "$preset_key")
     local insert_text="  UPDATE_WLED PRESET=$preset_value"  # Using spaces for indentation
 
-    print_item "Attempting to update file: $file in macro starting at line $start_line"
+    print_nospacers "Attempting to update file: $file in macro starting at line $start_line"
     if [ "$match_pattern" = "end_macro" ]; then
         # Insert at the end of the macro, before any potential new macro starts or file ends
         awk -v line_num="$start_line" -v insert_text="$insert_text" '
@@ -88,7 +88,7 @@ insert_wled_update() {
             {print}
         ' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
         if [ seen -eq 1 ]; then
-            print_item "Inserted for $preset_key in $file."
+            print_nospacers "Inserted for $preset_key in $file."
         else
             print_item "Skipped insertion for $preset_key as it already exists in $file."
         fi
@@ -98,7 +98,7 @@ insert_wled_update() {
 # Reading entries and processing updates
 while IFS=':' read -r file line_number content; do
     macro_name=$(echo "$content" | grep -oE '\[gcode_macro\s+\w+\]' | cut -d ' ' -f 2 | tr -d '[]')
-    print_item "Processing macro: $macro_name in file $file at line $line_number"
+    print_nospacers "Processing macro: $macro_name in file $file at line $line_number"
     case "$macro_name" in
         "START_PRINT")
             insert_wled_update "$file" "Heating" "CLEAR_PAUSE" "$line_number"
@@ -119,6 +119,6 @@ while IFS=':' read -r file line_number content; do
     esac
 done < "$CONFIRMED_MACROS_FILE"
 
-print_item "${GREEN}All modifications completed.${NC}\n"
-print_item "${CYAN}Press enter to continue...${NC}\n"
+print_nospacers "${GREEN}All modifications completed.${NC}\n"
+print_nospacers "${CYAN}Press enter to continue...${NC}\n"
 read dummy

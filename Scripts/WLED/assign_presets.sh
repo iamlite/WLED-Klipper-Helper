@@ -29,7 +29,7 @@ SCRIPT_DIR="$BASE_DIR/Scripts"
 ########################################################
 ########################################################
 
-config_dir="BASE_DIR/Config"
+config_dir="$BASE_DIR/Config"
 config_file="$config_dir/presets.conf"
 
 
