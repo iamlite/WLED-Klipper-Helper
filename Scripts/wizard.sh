@@ -25,6 +25,11 @@ SCRIPT_DIR="$BASE_DIR/Scripts"
 # Source common functions
 . "$SCRIPT_DIR/common_functions.sh"
 
+# Config Directory
+config_dir="${BASE_DIR}/Config"
+
+# Search directory for configurations
+search_dir="/usr/data/printer_data/config"
 ########################################################################
 ########################################################################
 ########################################################################
@@ -44,44 +49,44 @@ chmod +x "${SCRIPT_DIR}"/*.sh
 print_item "Permissions set. Continuing with the wizard." $GREEN
 
 
-# Search directory for configurations
-search_dir="/usr/data/printer_data/config"
 
 # Step 1: Delegate WLED setup to setup_wled.sh
 print_separator
 print_item "Configuring WLED..." $YELLOW
-"${SCRIPT_DIR}/setup_wled.sh"
+"${SCRIPT_DIR}/WLED/setup_wled.sh"
 continue_prompt
 
 # Step 2: Handle presets
 print_separator
 print_item "Handling presets for printer events..." $MAGENTA
-if [ -s "${SCRIPT_DIR}/Config/presets.conf" ]; then
+if [ -s "${BASE_DIR}/Config/presets.conf" ]; then
     print_item "Presets already defined. Skipping preset assignment." $GREEN
     continue_prompt
 else
     print_item "No presets found. Let's assign some presets." $RED
-    "${SCRIPT_DIR}/assign_presets.sh"
+    "${SCRIPT_DIR}/WLED/assign_presets.sh"
     continue_prompt
 fi
 
 # Step 3: Search and confirm macros
 print_separator
 print_item "Searching for user macros..." $BLUE
-if [ -s "${search_dir}/confirmed_macros.txt" ] && [ $(wc -l < "${search_dir}/confirmed_macros.txt") -eq 5 ]; then
+
+# Check if the confirmed_macros.txt exists and has exactly 5 lines in the config directory
+if [ -s "${config_dir}/confirmed_macros.txt" ] && [ $(wc -l < "${config_dir}/confirmed_macros.txt") -eq 5 ]; then
     print_item "All necessary macros have been found and confirmed:" $GREEN
-    cat "${search_dir}/confirmed_macros.txt"
+    cat "${config_dir}/confirmed_macros.txt"
     continue_prompt
 else
     print_item "Searching for macros..." $RED
-    "${SCRIPT_DIR}/macro_search.sh"
+    "${SCRIPT_DIR}/Macro/macro_search.sh" "${config_dir}" # Assuming macro_search.sh can take a directory as an argument
     continue_prompt
 fi
 
 # Step 4: Insert macros
 print_separator
 print_item "Inserting macros..." $CYAN
-"${SCRIPT_DIR}/insert_macros.sh"
+"${SCRIPT_DIR}/Macro/insert_macros.sh"
 continue_prompt
 
 # Completion message
