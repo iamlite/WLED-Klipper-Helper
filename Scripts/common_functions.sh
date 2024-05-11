@@ -148,9 +148,8 @@ print_item() {
 print_nospaces() {
     local item=$1
     local color=$2
-    printf "${CYAN}||${NC}\n"
+    printf "${CYAN}||${NC} ${color}${item}${NC}\n"
 }
-
 print_input_item() {
     local item=$1
     local color=$2
