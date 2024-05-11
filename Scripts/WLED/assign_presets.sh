@@ -1,13 +1,35 @@
 #!/bin/sh
 
+########################################################
+#################  FIND BASE DIRECTORY #################
+########################################################
+
+# Start from the directory of the current script and find the base directory
+DIR=$(dirname "$(realpath "$0")")
+while [ "$DIR" != "/" ]; do
+    if [ -f "$DIR/VERSION" ]; then
+        BASE_DIR=$DIR
+        break
+    fi
+    DIR=$(dirname "$DIR")
+done
+
+if [ -z "$BASE_DIR" ]; then
+    echo "Failed to find the base directory. Please check your installation." >&2
+    exit 1
+fi
 
 # Script directory
-SCRIPT_DIR="$(dirname "$(realpath "$0")")"
+SCRIPT_DIR="$BASE_DIR/Scripts"
 
-# Source common functions from the Scripts directory
-. "$SCRIPT_DIR/../common_functions.sh"
+# Source common functions
+. "$SCRIPT_DIR/common_functions.sh"
 
-config_dir="/usr/data/WLED-Klipper-Helper/Config"
+########################################################
+########################################################
+########################################################
+
+config_dir="BASE_DIR/Config"
 config_file="$config_dir/presets.conf"
 
 

@@ -143,7 +143,10 @@ print_ascii_art() {
 ###########   ### LOOP ###   ############
 #########################################
 
+clear
+print_spacer
 print_ascii_art
+print_spacer
 
 # Check if Git is installed and install it if not
 if ! command -v git &> /dev/null

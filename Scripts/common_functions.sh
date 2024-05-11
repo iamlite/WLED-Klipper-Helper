@@ -13,18 +13,29 @@ GITHUB="https://github.com/iamlite/WLED-Klipper-Helper"
 WIKI="https://github.com/iamlite/WLED-Klipper-Helper/wiki"
 
 
-# Initialize the current script's directory
-SCRIPT_DIR="$(dirname "$(realpath "$0")")"
 
-# Climb up the directory tree to find the base directory where start.sh resides
-BASE_DIR="$SCRIPT_DIR"
-while [ ! -f "$BASE_DIR/VERSION" ]; do
-    BASE_DIR=$(dirname "$BASE_DIR")
-    if [ "$BASE_DIR" == "/" ]; then
-        echo "Failed to find the base directory. Please check your installation."
-        exit 1
+
+########################################################
+#################  FIND BASE DIRECTORY #################
+########################################################
+
+# Start from the directory of the current script and find the base directory
+DIR=$(dirname "$(realpath "$0")")
+while [ "$DIR" != "/" ]; do
+    if [ -f "$DIR/VERSION" ]; then
+        BASE_DIR=$DIR
+        break
     fi
+    DIR=$(dirname "$DIR")
 done
+
+if [ -z "$BASE_DIR" ]; then
+    echo "Failed to find the base directory. Please check your installation." >&2
+    exit 1
+fi
+
+# Script directory
+SCRIPT_DIR="$BASE_DIR/Scripts"
 
 CONFIG_FILE_PATH="$BASE_DIR/Config/settings.conf"
 
@@ -35,7 +46,6 @@ else
     echo "Configuration file not found at $CONFIG_FILE_PATH."
     exit 1
 fi
-
 
 
 ################################

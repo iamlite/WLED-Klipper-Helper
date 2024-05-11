@@ -1,14 +1,33 @@
 #!/bin/sh
 
+########################################################
+#################  FIND BASE DIRECTORY #################
+########################################################
+
+# Start from the directory of the current script and find the base directory
+DIR=$(dirname "$(realpath "$0")")
+while [ "$DIR" != "/" ]; do
+    if [ -f "$DIR/VERSION" ]; then
+        BASE_DIR=$DIR
+        break
+    fi
+    DIR=$(dirname "$DIR")
+done
+
+if [ -z "$BASE_DIR" ]; then
+    echo "Failed to find the base directory. Please check your installation." >&2
+    exit 1
+fi
 
 # Script directory
-SCRIPT_DIR="$(dirname "$(realpath "$0")")"
+SCRIPT_DIR="$BASE_DIR/Scripts"
 
-# Source common functions from the Scripts directory
-. "$SCRIPT_DIR/../common_functions.sh"
+# Source common functions
+. "$SCRIPT_DIR/common_functions.sh"
 
-BASE_DIR="$(dirname "$SCRIPT_DIR")"
-
+########################################################
+########################################################
+########################################################
 
 # Configuration and script paths
 CONFIRMED_MACROS_FILE="$BASE_DIR/Config/confirmed_macros.txt"
@@ -22,7 +41,7 @@ fi
 
 # Check existence of necessary files
 if [ ! -f "$CONFIRMED_MACROS_FILE" ] || [ ! -f "$PRESET_ASSIGNMENTS_FILE" ]; then
-    printf "${RED}Necessary configuration files are missing. Exiting.${NC}\n"
+    print_item "${RED}Necessary configuration files are missing. Exiting.${NC}\n"
     read dummy
     exit 1
 fi
@@ -50,7 +69,7 @@ insert_wled_update() {
     local preset_value=$(apply_preset "$preset_key")
     local insert_text="  UPDATE_WLED PRESET=$preset_value"  # Using spaces for indentation
 
-    echo "Attempting to update file: $file in macro starting at line $start_line"
+    print_item "Attempting to update file: $file in macro starting at line $start_line"
     if [ "$match_pattern" = "end_macro" ]; then
         # Insert at the end of the macro, before any potential new macro starts or file ends
         awk -v line_num="$start_line" -v insert_text="$insert_text" '
@@ -69,9 +88,9 @@ insert_wled_update() {
             {print}
         ' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
         if [ seen -eq 1 ]; then
-            echo "Inserted for $preset_key in $file."
+            print_item "Inserted for $preset_key in $file."
         else
-            echo "Skipped insertion for $preset_key as it already exists in $file."
+            print_item "Skipped insertion for $preset_key as it already exists in $file."
         fi
     fi
 }
@@ -79,7 +98,7 @@ insert_wled_update() {
 # Reading entries and processing updates
 while IFS=':' read -r file line_number content; do
     macro_name=$(echo "$content" | grep -oE '\[gcode_macro\s+\w+\]' | cut -d ' ' -f 2 | tr -d '[]')
-    echo "Processing macro: $macro_name in file $file at line $line_number"
+    print_item "Processing macro: $macro_name in file $file at line $line_number"
     case "$macro_name" in
         "START_PRINT")
             insert_wled_update "$file" "Heating" "CLEAR_PAUSE" "$line_number"
@@ -100,6 +119,6 @@ while IFS=':' read -r file line_number content; do
     esac
 done < "$CONFIRMED_MACROS_FILE"
 
-printf "${GREEN}All modifications completed.${NC}\n"
-printf "${CYAN}Press enter to continue...${NC}\n"
+print_item "${GREEN}All modifications completed.${NC}\n"
+print_item "${CYAN}Press enter to continue...${NC}\n"
 read dummy

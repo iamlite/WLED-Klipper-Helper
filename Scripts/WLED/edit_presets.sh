@@ -1,14 +1,37 @@
 #!/bin/sh
 
 
-# Script directory
-SCRIPT_DIR="$(dirname "$(realpath "$0")")"
+########################################################
+#################  FIND BASE DIRECTORY #################
+########################################################
 
-# Source common functions from the Scripts directory
-. "$SCRIPT_DIR/../common_functions.sh"
+# Start from the directory of the current script and find the base directory
+DIR=$(dirname "$(realpath "$0")")
+while [ "$DIR" != "/" ]; do
+    if [ -f "$DIR/VERSION" ]; then
+        BASE_DIR=$DIR
+        break
+    fi
+    DIR=$(dirname "$DIR")
+done
+
+if [ -z "$BASE_DIR" ]; then
+    echo "Failed to find the base directory. Please check your installation." >&2
+    exit 1
+fi
+
+# Script directory
+SCRIPT_DIR="$BASE_DIR/Scripts"
+
+# Source common functions
+. "$SCRIPT_DIR/common_functions.sh"
+
+########################################################
+########################################################
+########################################################
 
 # Config file path
-config_file="/usr/data/WLED-Klipper-Helper/config/presets.conf"
+config_file="$BASE_DIR/Config/presets.conf"
 
 # Function to display the stored presets with options A, B, C, etc.
 show_presets() {
