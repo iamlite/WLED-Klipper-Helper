@@ -143,9 +143,7 @@ print_ascii_art() {
 ###########   ### LOOP ###   ############
 #########################################
 
-print_separator
 print_ascii_art
-print_separator
 
 # Check if Git is installed and install it if not
 if ! command -v git &> /dev/null
@@ -167,28 +165,27 @@ DEFAULT_INSTALL_DIR="/usr/data/WLED-Klipper-Helper"
 REPO_URL="https://github.com/iamlite/WLED-Klipper-Helper.git"
 CONFIG_FILE="Config/settings.conf"
 
-print_spacer
-
 # Ensure the script is run as root
 if [ "$(id -u)" -ne 0 ]; then
     print_item "Error: This script must be run as root." $RED
     exit 1
 fi
 
-print_spacer
-
 # Use environment variable or default for the installation directory
 INSTALL_DIR="${INSTALL_DIR:-$DEFAULT_INSTALL_DIR}"
 print_item "Installation directory is set to $INSTALL_DIR" $YELLOW
 
-print_spacer
 
-# Check if the target directory exists and clear it
+# Check if the target directory exists and rename it
 if [ -d "$INSTALL_DIR" ]; then
-    print_item "The directory $INSTALL_DIR already exists. Removing..." $YELLOW
-    rm -rf "$INSTALL_DIR"
+    print_item "The directory $INSTALL_DIR already exists. Renaming..." $YELLOW
+    count=1
+    while [ -d "$INSTALL_DIR.old$count" ]; do
+        count=$((count + 1))
+    done
+    mv "$INSTALL_DIR" "$INSTALL_DIR.old$count"
+    cp -r "$INSTALL_DIR.old$count" "$INSTALL_DIR"
 fi
-print_spacer
 
 # Create the installation directory
 mkdir -p "$INSTALL_DIR"
@@ -198,12 +195,8 @@ print_item "Cloning repository to $INSTALL_DIR..." $GREEN
 done
 print_item "Repository cloned." $GREEN
 
-print_spacer
-
 # Ensure the configuration directory exists
 mkdir -p "$(dirname "$INSTALL_DIR/$CONFIG_FILE")"
-
-print_spacer
 
 # Write the installation directory to a configuration file
 if echo "INSTALL_DIR=$INSTALL_DIR" > "$INSTALL_DIR/$CONFIG_FILE"; then
@@ -213,14 +206,13 @@ else
     exit 1
 fi
 
-print_spacer
-
 # Set permissions for all scripts
 print_item "Setting executable permissions on scripts..." $BLUE
 find "$INSTALL_DIR" -type f -name "*.sh" -exec chmod +x {} \;
 
-print_spacer
 
 # Output instruction for starting the menu
 print_item "Setup complete. To run the main menu, execute:" $CYAN
+print_spacer
 print_item "$INSTALL_DIR/Scripts/menu.sh" $MAGENTA
+print_spacer
