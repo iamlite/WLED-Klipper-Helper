@@ -89,7 +89,7 @@ add_wled_config() {
 
 check_existing_instances
 if [ $? -eq 1 ]; then
-    print_input_item "${YELLOW}Enter a name for the new WLED instance (e.g., wled_bedlight): ${NC}"
+    print_input_item "${YELLOW}Enter a name for the new WLED instance (e.g., my_wled): ${NC}"
     read wled_name
     print_input_item "${YELLOW}Enter WLED IP address (e.g., x.x.x.x): ${NC}"
     read wled_ip
