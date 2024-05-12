@@ -26,18 +26,16 @@ SETTINGS_FILE="$BASE_DIR/Config/settings.conf"
 
 PRINTER_CFG="$KLIPPER_CONFIG_DIR/printer.cfg"
 
-source "$SETTINGS_FILE"
-
 conf_file="$KLIPPER_CONFIG_DIR/moonraker.conf" 
 
 # Source common functions
 . "$SCRIPT_DIR/common_functions.sh"
+source "$SETTINGS_FILE"
 
 ########################################################
 ########################################################
 ########################################################
 
-# Validate IP address format
 validate_ip() {
     while ! echo "$1" | grep -E -q '^([0-9]{1,3}\.){3}[0-9]{1,3}$'; do
         print_item "${RED}Invalid IP address format. Please ensure it is in the form x.x.x.x where x is 0-255:${NC}\n"
@@ -47,7 +45,6 @@ validate_ip() {
     done
 }
 
-# Validate numerical input
 validate_number() {
     while ! echo "$1" | grep -E -q '^[0-9]+$'; do
         print_item "${RED}Invalid number entered. Please ensure it is a positive integer:${NC}\n"
@@ -57,65 +54,54 @@ validate_number() {
     done
 }
 
-# Function to add WLED configuration to moonraker.conf
-add_wled_config() {
-
-    # Check if the entry already exists
-    if grep -q "^\[wled $1\]$" "$conf_file"; then
-        print_item "${RED}Configuration for WLED instance '$1' already exists in moonraker.conf.${NC}\n"
-        return 1
-    fi
-
-    # Append configuration to the file
-    printf "\n[wled $1]\ntype: http\naddress: $2\nchain_count: $3\ninitial_preset: $4\n" >> "$conf_file"
-    if [ $? -eq 0 ]; then
-        print_item "${GREEN}WLED configuration added successfully.${NC}\n"
+check_existing_instances() {
+    if grep -q '^\[wled ' "$conf_file"; then
+        print_item "${YELLOW}Existing WLED instances found. Do you want to add another? (yes/no): ${NC}"
+        read add_new
+        if [ "$add_new" = "yes" ]; then
+            return 1
+        else
+            print_item "${YELLOW}Select an instance to configure from the list below:${NC}"
+            grep '^\[wled ' "$conf_file" | cut -d ' ' -f 2 | tr -d '[]'
+            read selected_instance
+            wled_name=$selected_instance
+            return 0
+        fi
     else
-        print_item "${RED}Failed to write to moonraker.conf. Check file permissions and path.${NC}\n"
+        print_item "${GREEN}No existing WLED instances found. Continuing to add new instance.${NC}"
         return 1
     fi
 }
 
-# Main logic for checking existing WLED instances and adding new ones
-conf_file="/usr/data/printer_data/config/moonraker.conf" 
-print_separator
-print_spacer
-print_item "${YELLOW}Checking for existing WLED instances...${NC}\n"
-print_spacer
-if grep -q "wled" "$conf_file"; then
-    print_item "${GREEN}Existing WLED configurations found in moonraker.conf:${NC}\n"
-    grep "wled" "$conf_file"
-    print_item "${YELLOW}Do you want to add another WLED instance? (Y/N): ${NC}"
-    read answer
-    if [ "$answer" != "Y" ] && [ "$answer" != "y" ]; then
-        print_item "${GREEN}No new WLED instance will be added. Exiting setup.${NC}\n"
-        exit 0
+add_wled_config() {
+    if grep -q "^\[wled $1\]$" "$conf_file"; then
+        print_item "${RED}Configuration for WLED instance '$1' already exists in moonraker.conf.${NC}\n"
+        return 1
     fi
-else
-    print_item "${GREEN}No existing WLED configurations found. Proceeding with new setup.${NC}\n"
+    echo "[wled $1]" >> "$conf_file"
+    echo "address: $2" >> "$conf_file"
+    echo "led_count: $3" >> "$conf_file"
+    echo "preset: $4" >> "$conf_file"
+    print_item "${GREEN}WLED configuration added for $1.${NC}"
+}
+
+### MAIN SCRIPT LOGIC
+
+check_existing_instances
+if [ $? -eq 1 ]; then
+    print_input_item "${YELLOW}Enter a name for the new WLED instance (e.g., wled_bedlight): ${NC}"
+    read wled_name
+    print_input_item "${YELLOW}Enter WLED IP address (e.g., x.x.x.x): ${NC}"
+    read wled_ip
+    validate_ip "$wled_ip"
+    print_input_item "${YELLOW}Enter the number of LEDs on the strip: ${NC}"
+    read led_count
+    validate_number "$led_count"
+    print_input_item "${YELLOW}Enter the initial preset number (that will turn on with the printer) - typically its the preset number of the 'Idle' event: ${NC}"
+    read preset_num
+    validate_number "$preset_num"
+    add_wled_config "$wled_name" "$wled_ip" "$led_count" "$preset_num"
 fi
-
-print_input_item "${YELLOW}Enter your WLED instance name (e.g., my_wled): ${NC}"
-read wled_name
-print_input_item "${YELLOW}Enter WLED IP address (e.g., x.x.x.x): ${NC}"
-read wled_ip
-
-validate_ip "$wled_ip"
-
-print_input_item "${YELLOW}Enter the number of LEDs on the strip: ${NC}"
-read led_count
-
-validate_number "$led_count"
-
-print_input_item "${YELLOW}Enter the initial preset number (that will turn on with the printer) - typically its the preset number of the 'Idle' event: ${NC}"
-read preset_num
-
-# Preset number validation
-validate_number "$preset_num"
-
-# Call function to add the WLED configuration
-add_wled_config "$wled_name" "$wled_ip" "$led_count" "$preset_num"
-
 
 # Create the macro file
 cat <<EOF >"$BASE_DIR/Config/WLED_Macros.cfg"
@@ -152,4 +138,5 @@ else
     print_item "Include line for WLED_Macro.cfg added to printer.cfg."
 fi
 
-print_item "${GREEN}All done!${NC}\n"
+print_item "${GREEN}All done! Press enter to continue...${NC}\n"
+read dummy

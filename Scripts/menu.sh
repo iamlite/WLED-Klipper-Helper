@@ -36,6 +36,9 @@ SETTINGS_FILE="$BASE_DIR/Config/settings.conf"
 
 # Function to check and set installation directories
 check_settings() {
+
+    clear
+
     # Ensure settings file exists
     [ -f "$SETTINGS_FILE" ] || touch "$SETTINGS_FILE"
 
@@ -115,9 +118,10 @@ show_main_menu() {
     print_input_item "Please enter your choice:" "$MAGENTA"
 }
 
+check_settings
+
 # Main loop
 while true; do
-    check_settings
     show_main_menu
     read -p "" choice
     case "$choice" in
