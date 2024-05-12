@@ -40,7 +40,7 @@ show_presets() {
     while IFS= read -r line; do
         # Use awk to convert index to ASCII letter (A, B, C...)
         char=$(awk -v num=$i 'BEGIN {printf "%c", 65 + num}')
-        print_item "$char: $line\n"
+        print_nospaces "$char: $line\n"
         i=$((i + 1))
     done < "$config_file"
     print_separator
@@ -48,7 +48,7 @@ show_presets() {
 
 # Function to edit a preset
 edit_preset() {
-    print_item "\033[35mEnter the letter of the event you want to edit (A, B, C, ...):\033[0m\n"
+    print_input_item "$MAGENTA""Enter the letter of the preset you want to edit (A, B, C, etc.):"
     read choice
     # Convert letter to line number
     line_num=$(printf "%d" "'$choice")
