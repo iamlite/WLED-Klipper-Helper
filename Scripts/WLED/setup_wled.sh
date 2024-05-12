@@ -62,7 +62,7 @@ check_existing_instances() {
     if [ -n "$instances" ]; then
         print_item "${YELLOW}Existing WLED instances found:${NC}"
         echo "$instances" | while IFS= read -r instance; do
-            print_item "$instance"
+            print_nospaces "$instance"
         done
         while true; do
             print_input_item "${YELLOW}Type the name of an instance to use, or type 'Y' to create a new instance:${NC}"
