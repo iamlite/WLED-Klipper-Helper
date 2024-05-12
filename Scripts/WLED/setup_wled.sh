@@ -57,43 +57,24 @@ validate_number() {
 }
 
 check_existing_instances() {
-    local instances=$(grep '^\[wled ' "$conf_file" | cut -d ' ' -f 2 | tr -d '[]')
-    local instance_array=($instances)
-    local index=0
-    local letter
-
-    if [ "${#instance_array[@]}" -gt 0 ]; then
-        print_item "${YELLOW}Existing WLED instances found. Please select an option below:${NC}"
-
-        for instance in "${instance_array[@]}"; do
-            letter=$(echo "ABCDEFGHIJKLMNOPQRSTUVWXYZ" | cut -c $((index+1)))
-            print_item "${letter}) $instance"
-            let index++
-        done
-
-        print_item "${YELLOW}Y) Create a new WLED instance${NC}"
-        read -p "Enter your choice (Y/new instance or letter for existing): " choice
-
-        if [[ "$choice" == "Y" || "$choice" == "y" ]]; then
-            return 1  # Continue to add a new instance
+    if grep -q '^\[wled ' "$conf_file"; then
+        print_input_item "${YELLOW}Existing WLED instances found. Do you want to add another? (Y/N): ${NC}"
+        read add_new
+        if [ "$add_new" == "y" ] || [ "$add_new" == "Y" ]; then
+            return 1
         else
-            # Convert letter to array index
-            local choice_index=$(($(echo "ABCDEFGHIJKLMNOPQRSTUVWXYZ" | grep -aob "$choice" | grep -oE '[0-9]+') - 1))
-            if [ $choice_index -ge 0 ] && [ $choice_index -lt ${#instance_array[@]} ]; then
-                wled_name=${instance_array[$choice_index]}
-                return 0  # User selected an existing instance
-            else
-                print_item "${RED}Invalid choice. Try again.${NC}"
-                return 2  # Invalid choice, could loop or handle error
-            fi
+            print_item "${YELLOW}Select an instance to configure from the list below:${NC}"
+            instances=$(grep '^\[wled ' "$conf_file" | cut -d ' ' -f 2 | tr -d '[]')
+            print_nospaces "$instances"
+            read selected_instance
+            wled_name=$selected_instance
+            return 0
         fi
     else
-        print_item "${GREEN}No existing WLED instances found. Creating a new instance.${NC}"
-        return 1  # No instances found, continue to add a new one
+        print_item "${GREEN}No existing WLED instances found. Continuing to add new instance.${NC}"
+        return 1
     fi
 }
-
-
 
 add_wled_config() {
     if grep -q "^\[wled $1\]$" "$conf_file"; then
