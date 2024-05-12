@@ -57,43 +57,43 @@ validate_number() {
 }
 
 check_existing_instances() {
-    local instances=($(grep '^\[wled ' "$conf_file" | cut -d ' ' -f 2 | tr -d '[]'))
-    local i=0
-    local choice_labels=()
+    local instances=$(grep '^\[wled ' "$conf_file" | cut -d ' ' -f 2 | tr -d '[]')
+    local instance_array=($instances)
+    local index=0
+    local letter
 
-    if [ "${#instances[@]}" -gt 0 ]; then
-        print_item "${YELLOW}Existing WLED instances found. Select an instance to configure or type 'Y' to add a new one:${NC}"
-        # Print existing instances with labels
-        for inst in "${instances[@]}"; do
-            label=$(echo "ABCDEFGHIJKLMNOPQRSTUVWXYZ" | cut -c $((i+1)))
-            choice_labels+=("$label")
-            print_item "${label}) $inst"
-            ((i++))
+    if [ "${#instance_array[@]}" -gt 0 ]; then
+        print_item "${YELLOW}Existing WLED instances found. Please select an option below:${NC}"
+
+        for instance in "${instance_array[@]}"; do
+            letter=$(echo "ABCDEFGHIJKLMNOPQRSTUVWXYZ" | cut -c $((index+1)))
+            print_item "${letter}) $instance"
+            let index++
         done
 
-        print_input_item "${YELLOW}Enter your choice (Y for new instance): ${NC}"
-        read user_choice
+        print_item "${YELLOW}Y) Create a new WLED instance${NC}"
+        read -p "Enter your choice (Y/new instance or letter for existing): " choice
 
-        # Check if user chose to create a new instance
-        if [ "$user_choice" == "y" ] || [ "$user_choice" == "Y" ]; then
-            return 1  # Continue to add new instance
+        if [[ "$choice" == "Y" || "$choice" == "y" ]]; then
+            return 1  # Continue to add a new instance
         else
-            # Map the choice label back to instance name
-            for ((j=0; j<${#choice_labels[@]}; j++)); do
-                if [ "${choice_labels[$j]}" == "$user_choice" ]; then
-                    wled_name="${instances[$j]}"
-                    print_item "${GREEN}You selected instance: $wled_name${NC}"
-                    return 0  # User chose existing instance
-                fi
-            done
-            print_item "${RED}Invalid choice. Please start over.${NC}"
-            return 2  # Invalid choice, handle as needed
+            # Convert letter to array index
+            local choice_index=$(($(echo "ABCDEFGHIJKLMNOPQRSTUVWXYZ" | grep -aob "$choice" | grep -oE '[0-9]+') - 1))
+            if [ $choice_index -ge 0 ] && [ $choice_index -lt ${#instance_array[@]} ]; then
+                wled_name=${instance_array[$choice_index]}
+                return 0  # User selected an existing instance
+            else
+                print_item "${RED}Invalid choice. Try again.${NC}"
+                return 2  # Invalid choice, could loop or handle error
+            fi
         fi
     else
-        print_item "${GREEN}No existing WLED instances found. Continuing to add new instance.${NC}"
-        return 1
+        print_item "${GREEN}No existing WLED instances found. Creating a new instance.${NC}"
+        return 1  # No instances found, continue to add a new one
     fi
 }
+
+
 
 add_wled_config() {
     if grep -q "^\[wled $1\]$" "$conf_file"; then
