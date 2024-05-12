@@ -121,7 +121,12 @@ gcode:
   {action_call_remote_method("set_wled_state", strip="$wled_name", state=False)}
 EOF
 
-# Create a symbolic link in the Klipper config directory
+# Remove the existing symbolic link if it exists
+if [ -L "$KLIPPER_CONFIG_DIR/WLED_Macros.cfg" ]; then
+    rm "$KLIPPER_CONFIG_DIR/WLED_Macros.cfg"
+fi
+
+# Create a new symbolic link in the Klipper config directory
 ln -s "$BASE_DIR/Config/WLED_Macros.cfg" "$KLIPPER_CONFIG_DIR/WLED_Macros.cfg"
 
 print_nospaces "Macro file created and linked successfully."
@@ -140,6 +145,9 @@ else
     awk -v line="$empty_line" 'NR==line{print "[include WLED_Macro.cfg]"} 1' "$PRINTER_CFG" > "$PRINTER_CFG.tmp" && mv "$PRINTER_CFG.tmp" "$PRINTER_CFG"
 
     print_item "Include line for WLED_Macro.cfg added to printer.cfg."
+    print_item "First include line: $first_include_line"
+    print_item "First empty line after the first include: $empty_line"
+
 fi
 
 print_item "${GREEN}All done! Press enter to continue...${NC}\n"

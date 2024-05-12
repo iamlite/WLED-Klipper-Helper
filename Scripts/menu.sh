@@ -115,7 +115,7 @@ show_main_menu() {
     print_spacer
     print_separator
     print_spacer
-    print_input_item "Please enter your choice:" "$MAGENTA"
+    print_input_item "Please enter your choice: " "$MAGENTA"
 }
 
 check_settings
