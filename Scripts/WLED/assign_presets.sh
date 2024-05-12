@@ -59,9 +59,10 @@ show_intro() {
 
 check_and_create_dir() {
     if [ ! -d "$config_dir" ]; then
+        print_item "${YELLOW}Config directory not found. Creating it now...${NC}"
         mkdir -p "$config_dir"
         if [ $? -ne 0 ]; then
-            print_item "\033[31mFailed to create configuration directory. Please check permissions.\033[0m\n"
+            print_item "${RED}Failed to create the config directory. Please check your permissions.${NC}"
             exit 1
         fi
     fi
@@ -69,8 +70,9 @@ check_and_create_dir() {
 
 
 read_and_store_presets() {
-    > "$config_file"  # Clear the config file to start fresh
+    > "$config_file"
     for event in "Idle" "Pause" "Cancel" "Resume" "Complete" "Heating" "Homing" "Printing"; do
+        clear
         print_input_item "Enter the preset number for $event:" "$MAGENTA"
         read preset_num
         # Validate the input is a number

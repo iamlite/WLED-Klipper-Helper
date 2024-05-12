@@ -58,6 +58,7 @@ validate_number() {
 
 check_existing_instances() {
     instances=$(grep '^\[wled ' "$conf_file" | cut -d ' ' -f 2 | tr -d '[]')
+    print_item "${YELLOW}Checking for existing WLED instances...${NC}"
 
     if [ -n "$instances" ]; then
         print_item "${YELLOW}Existing WLED instances found:${NC}"
@@ -65,7 +66,7 @@ check_existing_instances() {
             print_nospaces "$instance"
         done
         while true; do
-            print_input_item "${YELLOW}Type the name of an instance to use, or type 'Y' to create a new instance:${NC}"
+            print_input_item "${YELLOW}Type the name of an instance to use, or hit 'Y' to create a new instance:${NC}"
             read user_choice
             
             if [ "$user_choice" = "y" ] || [ "$user_choice" = "Y" ]; then
@@ -84,8 +85,6 @@ check_existing_instances() {
     fi
 }
 
-
-
 add_wled_config() {
     if grep -q "^\[wled $1\]$" "$conf_file"; then
         print_item "${RED}Configuration for WLED instance '$1' already exists in moonraker.conf.${NC}\n"
@@ -101,6 +100,7 @@ add_wled_config() {
 ### MAIN SCRIPT LOGIC
 
 clear
+print_nospaces "Initiating WLED configuration script..."
 check_existing_instances
 if [ $? -eq 1 ]; then
     print_input_item "${YELLOW}Enter a name for the new WLED instance (e.g., my_wled): ${NC}"
@@ -118,6 +118,7 @@ if [ $? -eq 1 ]; then
 fi
 
 # Create the macro file
+print_item "${YELLOW}Creating macro file...${NC}"
 cat <<EOF >"$BASE_DIR/Config/WLED_Macros.cfg"
 [gcode_macro UPDATE_WLED]
 description: update wled state
@@ -135,16 +136,18 @@ EOF
 # Remove the existing symbolic link if it exists
 if [ -L "$KLIPPER_CONFIG_DIR/WLED_Macros.cfg" ]; then
     rm "$KLIPPER_CONFIG_DIR/WLED_Macros.cfg"
+    print_item "${YELLOW}Removing existing symbolic link...${NC}"
 fi
 
 # Create a new symbolic link in the Klipper config directory
+print_item "${BLUE}Creating symbolic link...${NC}"
 ln -s "$BASE_DIR/Config/WLED_Macros.cfg" "$KLIPPER_CONFIG_DIR/WLED_Macros.cfg"
 
-print_nospaces "Macro file created and linked successfully."
+print_item "${GREEN}Macro file created and linked successfully.${NC}"
 
 # Check if the line already exists to avoid duplicates
 if grep -q "\[include WLED_Macro.cfg\]" "$PRINTER_CFG"; then
-    print_item "Include line for WLED_Macro.cfg already exists in printer.cfg."
+    print_item "${YELLOW}Include line for WLED_Macro.cfg already exists in printer.cfg.${NC}"
 else
     # Find the line number where the first sequence of includes ends
     include_block_end=$(awk '/^\[include/ {last_include = NR; next} /^[^\[#]/ && last_include {print last_include; exit}' "$PRINTER_CFG")
@@ -152,10 +155,9 @@ else
     # Add the include line after the last include in the first sequence
     awk -v line="$include_block_end" 'NR==line {print; print "[include WLED_Macro.cfg]"; next} 1' "$PRINTER_CFG" > "$PRINTER_CFG.tmp" && mv "$PRINTER_CFG.tmp" "$PRINTER_CFG"
 
-    print_item "Include line for WLED_Macro.cfg added just after the first sequence of includes."
-    print_item "Inserted at line: $include_block_end"
+    print_item "${GREEN}Include line for WLED_Macro.cfg added to printer.cfg successfully.${NC}"
+    print_item "${GREEN}Inserted at line: $include_block_end${NC}"
 fi
 
-
-print_item "${GREEN}All done! Press enter to continue...${NC}\n"
+print_input_item "${GREEN}All done! Press enter to continue...${NC}\n"
 read dummy

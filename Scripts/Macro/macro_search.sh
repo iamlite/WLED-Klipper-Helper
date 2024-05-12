@@ -43,15 +43,18 @@ mkdir -p "$BASE_DIR"
 if [ $? -ne 0 ]; then
     print_item "${RED}Failed to create directory: $BASE_DIR${NC}\n"
     exit 1
+else
+    print_item "${GREEN}Directory $BASE_DIR created successfully.${NC}\n"
 fi
 
 # Check if the Config directory is writable
 if [ ! -w "$BASE_DIR" ]; then
     print_item "${RED}Directory $BASE_DIR is not writable.${NC}\n"
     exit 1
+else
+    print_item "${GREEN}Directory $BASE_DIR is confirmed to be writable.${NC}\n"
 fi
 
-print_item "${GREEN}Directory $BASE_DIR is confirmed to be writable.${NC}\n"
 
 # List of macros to search for
 macros="START_PRINT END_PRINT CANCEL_PRINT PAUSE RESUME"
@@ -64,6 +67,8 @@ rejection_count=0
 if [ ! -d "$search_dir" ]; then
     print_item "${RED}Error: Directory $search_dir does not exist.${NC}\n"
     exit 1
+else
+    print_item "${GREEN}Directory $search_dir found!${NC}\n"
 fi
 
 # Temporary file for storing findings and a file to store confirmed macros
@@ -77,6 +82,7 @@ print_nospaces "${GREEN}Initialized confirmed macros file: $confirmed_macros_fil
 
 # Process each macro one by one
 for macro in $macros; do
+    clear
     print_nospaces "${GREEN}Searching for $macro in $search_dir...${NC}\n"
     grep -RIHn "^\s*\[gcode_macro\s\+$macro\]" "$search_dir" > "$temp_file"
     if [ ! -s "$temp_file" ]; then
@@ -96,7 +102,7 @@ for macro in $macros; do
         print_nospaces "${CYAN}Preview of macro content starting at line $line_number in file $file:${NC}\n"
         sed -n "${start_line},${end_line}p" "$file"
 
-        print_input_item "${GREEN}Confirm this is correct (y/n/q to quit): ${NC}"
+        print_input_item "${GREEN}Confirm this is correct (Y/N or Q to quit): ${NC}"
         read confirm </dev/tty
         if [ "$confirm" = "q" ] || [ "$confirm" = "Q" ]; then
             print_item "${RED}Quitting process as requested.${NC}\n"
