@@ -32,6 +32,16 @@ conf_file="$KLIPPER_CONFIG_DIR/moonraker.conf"
 . "$SCRIPT_DIR/common_functions.sh"
 . "$SETTINGS_FILE"
 
+echo "KLIPPER_CONFIG_DIR is set to $KLIPPER_CONFIG_DIR"
+echo "Base directory is set to $BASE_DIR"
+echo "INSTALL_DIR is set to $INSTALL_DIR"
+
+echo "Path to script directory is $SCRIPT_DIR"
+echo "Path to moonraker.conf is $conf_file"
+echo "Path to printer.cfg is $PRINTER_CFG"
+echo "Path to settings.conf is $SETTINGS_FILE"
+
+
 ########################################################
 ########################################################
 ########################################################
