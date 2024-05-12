@@ -138,15 +138,16 @@ else
     # Find the line number of the first include
     first_include_line=$(grep -n "^\[include " "$PRINTER_CFG" | head -n 1 | cut -d ':' -f 1)
 
-    # Find the line number of the first non-include line after the first include
-    non_include_line=$(awk "/^\[include / && NR>$first_include_line {print NR; exit}" "$PRINTER_CFG")
+    # Find the line number of the first non-include line after the last include
+    last_include_line=$(grep -n "^\[include " "$PRINTER_CFG" | tail -n 1 | cut -d ':' -f 1)
+    non_include_line=$(awk -v last_include="$last_include_line" 'NR > last_include && !/^\[include/ {print NR; exit}' "$PRINTER_CFG")
 
     # Add the include line before the first non-include line
     awk -v line="$non_include_line" 'NR==line{print "[include WLED_Macro.cfg]"} 1' "$PRINTER_CFG" > "$PRINTER_CFG.tmp" && mv "$PRINTER_CFG.tmp" "$PRINTER_CFG"
 
     print_item "Include line for WLED_Macro.cfg added to printer.cfg."
-    print_item "First include line: $first_include_line"
-    print_item "First non-include line after the first include: $non_include_line"
+    print_item "Last include line: $last_include_line"
+    print_item "First non-include line after the last include: $non_include_line"
 
 fi
 
