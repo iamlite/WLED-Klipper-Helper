@@ -24,13 +24,13 @@ SCRIPT_DIR="$BASE_DIR/Scripts"
 
 SETTINGS_FILE="$BASE_DIR/Config/settings.conf"
 
+. "$SCRIPT_DIR/common_functions.sh"
+. "$SETTINGS_FILE"
+
 PRINTER_CFG="$KLIPPER_CONFIG_DIR/printer.cfg"
 
 conf_file="$KLIPPER_CONFIG_DIR/moonraker.conf" 
 
-# Source common functions
-. "$SCRIPT_DIR/common_functions.sh"
-. "$SETTINGS_FILE"
 
 echo "KLIPPER_CONFIG_DIR is set to $KLIPPER_CONFIG_DIR"
 echo "Base directory is set to $BASE_DIR"
