@@ -32,6 +32,7 @@ SCRIPT_DIR="$BASE_DIR/Scripts"
 
 # Config file path
 config_file="$BASE_DIR/Config/presets.conf"
+
 # Function to display the stored presets with options A, B, C, etc.
 show_presets() {
     print_item "\033[32mCurrent WLED Presets:\033[0m\n"
