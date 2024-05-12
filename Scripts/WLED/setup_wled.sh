@@ -32,14 +32,6 @@ PRINTER_CFG="$KLIPPER_CONFIG_DIR/printer.cfg"
 conf_file="$KLIPPER_CONFIG_DIR/moonraker.conf" 
 
 
-echo "KLIPPER_CONFIG_DIR is set to $KLIPPER_CONFIG_DIR"
-echo "Base directory is set to $BASE_DIR"
-echo "INSTALL_DIR is set to $INSTALL_DIR"
-
-echo "Path to script directory is $SCRIPT_DIR"
-echo "Path to moonraker.conf is $conf_file"
-echo "Path to printer.cfg is $PRINTER_CFG"
-echo "Path to settings.conf is $SETTINGS_FILE"
 
 
 ########################################################
@@ -66,13 +58,14 @@ validate_number() {
 
 check_existing_instances() {
     if grep -q '^\[wled ' "$conf_file"; then
-        print_item "${YELLOW}Existing WLED instances found. Do you want to add another? (yes/no): ${NC}"
+        print_input_item "${YELLOW}Existing WLED instances found. Do you want to add another? (Y/N): ${NC}"
         read add_new
-        if [ "$add_new" = "yes" ]; then
+        if [ "$add_new" == "y" ]; then
             return 1
         else
             print_item "${YELLOW}Select an instance to configure from the list below:${NC}"
-            grep '^\[wled ' "$conf_file" | cut -d ' ' -f 2 | tr -d '[]'
+            instances=$(grep '^\[wled ' "$conf_file" | cut -d ' ' -f 2 | tr -d '[]')
+            print_nospaces "$instances"
             read selected_instance
             wled_name=$selected_instance
             return 0
@@ -137,13 +130,14 @@ print_nospaces "Macro file created and linked successfully."
 if grep -q "\[include WLED_Macro.cfg\]" "$PRINTER_CFG"; then
     print_item "Include line for WLED_Macro.cfg already exists in printer.cfg."
 else
-    # Add the include line right after the last include in the top section
-    awk '
-        BEGIN {printed=0}
-        /^\[include / && !printed {last_include=NR}
-        {print}
-        END {if (last_include) {print "[include WLED_Macro.cfg]"} else {print "[include WLED_Macro.cfg]"}}
-    ' "$PRINTER_CFG" >"$PRINTER_CFG.tmp" && mv "$PRINTER_CFG.tmp" "$PRINTER_CFG"
+    # Find the line number of the first include
+    first_include_line=$(grep -n "^\[include " "$PRINTER_CFG" | head -n 1 | cut -d ':' -f 1)
+
+    # Find the line number of the first empty line after the first include
+    empty_line=$(awk "/^\[include / && NR>$first_include_line {exit} /^$/{print NR; exit}" "$PRINTER_CFG")
+
+    # Add the include line after the first empty line
+    awk -v line="$empty_line" 'NR==line{print "[include WLED_Macro.cfg]"} 1' "$PRINTER_CFG" > "$PRINTER_CFG.tmp" && mv "$PRINTER_CFG.tmp" "$PRINTER_CFG"
 
     print_item "Include line for WLED_Macro.cfg added to printer.cfg."
 fi
