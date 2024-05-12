@@ -100,6 +100,7 @@ add_wled_config() {
 
 ### MAIN SCRIPT LOGIC
 
+clear
 check_existing_instances
 if [ $? -eq 1 ]; then
     print_input_item "${YELLOW}Enter a name for the new WLED instance (e.g., my_wled): ${NC}"
