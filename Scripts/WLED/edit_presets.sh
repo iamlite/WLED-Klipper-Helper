@@ -38,7 +38,8 @@ show_presets() {
     print_item "\033[32mCurrent WLED Presets:\033[0m\n"
     i=0
     while IFS= read -r line; do
-        char=$(printf "%c" $((65 + i))) # Convert index to ASCII letter (A, B, C...)
+        # Use awk to convert index to ASCII letter (A, B, C...)
+        char=$(awk -v num=$i 'BEGIN {printf "%c", 65 + num}')
         print_item "$char: $line\n"
         i=$((i + 1))
     done < "$config_file"
