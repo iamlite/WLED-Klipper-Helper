@@ -61,8 +61,10 @@ check_existing_instances() {
 
     if [ -n "$instances" ]; then
         print_item "${YELLOW}Existing WLED instances found:${NC}"
-        print_item "$instances"
-        print_input_item "${YELLOW}Type the name of an instance to use, or type 'Y' to create a new instance:${NC}"
+        print_spacer
+        print_nospaces "$instances"
+        print_spacer
+        print_input_item "${YELLOW}Type the name of an instance to use, or type 'Y' to create a new instance: ${NC}"
         read user_choice
         
         if [ "$user_choice" == "y" ] || [ "$user_choice" == "Y" ]; then
