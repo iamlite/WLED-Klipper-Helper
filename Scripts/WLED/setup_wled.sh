@@ -57,18 +57,37 @@ validate_number() {
 }
 
 check_existing_instances() {
-    if grep -q '^\[wled ' "$conf_file"; then
-        print_input_item "${YELLOW}Existing WLED instances found. Do you want to add another? (Y/N): ${NC}"
-        read add_new
-        if [ "$add_new" == "y" ] || [ "$add_new" == "Y" ]; then
-            return 1
+    local instances=($(grep '^\[wled ' "$conf_file" | cut -d ' ' -f 2 | tr -d '[]'))
+    local i=0
+    local choice_labels=()
+
+    if [ "${#instances[@]}" -gt 0 ]; then
+        print_item "${YELLOW}Existing WLED instances found. Select an instance to configure or type 'Y' to add a new one:${NC}"
+        # Print existing instances with labels
+        for inst in "${instances[@]}"; do
+            label=$(echo "ABCDEFGHIJKLMNOPQRSTUVWXYZ" | cut -c $((i+1)))
+            choice_labels+=("$label")
+            print_item "${label}) $inst"
+            ((i++))
+        done
+
+        print_input_item "${YELLOW}Enter your choice (Y for new instance): ${NC}"
+        read user_choice
+
+        # Check if user chose to create a new instance
+        if [ "$user_choice" == "y" ] || [ "$user_choice" == "Y" ]; then
+            return 1  # Continue to add new instance
         else
-            print_item "${YELLOW}Select an instance to configure from the list below:${NC}"
-            instances=$(grep '^\[wled ' "$conf_file" | cut -d ' ' -f 2 | tr -d '[]')
-            print_nospaces "$instances"
-            read selected_instance
-            wled_name=$selected_instance
-            return 0
+            # Map the choice label back to instance name
+            for ((j=0; j<${#choice_labels[@]}; j++)); do
+                if [ "${choice_labels[$j]}" == "$user_choice" ]; then
+                    wled_name="${instances[$j]}"
+                    print_item "${GREEN}You selected instance: $wled_name${NC}"
+                    return 0  # User chose existing instance
+                fi
+            done
+            print_item "${RED}Invalid choice. Please start over.${NC}"
+            return 2  # Invalid choice, handle as needed
         fi
     else
         print_item "${GREEN}No existing WLED instances found. Continuing to add new instance.${NC}"
