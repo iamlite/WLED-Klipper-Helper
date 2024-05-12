@@ -62,19 +62,20 @@ check_existing_instances() {
     if [ -n "$instances" ]; then
         print_item "${YELLOW}Existing WLED instances found:${NC}"
         print_item "$instances"
-        print_input_item "${YELLOW}Type the name of an instance to use, or type 'Y' to create a new instance:${NC}"
-        read user_choice
-        
-        if [ "$user_choice" = "y" ] || [ "$user_choice" = "Y" ]; then
-            return 1  # Continue to add new instance
-        elif echo "$instances" | grep -qw "$user_choice"; then
-            wled_name=$user_choice
-            print_item "${GREEN}Configuring selected instance: $wled_name${NC}"
-            return 0  # Configure the selected instance
-        else
-            print_item "${RED}Invalid selection. No such instance: $user_choice${NC}"
-            return 0  # Invalid selection, do not create a new instance
-        fi
+        while true; do
+            print_input_item "${YELLOW}Type the name of an instance to use, or type 'Y' to create a new instance:${NC}"
+            read user_choice
+            
+            if [ "$user_choice" = "y" ] || [ "$user_choice" = "Y" ]; then
+                return 1  # Continue to add new instance
+            elif echo "$instances" | grep -qw "$user_choice"; then
+                wled_name=$user_choice
+                print_item "${GREEN}Configuring selected instance: $wled_name${NC}"
+                return 0  # Configure the selected instance
+            else
+                print_item "${RED}Invalid selection. No such instance: $user_choice${NC}"
+            fi
+        done
     else
         print_item "${GREEN}No existing WLED instances found. Continuing to add new instance.${NC}"
         return 1  # No instances found, continue to add new instance
