@@ -32,13 +32,12 @@ SCRIPT_DIR="$BASE_DIR/Scripts"
 
 # Config file path
 config_file="$BASE_DIR/Config/presets.conf"
-
 # Function to display the stored presets with options A, B, C, etc.
 show_presets() {
     print_item "\033[32mCurrent WLED Presets:\033[0m\n"
     i=0
     while IFS= read -r line; do
-        char=$(awk "BEGIN {print_item \"%c\", 65+$i}") # Convert index to ASCII letter (A, B, C...)
+        char=$(printf "\\x$(printf %x $((65 + i)))") # Convert index to ASCII letter (A, B, C...)
         print_item "$char: %b\n" "$line"
         i=$((i + 1))
     done < "$config_file"
@@ -50,7 +49,7 @@ edit_preset() {
     print_item "\033[35mEnter the letter of the event you want to edit (A, B, C, ...):\033[0m\n"
     read choice
     # Convert letter to line number
-    line_num=$(print_item "%d" "'$choice")
+    line_num=$(printf "%d" "'$choice")
     line_num=$((line_num - 65 + 1))
 
     if [ $line_num -gt 0 ] && [ $line_num -le $i ]; then
