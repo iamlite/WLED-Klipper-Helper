@@ -61,15 +61,13 @@ check_existing_instances() {
 
     if [ -n "$instances" ]; then
         print_item "${YELLOW}Existing WLED instances found:${NC}"
-        print_spacer
-        print_nospaces "$instances"
-        print_spacer
-        print_input_item "${YELLOW}Type the name of an instance to use, or type 'Y' to create a new instance: ${NC}"
+        print_item "$instances"
+        print_input_item "${YELLOW}Type the name of an instance to use, or type 'Y' to create a new instance:${NC}"
         read user_choice
         
-        if [ "$user_choice" == "y" ] || [ "$user_choice" == "Y" ]; then
+        if [ "$user_choice" = "y" ] || [ "$user_choice" = "Y" ]; then
             return 1  # Continue to add new instance
-        elif [[ "$instances" == *"$user_choice"* ]]; then
+        elif echo "$instances" | grep -qw "$user_choice"; then
             wled_name=$user_choice
             print_item "${GREEN}Configuring selected instance: $wled_name${NC}"
             return 0  # Configure the selected instance
@@ -82,6 +80,7 @@ check_existing_instances() {
         return 1  # No instances found, continue to add new instance
     fi
 }
+
 
 
 add_wled_config() {
