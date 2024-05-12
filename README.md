@@ -1,6 +1,6 @@
 # WLED-Klipper-Helper
 
-Status: Not working - do not use (yet)
+Status: sorta works. use at own risk.
 
 A helper script for installing and configuring WLED with Klipper.
 This script will automatically add triggers to your macros to control WLED's behavior based on your printers status.
@@ -36,3 +36,12 @@ curl -sSL "https://raw.githubusercontent.com/iamlite/WLED-Klipper-Helper/main/st
 ```shell
 curl -sSL -H "Cache-Control: no-cache" "https://raw.githubusercontent.com/iamlite/WLED-Klipper-Helper/main/start.sh" | sudo INSTALL_DIR=/usr/data/WLED-Klipper-Helper sh
 ```
+
+
+### Todo
+
+- Success output on configure WLED
+- clear before input for everything
+- 
+- Add documentation
+- Add changelog

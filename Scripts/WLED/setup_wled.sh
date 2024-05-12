@@ -19,8 +19,16 @@ if [ -z "$BASE_DIR" ]; then
     exit 1
 fi
 
-# Script directory
+# Paths
 SCRIPT_DIR="$BASE_DIR/Scripts"
+
+SETTINGS_FILE="$BASE_DIR/Config/settings.conf"
+
+PRINTER_CFG="$KLIPPER_CONFIG_DIR/printer.cfg"
+
+source "$SETTINGS_FILE"
+
+conf_file="$KLIPPER_CONFIG_DIR/moonraker.conf" 
 
 # Source common functions
 . "$SCRIPT_DIR/common_functions.sh"
@@ -51,7 +59,6 @@ validate_number() {
 
 # Function to add WLED configuration to moonraker.conf
 add_wled_config() {
-    conf_file="/usr/data/printer_data/config/moonraker.conf" 
 
     # Check if the entry already exists
     if grep -q "^\[wled $1\]$" "$conf_file"; then
@@ -88,21 +95,19 @@ else
     print_item "${GREEN}No existing WLED configurations found. Proceeding with new setup.${NC}\n"
 fi
 
-print_input_item "${YELLOW}Enter your WLED instance name (e.g., keled): ${NC}"
+print_input_item "${YELLOW}Enter your WLED instance name (e.g., my_wled): ${NC}"
 read wled_name
 print_input_item "${YELLOW}Enter WLED IP address (e.g., x.x.x.x): ${NC}"
 read wled_ip
 
-# IP validation
 validate_ip "$wled_ip"
 
 print_input_item "${YELLOW}Enter the number of LEDs on the strip: ${NC}"
 read led_count
 
-# LED count validation
 validate_number "$led_count"
 
-print_input_item "${YELLOW}Enter the initial preset number (that will turn on with the printer): ${NC}"
+print_input_item "${YELLOW}Enter the initial preset number (that will turn on with the printer) - typically its the preset number of the 'Idle' event: ${NC}"
 read preset_num
 
 # Preset number validation
@@ -110,4 +115,41 @@ validate_number "$preset_num"
 
 # Call function to add the WLED configuration
 add_wled_config "$wled_name" "$wled_ip" "$led_count" "$preset_num"
+
+
+# Create the macro file
+cat <<EOF >"$BASE_DIR/Config/WLED_Macros.cfg"
+[gcode_macro UPDATE_WLED]
+description: update wled state
+gcode:
+  {% set PRESET = params.PRESET | default(0) | int %}
+  {action_call_remote_method("set_wled_state", strip="$wled_name", state=True, preset=PRESET)}
+
+[gcode_macro WLED_OFF]
+description: Turn WLED off
+gcode:
+  {% set strip = params.STRIP|string %}
+  {action_call_remote_method("set_wled_state", strip="$wled_name", state=False)}
+EOF
+
+# Create a symbolic link in the Klipper config directory
+ln -s "$BASE_DIR/Config/WLED_Macros.cfg" "$KLIPPER_CONFIG_DIR/WLED_Macros.cfg"
+
+print_nospaces "Macro file created and linked successfully."
+
+# Check if the line already exists to avoid duplicates
+if grep -q "\[include WLED_Macro.cfg\]" "$PRINTER_CFG"; then
+    print_item "Include line for WLED_Macro.cfg already exists in printer.cfg."
+else
+    # Add the include line right after the last include in the top section
+    awk '
+        BEGIN {printed=0}
+        /^\[include / && !printed {last_include=NR}
+        {print}
+        END {if (last_include) {print "[include WLED_Macro.cfg]"} else {print "[include WLED_Macro.cfg]"}}
+    ' "$PRINTER_CFG" >"$PRINTER_CFG.tmp" && mv "$PRINTER_CFG.tmp" "$PRINTER_CFG"
+
+    print_item "Include line for WLED_Macro.cfg added to printer.cfg."
+fi
+
 print_item "${GREEN}All done!${NC}\n"

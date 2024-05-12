@@ -32,6 +32,53 @@ SCRIPT_DIR="$BASE_DIR/Scripts"
 # Apply executable permissions recursively to all .sh files
 find "$SCRIPT_DIR" -type f -name "*.sh" -exec chmod +x {} \;
 
+SETTINGS_FILE="$BASE_DIR/Config/settings.conf"
+
+# Function to check and set installation directories
+check_settings() {
+    # Ensure settings file exists
+    [ -f "$SETTINGS_FILE" ] || touch "$SETTINGS_FILE"
+
+    # Default values
+    DEFAULT_INSTALL_DIR="/usr/data/WLED-Klipper-Helper"
+    DEFAULT_KLIPPER_CONFIG_DIR="/usr/data/printer_data/config"
+
+    # Helper function to update or append setting
+    update_or_append_setting() {
+        local setting_key=$1
+        local setting_value=$2
+        local default_value=$3
+
+        # Check if setting exists and is not empty
+        if grep -q "^$setting_key=" "$SETTINGS_FILE"; then
+            # Setting exists, check if it's empty
+            if [ -z "$(grep "^$setting_key=" "$SETTINGS_FILE" | cut -d'=' -f2)" ]; then
+                # Setting is empty, update it with user provided or default value
+                sed -i '' "s|^$setting_key=.*|$setting_key=$setting_value|" "$SETTINGS_FILE"
+            fi
+        else
+            # Setting does not exist, append it
+            echo "$setting_key=$setting_value" >> "$SETTINGS_FILE"
+        fi
+    }
+
+    # Check and update INSTALL_DIR
+    if [ -z "$INSTALL_DIR" ]; then
+        INSTALL_DIR="$DEFAULT_INSTALL_DIR"
+    fi
+    update_or_append_setting "INSTALL_DIR" "$INSTALL_DIR" "$DEFAULT_INSTALL_DIR"
+
+    # Check and update KLIPPER_CONFIG_DIR
+    if [ -z "$KLIPPER_CONFIG_DIR" ]; then
+        print_nospaces "KLIPPER_CONFIG_DIR is not set."
+        print_nospaces  "Enter the path to your Klipper config directory" 
+        print_input_item "or press enter to use default [$DEFAULT_KLIPPER_CONFIG_DIR]:"
+        read -p "> " input_klipper_dir
+        KLIPPER_CONFIG_DIR="${input_klipper_dir:-$DEFAULT_KLIPPER_CONFIG_DIR}"
+    fi
+    update_or_append_setting "KLIPPER_CONFIG_DIR" "$KLIPPER_CONFIG_DIR" "$DEFAULT_KLIPPER_CONFIG_DIR"
+}
+
 # Function to display the main menu with spacing
 show_main_menu() {
     clear
@@ -70,6 +117,7 @@ show_main_menu() {
 
 # Main loop
 while true; do
+    check_settings
     show_main_menu
     read -p "" choice
     case "$choice" in
