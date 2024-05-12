@@ -30,7 +30,7 @@ conf_file="$KLIPPER_CONFIG_DIR/moonraker.conf"
 
 # Source common functions
 . "$SCRIPT_DIR/common_functions.sh"
-source "$SETTINGS_FILE"
+. "$SETTINGS_FILE"
 
 ########################################################
 ########################################################
