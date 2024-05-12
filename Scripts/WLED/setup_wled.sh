@@ -135,17 +135,14 @@ print_nospaces "Macro file created and linked successfully."
 if grep -q "\[include WLED_Macro.cfg\]" "$PRINTER_CFG"; then
     print_item "Include line for WLED_Macro.cfg already exists in printer.cfg."
 else
-    # Find the line number of the last include
-    last_include_line=$(grep -n "^\[include " "$PRINTER_CFG" | tail -n 1 | cut -d ':' -f 1)
+    # Find the line number where the first sequence of includes ends
+    include_block_end=$(awk '/^\[include/ {last_include = NR; next} /^[^\[#]/ && last_include {print last_include; exit}' "$PRINTER_CFG")
 
-    # Calculate the next line number after the last include
-    next_line=$((last_include_line + 1))
+    # Add the include line after the last include in the first sequence
+    awk -v line="$include_block_end" 'NR==line {print; print "[include WLED_Macro.cfg]"; next} 1' "$PRINTER_CFG" > "$PRINTER_CFG.tmp" && mv "$PRINTER_CFG.tmp" "$PRINTER_CFG"
 
-    # Add the include line after the last include
-    awk -v line="$next_line" 'NR==line {print "[include WLED_Macro.cfg]"} 1' "$PRINTER_CFG" > "$PRINTER_CFG.tmp" && mv "$PRINTER_CFG.tmp" "$PRINTER_CFG"
-
-    print_item "Include line for WLED_Macro.cfg added below the last include in printer.cfg."
-    print_item "Inserted at line: $next_line"
+    print_item "Include line for WLED_Macro.cfg added just after the first sequence of includes."
+    print_item "Inserted at line: $include_block_end"
 fi
 
 
