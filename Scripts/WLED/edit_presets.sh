@@ -32,20 +32,20 @@ SCRIPT_DIR="$BASE_DIR/Scripts"
 
 # Config file path
 config_file="$BASE_DIR/Config/presets.conf"
-
 # Function to display the stored presets with options A, B, C, etc.
 show_presets() {
-    print_item "\033[32mCurrent WLED Presets:\033[0m\n"
+    print_item "\033[32mCurrent WLED Presets:\033[0m"  # Removed \n here if you want to control spacing manually
     i=0
     while IFS= read -r line; do
-        # Use awk to convert index to ASCII letter (A, B, C...)
+        if [ $i -gt 0 ]; then  # This ensures the spacer isn't added before the first item
+            print_spacer  # Adds your styled spacer
+        fi
         char=$(awk -v num=$i 'BEGIN {printf "%c", 65 + num}')
-        print_nospaces "$char: $line\n"
+        print_nospaces "$char: $line"  # Removed \n to control it explicitly
         i=$((i + 1))
     done < "$config_file"
     print_separator
 }
-
 # Function to edit a preset
 edit_preset() {
     print_input_item "$MAGENTA""Enter the letter of the preset you want to edit (A, B, C, etc.):"
