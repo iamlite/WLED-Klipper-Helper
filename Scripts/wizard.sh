@@ -58,14 +58,26 @@ continue_prompt
 # Step 2: Handle presets
 print_separator
 print_item "Handling presets for printer events..." $MAGENTA
-if [ -s "${BASE_DIR}/Config/presets.conf" ]; then
+
+# Function to check if all presets have values
+check_presets() {
+    while IFS= read -r line; do
+        if [[ "$line" == *":" ]]; then
+            return 1  # Return failure if any line ends with a colon (indicating no value assigned)
+        fi
+    done < "${BASE_DIR}/Config/presets.conf"
+    return 0  # Return success if all lines have values
+}
+
+if [ -s "${BASE_DIR}/Config/presets.conf" ] && check_presets; then
     print_item "Presets already defined. Skipping preset assignment." $GREEN
     continue_prompt
 else
-    print_item "No presets found. Let's assign some presets." $RED
+    print_item "No presets found or some presets are empty. Let's assign some presets." $RED
     "${SCRIPT_DIR}/WLED/assign_presets.sh"
     continue_prompt
 fi
+
 
 # Step 3: Search and confirm macros
 print_separator
