@@ -83,6 +83,7 @@ print_nospaces "${GREEN}Initialized confirmed macros file: $confirmed_macros_fil
 # Process each macro one by one
 for macro in $macros; do
     clear
+    frame
     print_nospaces "${GREEN}Searching for $macro in $search_dir...${NC}\n"
     grep -RIHn "^\s*\[gcode_macro\s\+$macro\]" "$search_dir" > "$temp_file"
     if [ ! -s "$temp_file" ]; then

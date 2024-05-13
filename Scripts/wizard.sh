@@ -39,7 +39,6 @@ search_dir="/usr/data/printer_data/config"
 continue_prompt() {
     print_item "${GREEN}Press enter to continue...${NC}"
     read dummy
-    print_spacer
 }
 
 # Ensure all scripts are executable

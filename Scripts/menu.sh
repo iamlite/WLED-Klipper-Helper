@@ -85,19 +85,18 @@ check_settings() {
 # Function to display the main menu with spacing
 show_main_menu() {
     clear
-    print_spacer
-    print_ascii_art
-    print_spacer
-    print_separator
+    frame
     print_menu_item "Version: $VERSION" "$DIM_WHITE"
     print_menu_item "Author: $AUTHOR" "$DIM_WHITE"
     # print_menu_item "GitHub: $GITHUB" "$DIM_WHITE"
     print_menu_item "Wiki: $WIKI" "$DIM_WHITE"
-    print_separator
     print_spacer
-    print_menu_item "1. WLED Setup Wizard" "$BOLD_MAGENTA"
+    print_separator_nospaces
     print_spacer
-    print_separator
+    print_menu_item "1. WLED Setup Wizard" "$BOLD_YELLOW"
+    print_spacer
+    print_separator_nospaces
+    print_spacer
     print_menu_item "2. Configure WLED with Moonraker" "$RED"
     print_spacer
     print_menu_item "3. Assign WLED Presets" "$BLUE"
@@ -110,11 +109,8 @@ show_main_menu() {
     print_spacer
     print_menu_item "7. Edit Macros (not implemented yet)" "$DIM_CYAN" 
     print_separator
-    print_spacer
     print_menu_item "Q. Quit" "$RED"
-    print_spacer
     print_separator
-    print_spacer
     print_input_item "Please enter your choice: " "$BLUE"
 }
 

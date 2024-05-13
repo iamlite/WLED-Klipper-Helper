@@ -35,7 +35,7 @@ config_file="$BASE_DIR/Config/presets.conf"
 
 # Function to display the stored presets with options A, B, C, etc., and an option to return to the main menu
 show_presets() {
-    print_item "$GREEN""Current WLED Presets:"
+    frame
     i=0
     while IFS= read -r line; do
         if [ $i -gt 0 ]; then

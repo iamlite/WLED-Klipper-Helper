@@ -33,6 +33,8 @@ SCRIPT_DIR="$BASE_DIR/Scripts"
 CONFIRMED_MACROS_FILE="$BASE_DIR/Config/confirmed_macros.txt"
 PRESET_ASSIGNMENTS_FILE="$BASE_DIR/Config/presets.conf"
 
+frame
+
 # Ensure script is run as root
 if [ "$(id -u)" != "0" ]; then
     print_item "${RED}This script must be run as root${NC}\n" 1>&2
@@ -68,8 +70,8 @@ insert_wled_update() {
 
     local preset_value=$(apply_preset "$preset_key")
     local insert_text="  UPDATE_WLED PRESET=$preset_value"
-    local seen=0  # Initialize 'seen' at the start of the function
-    local found=0 # Also make sure to initialize 'found'
+    local seen=0
+    local found=0
 
     print_nospaces "Attempting to update file: $file in macro starting at line $start_line"
     if [ "$match_pattern" = "end_macro" ]; then

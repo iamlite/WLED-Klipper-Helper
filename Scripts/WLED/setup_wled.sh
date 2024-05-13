@@ -40,8 +40,8 @@ conf_file="$KLIPPER_CONFIG_DIR/moonraker.conf"
 
 validate_ip() {
     while ! echo "$1" | grep -E -q '^([0-9]{1,3}\.){3}[0-9]{1,3}$'; do
-        print_item "${RED}Invalid IP address format. Please ensure it is in the form x.x.x.x where x is 0-255:${NC}\n"
-        print_item "${YELLOW}Enter WLED IP address again: ${NC}"
+        print_item "${RED}Invalid IP address format. Please ensure it is in the form x.x.x.x where x is 0-255"
+        print_input_item "${YELLOW}Enter WLED IP address again: "
         read ip
         set -- "$ip"
     done
@@ -49,10 +49,19 @@ validate_ip() {
 
 validate_number() {
     while ! echo "$1" | grep -E -q '^[0-9]+$'; do
-        print_item "${RED}Invalid number entered. Please ensure it is a positive integer:${NC}\n"
-        print_item "${YELLOW}Enter the number again: ${NC}"
+        print_item "${RED}Invalid number entered. Please ensure it is a positive integer"
+        print_input_item "${YELLOW}Enter the number again: "
         read num
         set -- "$num"
+    done
+}
+
+validate_name() {
+    while ! echo "$1" | grep -E -q '^[a-zA-Z0-9_]+$'; do
+        print_item "${RED}Invalid name entered. Please ensure it only contains letters, numbers, and underscores: "
+        print_input_item "${YELLOW}Enter the name again: "
+        read name
+        set -- "$name"
     done
 }
 
@@ -94,17 +103,21 @@ add_wled_config() {
     echo "address: $2" >> "$conf_file"
     echo "led_count: $3" >> "$conf_file"
     echo "preset: $4" >> "$conf_file"
+    clear
+    frame
     print_item "${GREEN}WLED configuration added for $1.${NC}"
 }
 
 ### MAIN SCRIPT LOGIC
 
 clear
-print_nospaces "Initiating WLED configuration script..."
+frame
+print_nospaces "$MAGENTA""Initiating WLED configuration script..."
 check_existing_instances
 if [ $? -eq 1 ]; then
     print_input_item "${YELLOW}Enter a name for the new WLED instance (e.g., my_wled): ${NC}"
     read wled_name
+    validate_name "$wled_name"
     print_input_item "${YELLOW}Enter WLED IP address (e.g., x.x.x.x): ${NC}"
     read wled_ip
     validate_ip "$wled_ip"

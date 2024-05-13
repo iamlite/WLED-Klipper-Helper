@@ -134,6 +134,11 @@ print_separator() {
     printf "${CYAN}||${NC}\n"
 }
 
+print_separator_nospaces() {
+    local separator_length=$(stty size | awk '{print $2}')
+    local separator_char="="
+    printf "${CYAN}%s${NC}\n" "$(printf "%${separator_length}s" | tr ' ' "$separator_char")"
+}
 
 print_menu_item() {
     local item=$1
@@ -169,6 +174,15 @@ print_ascii_line() {
     printf "${CYAN}||${NC} $1\n"
 }
 
+
+frame() {
+    print_separator_nospaces
+    print_spacer
+    print_ascii_art
+    print_spacer
+    print_separator_nospaces
+    print_spacer
+}
 
 #########################################
 ############### FUNCTIONS ###############

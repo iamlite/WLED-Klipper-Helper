@@ -34,9 +34,7 @@ config_file="$config_dir/presets.conf"
 
 
 show_intro() {
-    print_separator
-    print_item "Welcome to the WLED Klipper Setup Helper" "$MAGENTA"
-    print_separator
+    frame
     print_nospaces "This guide will help you link WLED lighting presets to specific events on your Klipper 3D printer." "$GREEN"
     print_nospaces "Start by opening your WLED instance in a web browser and navigate to the 'Presets' tab."
     print_nospaces "Click on the 'Add Preset' button to begin creating presets."
@@ -73,16 +71,20 @@ read_and_store_presets() {
     > "$config_file"
     for event in "Idle" "Pause" "Cancel" "Resume" "Complete" "Heating" "Homing" "Printing"; do
         clear
-        print_input_item "Enter the preset number for $event:" "$MAGENTA"
+        frame
+        print_input_item "Enter the preset number for $event: " "$MAGENTA"
         read preset_num
         # Validate the input is a number
         while ! echo "$preset_num" | grep -E -q '^[0-9]+$'; do
-            print_input_item "Invalid input. Please enter a valid preset number:" "$RED"
-            print_input_item "Enter the preset number for $event:" "$MAGENTA"
+            print_item "$RED""Invalid input. Please enter a valid preset number."
+            print_input_item "Enter the preset number for $event:" "$GREEN"
             read preset_num
         done
         # Write to config file
         echo "$event: $preset_num" >> "$config_file"
+        print_item "Preset for $event has been recorded." "$GREEN"
+        print_input_item "Press enter to continue..."
+        read dummy
     done
     print_item "All presets have been recorded successfully." "$GREEN"
 }
