@@ -64,7 +64,7 @@ check_presets() {
     while IFS= read -r line; do
         # Trim leading and trailing whitespace and check if the line ends with a colon
         trimmed_line=$(echo "$line" | sed 's/^[ \t]*//;s/[ \t]*$//')
-        if [[ "$trimmed_line" =~ :$ ]]; then
+        if echo "$trimmed_line" | grep -q ":$"; then
             return 1  # Return failure if any line ends with a colon (indicating no value assigned)
         fi
     done < "${BASE_DIR}/Config/presets.conf"
