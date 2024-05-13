@@ -62,7 +62,9 @@ print_item "Handling presets for printer events..." $MAGENTA
 # Function to check if all presets have values
 check_presets() {
     while IFS= read -r line; do
-        if [[ "$line" == *":" ]]; then
+        # Trim leading and trailing whitespace and check if the line ends with a colon
+        trimmed_line=$(echo "$line" | sed 's/^[ \t]*//;s/[ \t]*$//')
+        if [[ "$trimmed_line" =~ :$ ]]; then
             return 1  # Return failure if any line ends with a colon (indicating no value assigned)
         fi
     done < "${BASE_DIR}/Config/presets.conf"
@@ -71,11 +73,9 @@ check_presets() {
 
 if [ -s "${BASE_DIR}/Config/presets.conf" ] && check_presets; then
     print_item "Presets already defined. Skipping preset assignment." $GREEN
-    continue_prompt
 else
     print_item "No presets found or some presets are empty. Let's assign some presets." $RED
     "${SCRIPT_DIR}/WLED/assign_presets.sh"
-    continue_prompt
 fi
 
 
@@ -87,18 +87,15 @@ print_item "Searching for user macros..." $BLUE
 if [ -s "${config_dir}/confirmed_macros.txt" ] && [ $(wc -l < "${config_dir}/confirmed_macros.txt") -eq 5 ]; then
     print_item "All necessary macros have been found and confirmed:" $GREEN
     cat "${config_dir}/confirmed_macros.txt"
-    continue_prompt
 else
     print_item "Searching for macros..." $RED
     "${SCRIPT_DIR}/Macro/macro_search.sh" "${config_dir}" # Assuming macro_search.sh can take a directory as an argument
-    continue_prompt
 fi
 
 # Step 4: Insert macros
 print_separator
 print_item "Inserting macros..." $CYAN
 "${SCRIPT_DIR}/Macro/insert_macros.sh"
-continue_prompt
 
 # Completion message
 print_separator
