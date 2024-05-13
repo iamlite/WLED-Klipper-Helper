@@ -91,7 +91,7 @@ show_main_menu() {
     print_separator
     print_menu_item "Version: $VERSION" "$DIM_WHITE"
     print_menu_item "Author: $AUTHOR" "$DIM_WHITE"
-    print_menu_item "GitHub: $GITHUB" "$DIM_WHITE"
+    # print_menu_item "GitHub: $GITHUB" "$DIM_WHITE"
     print_menu_item "Wiki: $WIKI" "$DIM_WHITE"
     print_separator
     print_spacer
@@ -115,7 +115,7 @@ show_main_menu() {
     print_spacer
     print_separator
     print_spacer
-    print_input_item "Please enter your choice: " "$MAGENTA"
+    print_input_item "Please enter your choice: " "$BLUE"
 }
 
 check_settings
