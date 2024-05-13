@@ -35,7 +35,7 @@ config_file="$BASE_DIR/Config/presets.conf"
 
 # Function to display the stored presets with options A, B, C, etc., and an option to return to the main menu
 show_presets() {
-    print_item "$MAGENTA""Current WLED Presets: "
+    print_item "$green Current WLED Presets:$NC"
     i=0
     while IFS= read -r line; do
         if [ $i -gt 0 ]; then
@@ -52,40 +52,42 @@ show_presets() {
 
 # Function to edit a preset or return to the main menu
 edit_preset() {
-    print_input_item "$MAGENTA""Enter the letter of the preset you want to edit (A, B, C, ..., X for main menu):"
+    print_input_item "$MAGENTA Enter the letter of the preset you want to edit (A, B, C, ..., X for main menu):"
     read choice
     choice=$(echo "$choice" | tr '[:lower:]' '[:upper:]')  # Normalize input
     if [ "$choice" = "X" ]; then
-        return  # Exit the function to stop the loop and potentially return to a higher menu
+        return 1  # Return a specific non-zero status to indicate menu return
     fi
     line_num=$(printf "%d" "'$choice")
     line_num=$((line_num - 65 + 1))
     if [ $line_num -gt 0 ] && [ $line_num -le $i ]; then
         event_name=$(sed -n "${line_num}p" "$config_file" | cut -d':' -f1)
-        print_input_item "$MAGENTA""Enter the new preset number for $event_name: "
+        print_input_item "$MAGENTA Enter the new preset number for $event_name: "
         read new_number
         while ! echo "$new_number" | grep -E -q '^[0-9]+$'; do
-            print_item "$RED""Invalid input. Please enter a valid preset number: "
+            print_item "$red Invalid input. Please enter a valid preset number:$NC"
             read new_number
         done
         sed -i "${line_num}s/^$event_name: .*$/$event_name: $new_number/" "$config_file"
-        [ $? -eq 0 ] && print_item "$GREEN""Preset updated successfully!" || print_item "$RED""Failed to update preset."
+        [ $? -eq 0 ] && print_item "$green Preset updated successfully.$NC" || print_item "$red Failed to update preset. Check your permissions or path.$NC"
     else
-        print_input_item "$RED""Invalid choice. Please enter a valid letter (A, B, C, ..., X for main menu):"
+        print_input_item "$red Invalid selection. Please enter a valid letter.$NC"
     fi
 }
 
 # Main logic
-while true; do
-    clear
+clear
+quit=0
+while [ $quit -eq 0 ]; do
     if [ -f "$config_file" ]; then
         show_presets
         edit_preset
+        quit=$?  # Capture the return status to decide if the loop should continue
     else
-        print_item "$RED""No presets found. Please add some."
+        print_item "$red No preset configuration file found. Please run setup first.$NC"
         break
     fi
 done
 
-print_item "$MAGENTA""Press enter to return to the main menu..."
+print_item "$blue Press enter to return to the menu...$NC"
 read dummy
