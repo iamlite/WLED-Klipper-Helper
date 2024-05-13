@@ -102,7 +102,7 @@ show_main_menu() {
     print_spacer
     print_menu_item "3. Assign WLED Presets" "$BLUE"
     print_spacer
-    print_menu_item "4. Edit WLED Presets (not implemented yet)" "$DIM_CYAN"
+    print_menu_item "4. Edit WLED Presets" "$CYAN"
     print_separator
     print_menu_item "5. Search for Macros" "$YELLOW"
     print_spacer
