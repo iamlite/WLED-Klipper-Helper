@@ -80,6 +80,7 @@ clear
 quit=0
 while [ $quit -eq 0 ]; do
     if [ -f "$config_file" ]; then
+        clear
         show_presets
         edit_preset
         quit=$?  # Capture the return status to decide if the loop should continue
