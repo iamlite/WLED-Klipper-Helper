@@ -50,6 +50,8 @@ show_presets() {
 edit_preset() {
     print_input_item "$MAGENTA""Enter the letter of the preset you want to edit (A, B, C, etc.):"
     read choice
+    # Convert any lowercase letter to uppercase
+    choice=$(echo "$choice" | tr '[:lower:]' '[:upper:]')
     # Convert letter to line number
     line_num=$(printf "%d" "'$choice")
     line_num=$((line_num - 65 + 1))
