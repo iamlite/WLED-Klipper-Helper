@@ -73,9 +73,11 @@ check_presets() {
 
 if [ -s "${BASE_DIR}/Config/presets.conf" ] && check_presets; then
     print_item "Presets already defined. Skipping preset assignment." $GREEN
+    continue_prompt
 else
     print_item "No presets found or some presets are empty. Let's assign some presets." $RED
     "${SCRIPT_DIR}/WLED/assign_presets.sh"
+    continue_prompt
 fi
 
 
