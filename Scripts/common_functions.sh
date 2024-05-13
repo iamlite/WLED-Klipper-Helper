@@ -6,9 +6,9 @@
 
 
 VERSIONNUMBER=$(curl -s "https://raw.githubusercontent.com/iamlite/WLED-Klipper-Helper/master/VERSION")
-COMMIT_HASH=$(git rev-parse --short HEAD 2>/dev/null || echo "Unknown")
+COMMIT_HASH=$(git rev-parse --short HEAD 2>/dev/null || echo " ")
 VERSION="$VERSIONNUMBER ($COMMIT_HASH)"
-AUTHOR="Tariel Davidashvili"
+AUTHOR="Tariel D. (iamlite)"
 GITHUB="https://github.com/iamlite/WLED-Klipper-Helper"
 WIKI="https://github.com/iamlite/WLED-Klipper-Helper/wiki"
 
