@@ -35,14 +35,14 @@ config_file="$BASE_DIR/Config/presets.conf"
 
 # Function to display the stored presets with options A, B, C, etc., and an option to return to the main menu
 show_presets() {
-    print_item "$green""Current WLED Presets:"
+    print_item "$GREEN""Current WLED Presets:"
     i=0
     while IFS= read -r line; do
         if [ $i -gt 0 ]; then
             print_spacer
         fi
         char=$(awk -v num=$i 'BEGIN {printf "%c", 65 + num}')
-        print_nospaces "$BOLD_YELLOW" "$char: $line"
+        print_nospaces "$BLUE""$char: $line"
         i=$((i + 1))
     done < "$config_file"
     print_spacer
@@ -66,13 +66,13 @@ edit_preset() {
         print_input_item "$MAGENTA Enter the new preset number for $event_name: "
         read new_number
         while ! echo "$new_number" | grep -E -q '^[0-9]+$'; do
-            print_item "$red""Invalid input. Please enter a valid preset number: "
+            print_input_item "$RED""Invalid input. Please enter a valid preset number: "
             read new_number
         done
         sed -i "${line_num}s/^$event_name: .*$/$event_name: $new_number/" "$config_file"
-        [ $? -eq 0 ] && print_item "$green""Preset updated successfully." || print_item "$red""Failed to update preset. Check your permissions or path."
+        [ $? -eq 0 ] && print_item "$GREEN""Preset updated successfully." || print_item "$RED""Failed to update preset. Check your permissions or path."
     else
-        print_input_item "$red Invalid selection. Please enter a valid letter.$NC"
+        print_input_item "$RED Invalid selection. Please enter a valid letter."
     fi
 }
 
@@ -86,7 +86,7 @@ while [ $quit -eq 0 ]; do
         edit_preset
         quit=$?
     else
-        print_item "$red No preset configuration file found. Please run setup first."
+        print_item "$RED No preset configuration file found. Please run setup first."
         break
     fi
 done
