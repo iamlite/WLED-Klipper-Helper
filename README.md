@@ -27,9 +27,15 @@ curl -sSL "https://raw.githubusercontent.com/iamlite/WLED-Klipper-Helper/main/st
 
 - To start the script, run:
 
-    ```shell
-    .YOUR/INSTALL/PATH/Scripts/menu.sh
-    ```
+```shell
+sh /usr/data/WLED-Klipper-Helper/Scripts/menu.sh
+```
+
+or if you installed it in a custom path, run:
+
+```shell
+sh /YOUR/INSTALL/PATH/Scripts/menu.sh
+```
 
 - Follow the on-screen prompts to configure your WLED and Klipper integration.
 - Once configured, you can use the script to automate WLED control based on printer status or events.
@@ -49,4 +55,3 @@ Special thanks to the Klipper and WLED communities for their continuous support 
 ---
 
 **Maintainer:** Tariel D. (GitHub: [iamlite](https://github.com/iamlite))
-
