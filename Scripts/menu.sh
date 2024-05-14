@@ -98,7 +98,7 @@ update_moonraker_config() {
 [update_manager WLED-Klipper-Helper]
 type: git_repo
 channel: dev
-path: "$INSTALL_DIR"
+path: $INSTALL_DIR
 origin: https://github.com/iamlite/WLED-Klipper-Helper.git
 primary_branch: main
 managed_services: klipper
