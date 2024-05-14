@@ -75,7 +75,7 @@ check_existing_instances() {
             print_nospaces "$instance"
         done
         while true; do
-            print_input_item "${YELLOW}Type the name of an instance to use, or hit 'Y' to create a new instance:${NC}"
+            print_input_item "${YELLOW}Type the name of an instance to use, or hit 'Y' to create a new instance: "
             read user_choice
             
             if [ "$user_choice" = "y" ] || [ "$user_choice" = "Y" ]; then

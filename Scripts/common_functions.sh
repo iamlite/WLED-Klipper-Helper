@@ -140,6 +140,18 @@ print_separator_nospaces() {
     printf "${CYAN}%s${NC}\n" "$(printf "%${separator_length}s" | tr ' ' "$separator_char")"
 }
 
+print_text_separator() {
+    local text="$1"  # This captures the text to be displayed in the separator.
+    local separator_length=$(stty size | awk '{print $2}')
+    local text_length=${#text}
+    local half_separator_length=$(((separator_length - text_length - 2) / 2))  # -2 for padding spaces around the text
+    local separator_char="="
+
+    # Print the first half of the separator, then the text, then the rest of the separator
+    printf "${CYAN}%s %s %s${NC}\n" "$(printf "%${half_separator_length}s" | tr ' ' "$separator_char")" "$text" "$(printf "%${half_separator_length}s" | tr ' ' "$separator_char")"
+}
+
+
 print_menu_item() {
     local item=$1
     local color=$2

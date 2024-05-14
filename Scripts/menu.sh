@@ -34,7 +34,6 @@ find "$SCRIPT_DIR" -type f -name "*.sh" -exec chmod +x {} \;
 
 SETTINGS_FILE="$BASE_DIR/Config/settings.conf"
 
-# Function to check and set installation directories
 check_settings() {
 
     clear
@@ -57,7 +56,7 @@ check_settings() {
             # Setting exists, check if it's empty
             if [ -z "$(grep "^$setting_key=" "$SETTINGS_FILE" | cut -d'=' -f2)" ]; then
                 # Setting is empty, update it with user provided or default value
-                sed -i '' "s|^$setting_key=.*|$setting_key=$setting_value|" "$SETTINGS_FILE"
+                sed -i "s|^$setting_key=.*|$setting_key=$setting_value|" "$SETTINGS_FILE"
             fi
         else
             # Setting does not exist, append it
@@ -74,12 +73,44 @@ check_settings() {
     # Check and update KLIPPER_CONFIG_DIR
     if [ -z "$KLIPPER_CONFIG_DIR" ]; then
         print_nospaces "KLIPPER_CONFIG_DIR is not set."
-        print_nospaces  "Enter the path to your Klipper config directory" 
+        print_nospaces "Enter the path to your Klipper config directory"
         print_input_item "or press enter to use default [$DEFAULT_KLIPPER_CONFIG_DIR]:"
         read -p "> " input_klipper_dir
         KLIPPER_CONFIG_DIR="${input_klipper_dir:-$DEFAULT_KLIPPER_CONFIG_DIR}"
     fi
     update_or_append_setting "KLIPPER_CONFIG_DIR" "$KLIPPER_CONFIG_DIR" "$DEFAULT_KLIPPER_CONFIG_DIR"
+
+    # Ensure moonraker.conf is updated
+    update_moonraker_config "$KLIPPER_CONFIG_DIR" "$INSTALL_DIR"
+}
+
+update_moonraker_config() {
+    local klipper_config_dir=$1
+    local install_dir=$2
+
+    # Ensure moonraker.conf exists
+    local moonraker_conf="$klipper_config_dir/moonraker.conf"
+    [ -f "$moonraker_conf" ] || touch "$moonraker_conf"
+
+    # Define the block of text to add
+    local block_text=$(cat <<EOF
+[update_manager WLED-Klipper-Helper]
+type: git_repo
+channel: dev
+path: "$INSTALL_DIR"
+origin: https://github.com/iamlite/WLED-Klipper-Helper.git
+primary_branch: main
+managed_services: klipper
+EOF
+    )
+
+    # Add block of text to moonraker.conf if it does not already exist
+    if ! grep -q "\[update_manager WLED-Klipper-Helper\]" "$moonraker_conf"; then
+        echo "$block_text" >> "$moonraker_conf"
+        print_item "Added WLED-Klipper-Helper update_manager block to moonraker.conf"
+    else
+        print_item "WLED-Klipper-Helper update_manager block already exists in moonraker.conf"
+    fi
 }
 
 # Function to display the main menu with spacing
@@ -91,7 +122,7 @@ show_main_menu() {
     # print_menu_item "GitHub: $GITHUB" "$DIM_WHITE"
     print_menu_item "Wiki: $WIKI" "$DIM_WHITE"
     print_spacer
-    print_separator_nospaces
+    print_text_separator "Main Menu"
     print_spacer
     print_menu_item "1. WLED Setup Wizard" "$BOLD_YELLOW"
     print_spacer
