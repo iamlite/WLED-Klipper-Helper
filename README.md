@@ -1,47 +1,52 @@
-# WLED-Klipper-Helper
+# Klipper-WLED-Helper
 
-Status: sorta works. use at own risk.
+Klipper-WLED-Helper is a helper script designed to assist users in integrating WLED instances with Klipper firmware for 3D printers. The script manages configuration files, creates symlinks, and edits G-code macro files to insert calls to a macro that controls LEDs via WLED based on printer statuses or events.
 
-A helper script for installing and configuring WLED with Klipper.
-This script will automatically add triggers to your macros to control WLED's behavior based on your printers status.
+## Features
 
-## For Ender 3 V3 KE, Ender 3V3 and Creality K1, as well as anything using the nebula pad
+- **Configuration Management:** Check and manage Klipper configuration files.
+- **Symlink Creation:** Create necessary symlinks for WLED integration.
+- **G-code Macro Editing:** Insert calls to the WLED control macro in G-code files.
+- **WLED Control:** Automate WLED control based on printer status or events.
+
+## Installation
+
+### For Ender 3 V3 KE, Ender 3V3 and Creality K1, as well as anything using the nebula pad
 
 ```shell
 curl -sSL "https://raw.githubusercontent.com/iamlite/WLED-Klipper-Helper/main/start.sh" | sudo sh
 ```
 
-## For any other klipper installs. Make sure to edit the INSTALL_DIR variable to choose where it is installed
+### For any other klipper installs. Make sure to edit the INSTALL_DIR variable to choose where it is installed
 
 ```shell
 curl -sSL "https://raw.githubusercontent.com/iamlite/WLED-Klipper-Helper/main/start.sh?" | sudo INSTALL_DIR=/YOUR/CUSTOM/PATH/WLED-Klipper-Helper sh
 ```
 
-```bash
-  ├─ Config/
-  │  └─ presets.conf
-  ├─ Scripts/
-  │  ├─ menu.sh
-  │  ├─ macro_search.sh
-  │  ├─ assign_presets.sh
-  │  ├─ setup_wled.sh
-  │  └─ view_edit_presets.sh
-  ├─ .gitignore
-  ├─ README.md
-  └─ start.sh
-```
+## Usage
 
-## test
+- To start the script, run:
 
-```shell
-curl -sSL -H "Cache-Control: no-cache" "https://raw.githubusercontent.com/iamlite/WLED-Klipper-Helper/main/start.sh" | sudo INSTALL_DIR=/usr/data/WLED-Klipper-Helper sh
-```
+    ```shell
+    .YOUR/INSTALL/PATH/Scripts/menu.sh
+    ```
 
+- Follow the on-screen prompts to configure your WLED and Klipper integration.
+- Once configured, you can use the script to automate WLED control based on printer status or events.
 
-### Todo
+## Contributing
 
-- Success output on configure WLED
-- clear before input for everything
-- 
-- Add documentation
-- Add changelog
+Contributions are welcome! Please fork the repository and submit a pull request with your improvements.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+## Acknowledgements
+
+Special thanks to the Klipper and WLED communities for their continuous support and contributions.
+
+---
+
+**Maintainer:** Tariel D. (GitHub: [iamlite](https://github.com/iamlite))
+
