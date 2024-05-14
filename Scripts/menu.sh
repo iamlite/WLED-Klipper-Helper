@@ -94,6 +94,7 @@ update_moonraker_config() {
 
     # Define the block of text to add
     local block_text=$(cat <<EOF
+
 [update_manager WLED-Klipper-Helper]
 type: git_repo
 channel: dev

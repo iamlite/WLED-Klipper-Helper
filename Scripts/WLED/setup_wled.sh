@@ -99,6 +99,7 @@ add_wled_config() {
         print_item "${RED}Configuration for WLED instance '$1' already exists in moonraker.conf.${NC}\n"
         return 1
     fi
+    echo " " >> "$conf_file"
     echo "[wled $1]" >> "$conf_file"
     echo "address: $2" >> "$conf_file"
     echo "led_count: $3" >> "$conf_file"
