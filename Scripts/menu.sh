@@ -72,9 +72,9 @@ check_settings() {
 
     # Check and update KLIPPER_CONFIG_DIR
     if [ -z "$KLIPPER_CONFIG_DIR" ]; then
-        print_nospaces "KLIPPER_CONFIG_DIR is not set."
-        print_nospaces "Enter the path to your Klipper config directory"
-        print_input_item "or press enter to use default [$DEFAULT_KLIPPER_CONFIG_DIR]:"
+        frame
+        print_nospaces "$RED Klipper config directory not found. Please provide the path to your Klipper config directory."
+        print_input_item "$GREEN Enter the path or press enter to use default [$DEFAULT_KLIPPER_CONFIG_DIR]:"
         read -p "> " input_klipper_dir
         KLIPPER_CONFIG_DIR="${input_klipper_dir:-$DEFAULT_KLIPPER_CONFIG_DIR}"
     fi
@@ -120,15 +120,14 @@ show_main_menu() {
     frame
     print_menu_item "Version: $VERSION" "$DIM_WHITE"
     print_menu_item "Author: $AUTHOR" "$DIM_WHITE"
-    # print_menu_item "GitHub: $GITHUB" "$DIM_WHITE"
     print_menu_item "Wiki: $WIKI" "$DIM_WHITE"
+    # print_menu_item "GitHub: $GITHUB" "$DIM_WHITE"
     print_spacer
-    print_text_separator "Main Menu"
+    print_separator
     print_spacer
     print_menu_item "1. WLED Setup Wizard" "$BOLD_YELLOW"
     print_spacer
-    print_separator_nospaces
-    print_spacer
+    print_separator
     print_menu_item "2. Configure WLED with Moonraker" "$RED"
     print_spacer
     print_menu_item "3. Assign WLED Presets" "$BLUE"

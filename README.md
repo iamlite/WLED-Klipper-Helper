@@ -11,13 +11,13 @@ Klipper-WLED-Helper is a helper script designed to assist users in integrating W
 
 ## Installation
 
-### For Ender 3 V3 KE, Ender 3V3 and Creality K1, as well as anything using the nebula pad
+### For Creality K1, K1C, (Probably) K2, Ender 3 V3 KE, and Ender 3 V3 Core XZ, as well as anything using the creality nebula pad
 
 ```shell
 curl -sSL "https://raw.githubusercontent.com/iamlite/WLED-Klipper-Helper/main/start.sh" | sudo sh
 ```
 
-### For any other klipper installs. Make sure to edit the INSTALL_DIR variable to choose where it is installed
+### For any other klipper installs. You can use an environment variable to set a custom path. Make sure to edit the INSTALL_DIR variable to choose where it is installed
 
 ```shell
 curl -sSL "https://raw.githubusercontent.com/iamlite/WLED-Klipper-Helper/main/start.sh?" | sudo INSTALL_DIR=/YOUR/CUSTOM/PATH/WLED-Klipper-Helper sh
