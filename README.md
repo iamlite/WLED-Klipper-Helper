@@ -9,6 +9,7 @@ Klipper-WLED-Helper is a helper script designed to assist users in integrating W
 - **Symlink Creation:** Creates necessary symlinks
 - **Automated Search and Injection of Macros:** Automatically search for macros and inject them into your configuration.
 - **QOL Features:** Lots of small QOL features related to WLED
+- **Moonraker Update Manager:** Update manager built into your UI to keep script up to date.
 - **Automate progress macro generation:** Automate progress macro generation macro. (Coming soon)
 
 ---
