@@ -62,6 +62,7 @@ apply_preset() {
 }
 
 # Function to insert WLED update line into the macro file
+# Function to insert WLED update line into the macro file
 insert_wled_update() {
     local file="$1"
     local preset_key="$2"
@@ -70,38 +71,40 @@ insert_wled_update() {
 
     local preset_value=$(apply_preset "$preset_key")
     local insert_text="  UPDATE_WLED PRESET=$preset_value"
-    local seen=0
-    local found=0
+    local inserted=0
 
     print_nospaces "Attempting to update file: $file in macro starting at line $start_line"
+
     if [ "$match_pattern" = "end_macro" ]; then
-        awk -v line_num="$start_line" -v insert_text="$insert_text" '
-            BEGIN {in_macro=0; found=0; insert_done=0}
-            NR == line_num {in_macro=1; print "DEBUG: Entering macro at line", NR}
-            /^\[gcode_macro/ && NR > line_num {in_macro=0; if (!insert_done) {print insert_text; insert_done=1; print "DEBUG: Inserted at new macro start"}}
-            in_macro && index($0, insert_text) {found=1; print "DEBUG: Found existing insert_text at line", NR}
+        awk -v line_num="$start_line" -v insert_text="$insert_text" -v inserted="inserted" '
+            NR == line_num {in_macro=1}
+            /^\[gcode_macro/ && NR > line_num {in_macro=0; if (!insert_done) {print insert_text; insert_done=1; inserted=1}}
+            in_macro && index($0, insert_text) {insert_done=1}
             {print}
-            END {if (in_macro && !found && !insert_done) {print insert_text; print "DEBUG: Inserted at end of macro"}}
-        ' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
+            END {if (in_macro && !insert_done) {print insert_text; inserted=1}}
+        ' "$file" > "$file.tmp"
     else
-        awk -v line_num="$start_line" -v pattern="$match_pattern" -v insert_text="$insert_text" '
-            BEGIN {p=0; found=0; seen=0}
-            NR == line_num {p=1; print "DEBUG: Processing from line", NR}
-            p && $0 ~ pattern && !seen && !found {print; print insert_text; seen=1; print "DEBUG: Inserted at pattern match line", NR; next}
-            p && index($0, insert_text) {found=1; print "DEBUG: Found existing insert_text at line", NR}
+        awk -v line_num="$start_line" -v pattern="$match_pattern" -v insert_text="$insert_text" -v inserted="inserted" '
+            NR == line_num {in_macro=1}
+            in_macro && $0 ~ pattern && !insert_done {print; print insert_text; insert_done=1; inserted=1; next}
+            in_macro && index($0, insert_text) {insert_done=1}
             {print}
-            END {if (p && !found && !seen) {print insert_text; print "DEBUG: Inserted at end of section"}}
-        ' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
+            END {if (in_macro && !insert_done) {print insert_text; inserted=1}}
+        ' "$file" > "$file.tmp"
     fi
 
-    if [ "$seen" -eq 1 ]; then
-        print_nospaces "Inserted for $preset_key in $file."
+    if [ $? -eq 0 ]; then
+        mv "$file.tmp" "$file"
+        if [ "$inserted" -eq 1 ]; then
+            print_nospaces "Inserted for $preset_key in $file."
+        else
+            print_item "Skipped insertion for $preset_key as it already exists in $file."
+        fi
     else
-        print_item "Skipped insertion for $preset_key as it already exists in $file."
+        rm "$file.tmp"
+        print_item "Failed to update $file for $preset_key due to an error."
     fi
 }
-
-
 
 
 # Reading entries and processing updates
