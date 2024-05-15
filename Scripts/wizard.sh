@@ -53,7 +53,6 @@ print_item "Permissions set. Continuing with the wizard." $GREEN
 print_separator
 print_item "Configuring WLED..." $YELLOW
 "${SCRIPT_DIR}/WLED/setup_wled.sh"
-continue_prompt
 
 # Step 2: Handle presets
 print_separator
