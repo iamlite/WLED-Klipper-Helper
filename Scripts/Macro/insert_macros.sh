@@ -77,20 +77,20 @@ insert_wled_update() {
     if [ "$match_pattern" = "end_macro" ]; then
         awk -v line_num="$start_line" -v insert_text="$insert_text" '
             BEGIN {in_macro=0; found=0; insert_done=0}
-            NR == line_num {in_macro=1}
-            /^\[gcode_macro/ && NR > line_num {in_macro=0; if (!insert_done) {print insert_text; insert_done=1}}
-            in_macro && index($0, insert_text) {found=1}
+            NR == line_num {in_macro=1; print "DEBUG: Entering macro at line", NR}
+            /^\[gcode_macro/ && NR > line_num {in_macro=0; if (!insert_done) {print insert_text; insert_done=1; print "DEBUG: Inserted at new macro start"}}
+            in_macro && index($0, insert_text) {found=1; print "DEBUG: Found existing insert_text at line", NR}
             {print}
-            END {if (in_macro && !found && !insert_done) print insert_text}
+            END {if (in_macro && !found && !insert_done) {print insert_text; print "DEBUG: Inserted at end of macro"}}
         ' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
     else
         awk -v line_num="$start_line" -v pattern="$match_pattern" -v insert_text="$insert_text" '
             BEGIN {p=0; found=0; seen=0}
-            NR == line_num {p=1}
-            p && $0 ~ pattern && !seen && !found {print; print insert_text; seen=1; next}
-            p && index($0, insert_text) {found=1}
+            NR == line_num {p=1; print "DEBUG: Processing from line", NR}
+            p && $0 ~ pattern && !seen && !found {print; print insert_text; seen=1; print "DEBUG: Inserted at pattern match line", NR; next}
+            p && index($0, insert_text) {found=1; print "DEBUG: Found existing insert_text at line", NR}
             {print}
-            END {if (p && !found && !seen) {print insert_text; seen=1}}
+            END {if (p && !found && !seen) {print insert_text; print "DEBUG: Inserted at end of section"}}
         ' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
     fi
 
@@ -100,6 +100,7 @@ insert_wled_update() {
         print_item "Skipped insertion for $preset_key as it already exists in $file."
     fi
 }
+
 
 
 
