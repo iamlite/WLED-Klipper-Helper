@@ -102,8 +102,8 @@ add_wled_config() {
     echo " " >> "$conf_file"
     echo "[wled $1]" >> "$conf_file"
     echo "address: $2" >> "$conf_file"
-    echo "led_count: $3" >> "$conf_file"
-    echo "preset: $4" >> "$conf_file"
+    echo "chain_count: $3" >> "$conf_file"
+    echo "initial_preset: $4" >> "$conf_file"
     clear
     frame
     print_item "${GREEN}WLED configuration added for $1.${NC}"
@@ -160,16 +160,16 @@ ln -s "$BASE_DIR/Config/WLED_Macros.cfg" "$KLIPPER_CONFIG_DIR/WLED_Macros.cfg"
 print_item "${GREEN}Macro file created and linked successfully.${NC}"
 
 # Check if the line already exists to avoid duplicates
-if grep -q "\[include WLED_Macro.cfg\]" "$PRINTER_CFG"; then
-    print_item "${YELLOW}Include line for WLED_Macro.cfg already exists in printer.cfg.${NC}"
+if grep -q "\[include WLED_Macros.cfg\]" "$PRINTER_CFG"; then
+    print_item "${YELLOW}Include line for WLED_Macros.cfg already exists in printer.cfg.${NC}"
 else
     # Find the line number where the first sequence of includes ends
     include_block_end=$(awk '/^\[include/ {last_include = NR; next} /^[^\[#]/ && last_include {print last_include; exit}' "$PRINTER_CFG")
 
     # Add the include line after the last include in the first sequence
-    awk -v line="$include_block_end" 'NR==line {print; print "[include WLED_Macro.cfg]"; next} 1' "$PRINTER_CFG" > "$PRINTER_CFG.tmp" && mv "$PRINTER_CFG.tmp" "$PRINTER_CFG"
+    awk -v line="$include_block_end" 'NR==line {print; print "[include WLED_Macros.cfg]"; next} 1' "$PRINTER_CFG" > "$PRINTER_CFG.tmp" && mv "$PRINTER_CFG.tmp" "$PRINTER_CFG"
 
-    print_item "${GREEN}Include line for WLED_Macro.cfg added to printer.cfg successfully at line: $include_block_end"
+    print_item "${GREEN}Include line for WLED_Macros.cfg added to printer.cfg successfully at line: $include_block_end"
 fi
 
 print_input_item "${GREEN}All done! Press enter to continue...${NC}\n"
