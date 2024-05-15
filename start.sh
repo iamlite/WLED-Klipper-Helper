@@ -83,7 +83,7 @@ print_separator() {
 }
 
 
-print_menu_item() {
+print_1line_item() {
     local item=$1
     local color=$2
     printf "${CYAN}||${NC} ${color}${item}${NC}\n"
@@ -150,9 +150,9 @@ print_spacer
 
     # Check if Git is installed
     if command -v git > /dev/null 2>&1; then
-        echo "Git is already installed."
+        print_1line_item "Git is already installed."
     else
-        echo "Git is not installed. Installing Git..."
+        print_1line_item "Git is not installed. Installing Git..."
     
         # Check for the presence of known package managers and attempt to install Git
         if [ -f /etc/debian_version ]; then
@@ -176,7 +176,6 @@ print_spacer
     
     echo "Git has been installed."
     fi
-
 
 # Define default installation directory and repository URL
 DEFAULT_INSTALL_DIR="/usr/data/WLED-Klipper-Helper"
