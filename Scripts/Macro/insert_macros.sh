@@ -61,7 +61,7 @@ apply_preset() {
     echo "$preset_value"
 }
 
-# Improved function to insert WLED update line into the macro file
+# Function to insert WLED update line into the macro file
 insert_wled_update() {
     local file="$1"
     local preset_key="$2"
@@ -70,30 +70,31 @@ insert_wled_update() {
 
     local preset_value=$(apply_preset "$preset_key")
     local insert_text="  UPDATE_WLED PRESET=$preset_value"
-    local seen=0
     local found=0
 
     print_nospaces "Attempting to update file: $file in macro starting at line $start_line"
     if [ "$match_pattern" = "end_macro" ]; then
         awk -v line_num="$start_line" -v insert_text="$insert_text" '
             NR == line_num {in_macro=1}
-            /^\[gcode_macro/ && NR > line_num {in_macro=0; if (!insert_done) {print insert_text; insert_done=1}}
+            /^\[gcode_macro/ && NR > line_num {in_macro=0; if (!found) {print insert_text; found=1}}
             in_macro && index($0, insert_text) {found=1}
             {print}
-            END {if (in_macro && !found && !insert_done) print insert_text}
+            END {if (in_macro && !found) print insert_text}
         ' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
     else
-        awk -v line_num="$start_line" -v pattern="$match_pattern" -v insert_text="$insert_text" 'BEGIN {p=0}
-            NR == line_num {p=1}
-            p && $0 ~ pattern && !seen && !found {print; print insert_text; seen=1; next}
-            p && index($0, insert_text) {found=1}
+        awk -v line_num="$start_line" -v pattern="$match_pattern" -v insert_text="$insert_text" '
+            NR == line_num {in_macro=1}
+            in_macro && $0 ~ pattern && !found {print; print insert_text; found=1; next}
+            in_macro && index($0, insert_text) {found=1}
             {print}
+            END {in_macro && !found && print insert_text}
         ' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
-        if [ "$seen" -eq 1 ]; then
-            print_nospaces "Inserted for $preset_key in $file."
-        else
-            print_item "Skipped insertion for $preset_key as it already exists in $file."
-        fi
+    fi
+
+    if [ "$found" -eq 0 ]; then
+        print_item "Inserted for $preset_key in $file."
+    else
+        print_item "Skipped insertion for $preset_key as it already exists in $file."
     fi
 }
 
