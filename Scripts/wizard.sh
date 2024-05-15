@@ -95,6 +95,7 @@ else
 fi
 
 # Step 4: Insert macros
+clear
 print_separator
 print_item "Inserting macros..." $CYAN
 "${SCRIPT_DIR}/Macro/insert_macros.sh"
