@@ -150,31 +150,22 @@ print_spacer
 
     # Check if Git is installed
     if command -v git > /dev/null 2>&1; then
-        print_1line_item "Git is already installed."
+        print_spacer
+        print_1line_item "Git is already installed." $GREEN
     else
         print_1line_item "Git is not installed. Installing Git..."
     
         # Check for the presence of known package managers and attempt to install Git
         if [ -f /etc/debian_version ]; then
-        sudo apt-get update && sudo apt-get install -y git
-        elif [ -f /etc/redhat-release ]; then
-        sudo yum install -y git
-        elif [ -f /etc/arch-release ]; then
-        sudo pacman -Syu --noconfirm git
-        elif [ -f /etc/SuSE-release ]; then
-        sudo zypper install -y git
-        elif command -v brew > /dev/null 2>&1; then
-        brew install git
-        elif [ -f /etc/alpine-release ]; then
-        sudo apk add git
+            sudo apt-get update && sudo apt-get install -y git
         elif command -v opkg > /dev/null 2>&1; then
-        sudo opkg install git
+            sudo opkg install git
         else
-        print_1line_item "No supported package manager found. Please install Git manually."
-        return 1
-    fi
+            print_1line_item "No supported package manager found. Please install Git manually."
+            return 1
+        fi
     
-    print_1line_item "Git has been installed."
+        print_1line_item "Git has been installed."
     fi
 
 # Define default installation directory and repository URL
@@ -192,6 +183,7 @@ fi
 
 # Use environment variable or default for the installation directory
 INSTALL_DIR="${INSTALL_DIR:-$DEFAULT_INSTALL_DIR}"
+print_spacer
 print_1line_item "Installation directory is set to $INSTALL_DIR" $YELLOW
 print_spacer
 
@@ -208,7 +200,6 @@ fi
 
 # Create the installation directory
 mkdir -p "$INSTALL_DIR"
-print_1line_item "Cloning repository to $INSTALL_DIR..." $GREEN
 { git clone "$REPO_URL" "$INSTALL_DIR" 2>&1; } | while read line; do
     print_1line_item "$line" $GREEN
 done
