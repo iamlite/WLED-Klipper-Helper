@@ -170,11 +170,11 @@ print_spacer
         elif command -v opkg > /dev/null 2>&1; then
         sudo opkg install git
         else
-        echo "No supported package manager found. Please install Git manually."
+        print_1line_item "No supported package manager found. Please install Git manually."
         return 1
     fi
     
-    echo "Git has been installed."
+    print_1line_item "Git has been installed."
     fi
 
 # Define default installation directory and repository URL
@@ -184,18 +184,21 @@ CONFIG_FILE="Config/settings.conf"
 
 # Ensure the script is run as root
 if [ "$(id -u)" -ne 0 ]; then
-    print_item "Error: This script must be run as root." $RED
+    print_spacer
+    print_1line_item "Error: This script must be run as root." $RED
+    print_spacer
     exit 1
 fi
 
 # Use environment variable or default for the installation directory
 INSTALL_DIR="${INSTALL_DIR:-$DEFAULT_INSTALL_DIR}"
-print_item "Installation directory is set to $INSTALL_DIR" $YELLOW
-
+print_1line_item "Installation directory is set to $INSTALL_DIR" $YELLOW
+print_spacer
 
 # Check if the target directory exists and rename it
 if [ -d "$INSTALL_DIR" ]; then
-    print_item "The directory $INSTALL_DIR already exists. Renaming..." $YELLOW
+    print_1line_item "The directory $INSTALL_DIR already exists. Renaming..." $YELLOW
+    print_spacer
     count=1
     while [ -d "$INSTALL_DIR.old$count" ]; do
         count=$((count + 1))
@@ -205,30 +208,33 @@ fi
 
 # Create the installation directory
 mkdir -p "$INSTALL_DIR"
-print_item "Cloning repository to $INSTALL_DIR..." $GREEN
+print_1line_item "Cloning repository to $INSTALL_DIR..." $GREEN
 { git clone "$REPO_URL" "$INSTALL_DIR" 2>&1; } | while read line; do
-    print_item "$line" $GREEN
+    print_1line_item "$line" $GREEN
 done
-print_item "Repository cloned." $GREEN
+print_spacer
+print_1line_item "Repository cloned." $GREEN
+print_spacer
 
 # Ensure the configuration directory exists
 mkdir -p "$(dirname "$INSTALL_DIR/$CONFIG_FILE")"
 
 # Write the installation directory to a configuration file
 if echo "INSTALL_DIR=$INSTALL_DIR" > "$INSTALL_DIR/$CONFIG_FILE"; then
-    print_item "Installation directory saved in settings file." $GREEN
+    print_1line_item "Installation directory saved in settings file." $GREEN
 else
-    print_item "Failed to write installation directory to settings file." $RED
+    print_1line_item "Failed to write installation directory to settings file." $RED
     exit 1
 fi
 
+print_spacer
+
 # Set permissions for all scripts
-print_item "Setting executable permissions on scripts..." $BLUE
+print_1line_item "Setting executable permissions on scripts..." $BLUE
 find "$INSTALL_DIR" -type f -name "*.sh" -exec chmod +x {} \;
 
+print_spacer
 
 # Output instruction for starting the menu
-print_item "Setup complete. To run the main menu, execute:" $CYAN
-print_spacer
+print_1line_item "Setup complete. To run the main menu, execute:" $CYAN
 print_item "$INSTALL_DIR/Scripts/menu.sh" $MAGENTA
-print_spacer
