@@ -33,6 +33,7 @@ SCRIPT_DIR="$BASE_DIR/Scripts"
 CONFIRMED_MACROS_FILE="$BASE_DIR/Config/confirmed_macros.txt"
 PRESET_ASSIGNMENTS_FILE="$BASE_DIR/Config/presets.conf"
 
+clear
 frame
 
 # Ensure script is run as root
@@ -111,9 +112,6 @@ insert_wled_update() {
 # Reading entries and processing updates
 while IFS=':' read -r file line_number content; do
     macro_name=$(echo "$content" | grep -oE '\[gcode_macro\s+\w+\]' | cut -d ' ' -f 2 | tr -d '[]')
-    print_spacer
-    print_ascii_art
-    print_spacer
     print_nospaces "Processing macro: $macro_name in file $file at line $line_number"
     case "$macro_name" in
         "START_PRINT")
