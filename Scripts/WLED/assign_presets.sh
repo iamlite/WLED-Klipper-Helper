@@ -35,23 +35,35 @@ config_file="$config_dir/presets.conf"
 
 show_intro() {
     frame
-    print_nospaces "This guide will help you link WLED lighting presets to specific events on your Klipper 3D printer." "$GREEN"
-    print_nospaces "Start by opening your WLED instance in a web browser and navigate to the 'Presets' tab."
-    print_nospaces "Click on the 'Add Preset' button to begin creating presets."
-    print_nospaces "You will create presets that correspond to various printer events, each triggered by a unique macro."
+    print_nospaces "$GREEN""This process will link WLED lighting presets to specific events on your printer."
     print_spacer
-    print_item "Please follow these steps to create a preset for each printer status. You can choose any visual effect and color you like for each event:"
-    print_item "Idle - The printer is not active." "$YELLOW"
-    print_item "Pause - The print has been paused." "$YELLOW"
-    print_item "Cancel - The print has been cancelled." "$YELLOW"
-    print_item "Resume - The print is resuming." "$YELLOW"
-    print_item "Complete - The print has finished successfully." "$YELLOW"
-    print_item "Heating - The printer is heating up." "$YELLOW"
-    print_item "Homing - The printer is preparing to print by homing its axes." "$YELLOW"
-    print_item "Printing - The printer is in the process of printing." "$YELLOW"
+    print_nospaces "$GREEN""Start by opening your WLED instance in a web browser and navigate to the 'Presets' tab."
+    print_nospaces "$GREEN""Click on the 'Add Preset' button to begin creating presets."
+    print_nospaces "$GREEN""Create presets that correspond to various printer events."
+    print_nospaces "$GREEN""Assign each preset a unique number in WLED which will be used in the macro to trigger the correct lighting effect for each event."
+    print_nospaces "$GREEN""You should choose any visual effect and color you like for each event. "
     print_spacer
-    print_nospaces "Assign each preset a unique number in WLED. This number will be used in your printer's configuration to trigger the correct lighting effect for each event."
+    print_nospaces "$MAGENTA""List of presets for you to make:"
     print_spacer
+    print_nospaces  "Pause" "$YELLOW"
+    print_spacer
+    print_nospaces  "Cancel" "$YELLOW"
+    print_spacer   
+    print_nospaces  "Resume" "$YELLOW"
+    print_spacer
+    print_nospaces  "Homing" "$YELLOW"
+    print_spacer
+    print_nospaces  "Idle - Your default state when the printer is idle." "$YELLOW"
+    print_spacer
+    print_nospaces  "Heating - Make your printer glow fancy red and orange while its heating 0_0" "$YELLOW"
+    print_spacer
+    print_nospaces  "Printing - Effect when the printer is printing." "$YELLOW"
+    print_spacer
+    print_nospaces  "Complete - When the print has finished successfully." "$YELLOW"
+    print_spacer
+    print_input_item "$BLUE""Once you have created all your presets, press enter to continue..."
+    read dummy
+
 }
 
 
@@ -93,6 +105,4 @@ read_and_store_presets() {
 clear
 show_intro
 check_and_create_dir
-print_item "\033[34mPress enter when you are ready to continue...\033[0m"
-read dummy
 read_and_store_presets

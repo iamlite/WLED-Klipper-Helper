@@ -29,7 +29,8 @@ SCRIPT_DIR="$BASE_DIR/Scripts"
 config_dir="${BASE_DIR}/Config"
 
 # Search directory for configurations
-search_dir="/usr/data/printer_data/config"
+search_dir="$KLIPPER_CONFIG_DIR"
+
 ########################################################################
 ########################################################################
 ########################################################################
@@ -90,7 +91,7 @@ if [ -s "${config_dir}/confirmed_macros.txt" ] && [ $(wc -l < "${config_dir}/con
     cat "${config_dir}/confirmed_macros.txt"
 else
     print_item "Searching for macros..." $RED
-    "${SCRIPT_DIR}/Macro/macro_search.sh" "${config_dir}" # Assuming macro_search.sh can take a directory as an argument
+    "${SCRIPT_DIR}/Macro/macro_search.sh"
 fi
 
 # Step 4: Insert macros

@@ -25,12 +25,12 @@ SCRIPT_DIR="$BASE_DIR/Scripts"
 # Source common functions
 . "$SCRIPT_DIR/common_functions.sh"
 
-########################################################
-########################################################
-########################################################
-
 # Directory for configuration and macros
-search_dir="/usr/data/printer_data/config"
+search_dir="$KLIPPER_CONFIG_DIR"
+
+########################################################
+########################################################
+########################################################
 
 # Ensure script is run as root
 if [ "$(id -u)" != "0" ]; then

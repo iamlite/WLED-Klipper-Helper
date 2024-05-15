@@ -122,10 +122,9 @@ show_main_menu() {
     print_menu_item "Author: $AUTHOR" "$DIM_WHITE"
     print_menu_item "Wiki: $WIKI" "$DIM_WHITE"
     # print_menu_item "GitHub: $GITHUB" "$DIM_WHITE"
-    print_spacer
     print_separator
     print_spacer
-    print_menu_item "1. WLED Setup Wizard" "$BOLD_YELLOW"
+    print_menu_item "1. Easy Setup Wizard" "$BOLD_YELLOW"
     print_spacer
     print_separator
     print_menu_item "2. Configure WLED with Moonraker" "$RED"
@@ -138,7 +137,9 @@ show_main_menu() {
     print_spacer
     print_menu_item "6. Inject WLED Macros" "$GREEN"
     print_spacer
-    print_menu_item "7. Edit Macros (not implemented yet)" "$DIM_CYAN" 
+    print_menu_item "7. Edit Macros (coming soon!)" "$DIM_CYAN" 
+    print_spacer
+    print_menu_item "8. Print Progress Macro Generator (coming soon!)" "$DIM_YELLOW"
     print_separator
     print_menu_item "Q. Quit" "$RED"
     print_separator
@@ -159,12 +160,13 @@ while true; do
     4) sh "$SCRIPT_DIR/WLED/edit_presets.sh" ;;
     5) sh "$SCRIPT_DIR/Macro/macro_search.sh" ;;
     6) sh "$SCRIPT_DIR/Macro/insert_macros.sh" ;;
-    7) sh "$SCRIPT_DIR/Macro/edit_macros.sh" ;;
+    77) sh "$SCRIPT_DIR/Macro/edit_macros.sh" ;;
+    88) sh "$SCRIPT_DIR/Macro/pmg.sh" ;;
 
     q | Q)
         print_input_item "${BLUE}Exiting...${NC}\n"
         break
         ;;
-    *) print_input_item "${RED}Invalid option, try again...${NC}\n" ;;
+    *) print_input_item "${RED}Invalid option, try something else...${NC}\n" ;;
     esac
 done

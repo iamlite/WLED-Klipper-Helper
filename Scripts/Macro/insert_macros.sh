@@ -111,6 +111,8 @@ insert_wled_update() {
 # Reading entries and processing updates
 while IFS=':' read -r file line_number content; do
     macro_name=$(echo "$content" | grep -oE '\[gcode_macro\s+\w+\]' | cut -d ' ' -f 2 | tr -d '[]')
+    clear
+    frame
     print_nospaces "Processing macro: $macro_name in file $file at line $line_number"
     case "$macro_name" in
         "START_PRINT")

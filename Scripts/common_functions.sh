@@ -4,7 +4,6 @@
 ########### VARIABLES ##########
 ################################
 
-
 VERSIONNUMBER=$(curl -s "https://raw.githubusercontent.com/iamlite/WLED-Klipper-Helper/master/VERSION")
 COMMIT_HASH=$(git rev-parse --short HEAD 2>/dev/null)
 if [ -z "$COMMIT_HASH" ]; then
@@ -15,9 +14,6 @@ fi
 AUTHOR="Tariel D. (iamlite)"
 GITHUB="https://github.com/iamlite/WLED-Klipper-Helper"
 WIKI="https://github.com/iamlite/WLED-Klipper-Helper/wiki"
-
-
-
 
 ########################################################
 #################  FIND BASE DIRECTORY #################
@@ -51,11 +47,9 @@ else
     exit 1
 fi
 
-
 ################################
 ############ COLORS ############
 ################################
-
 
 # Basic Colors
 BLACK='\033[0;30m'
@@ -120,11 +114,9 @@ BG_IWHITE='\033[0;107m'
 # No Color (to reset to default)
 NC='\033[0m'
 
-
 ###########################################
 ############ STYLING FUNCTIONS ############
 ###########################################
-
 
 print_separator() {
     local separator_length=$(stty size | awk '{print $2}')
@@ -141,16 +133,15 @@ print_separator_nospaces() {
 }
 
 print_text_separator() {
-    local text="$1"  # This captures the text to be displayed in the separator.
+    local text="$1" # This captures the text to be displayed in the separator.
     local separator_length=$(stty size | awk '{print $2}')
     local text_length=${#text}
-    local half_separator_length=$(((separator_length - text_length - 2) / 2))  # -2 for padding spaces around the text
+    local half_separator_length=$(((separator_length - text_length - 2) / 2)) # -2 for padding spaces around the text
     local separator_char="="
 
     # Print the first half of the separator, then the text, then the rest of the separator
     printf "${CYAN}%s %s %s${NC}\n" "$(printf "%${half_separator_length}s" | tr ' ' "$separator_char")" "$text" "$(printf "%${half_separator_length}s" | tr ' ' "$separator_char")"
 }
-
 
 print_menu_item() {
     local item=$1
@@ -186,7 +177,6 @@ print_ascii_line() {
     printf "${CYAN}||${NC} $1\n"
 }
 
-
 frame() {
     print_separator_nospaces
     print_spacer
@@ -199,8 +189,6 @@ frame() {
 #########################################
 ############### FUNCTIONS ###############
 #########################################
-
-
 
 confirm_proceed() {
     print_item "${BLUE}Selection: $1.${NC}\n"
@@ -216,19 +204,20 @@ confirm_proceed() {
 
 print_ascii_art() {
     local idx=0
-    
+
     for line in "    _   _  _   ___ __     _  ___   _ ___ ___ ___ ___    _  _ ___ _   ___ ___ ___  " \
                 "   | | | || | | __| _\\ __| |/ / | | | _,\\ _,\\ __| _ \\__| || | __| | | _,\\ __| _ \\ " \
                 "   | 'V' || |_| _|| v |__|   <| |_| | v_/ v_/ _|| v /__| >< | _|| |_| v_/ _|| v / " \
                 "   !_/ \\_!|___|___|__/   |_|\\_\\___|_|_| |_| |___|_|_\\  |_||_|___|___|_| |___|_|_\\ "
     do
+
         case $idx in
-            0) printf "${CYAN}||${NC}""${BOLD_BLUE}%s${NC}\n" "$line";;
-            1) printf "${CYAN}||${NC}""${BOLD_RED}%s${NC}\n" "$line";;
-            2) printf "${CYAN}||${NC}""${BOLD_CYAN}%s${NC}\n" "$line";;
-            3) printf "${CYAN}||${NC}""${BOLD_YELLOW}%s${NC}\n" "$line";;
-            4) printf "${CYAN}||${NC}""${BOLD_BLUE}%s${NC}\n" "$line";;
-            5) printf "${CYAN}||${NC}""${BOLD_MAGENTA}%s${NC}\n" "$line";;
+        0) printf "${CYAN}||${NC}""${BOLD_BLUE}%s${NC}\n" "$line" ;;
+        1) printf "${CYAN}||${NC}""${BOLD_RED}%s${NC}\n" "$line" ;;
+        2) printf "${CYAN}||${NC}""${BOLD_CYAN}%s${NC}\n" "$line" ;;
+        3) printf "${CYAN}||${NC}""${BOLD_YELLOW}%s${NC}\n" "$line" ;;
+        4) printf "${CYAN}||${NC}""${BOLD_BLUE}%s${NC}\n" "$line" ;;
+        5) printf "${CYAN}||${NC}""${BOLD_MAGENTA}%s${NC}\n" "$line" ;;
         esac
         idx=$((idx + 1))
     done

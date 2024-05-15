@@ -91,5 +91,4 @@ while [ $quit -eq 0 ]; do
     fi
 done
 
-print_item "$blue Press enter to return to the menu..."
-read dummy
+

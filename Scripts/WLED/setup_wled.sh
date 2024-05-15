@@ -169,8 +169,7 @@ else
     # Add the include line after the last include in the first sequence
     awk -v line="$include_block_end" 'NR==line {print; print "[include WLED_Macro.cfg]"; next} 1' "$PRINTER_CFG" > "$PRINTER_CFG.tmp" && mv "$PRINTER_CFG.tmp" "$PRINTER_CFG"
 
-    print_item "${GREEN}Include line for WLED_Macro.cfg added to printer.cfg successfully.${NC}"
-    print_item "${GREEN}Inserted at line: $include_block_end${NC}"
+    print_item "${GREEN}Include line for WLED_Macro.cfg added to printer.cfg successfully at line: $include_block_end"
 fi
 
 print_input_item "${GREEN}All done! Press enter to continue...${NC}\n"

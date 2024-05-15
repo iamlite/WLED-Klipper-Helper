@@ -148,19 +148,50 @@ print_spacer
 print_ascii_art
 print_spacer
 
-# Check if Git is installed and install it if not
+# Check if Git is installed
 if ! command -v git &> /dev/null
 then
     print_item "Git is not installed. Installing..." $YELLOW
-    { apt-get update && apt-get install -y git; } | while read line; do
-        print_item "$line" $YELLOW
-    done
-    if [ $? -eq 0 ]; then
+
+    # Detect package manager and install git
+    if command -v apt-get &> /dev/null; then
+        { apt-get update && apt-get install -y git; } | while read line; do
+            print_item "$line" $YELLOW
+        done
+    elif command -v yum &> /dev/null; then
+        { yum install -y git; } | while read line; do
+            print_item "$line" $YELLOW
+        done
+    elif command -v dnf &> /dev/null; then
+        { dnf install -y git; } | while read line; do
+            print_item "$line" $YELLOW
+        done
+    elif command -v pacman &> /dev/null; then
+        { pacman -Sy git; } | while read line; do
+            print_item "$line" $YELLOW
+        done
+    elif command -v zypper &> /dev/null; then
+        { zypper install -y git; } | while read line; do
+            print_item "$line" $YELLOW
+        done
+    elif command -v opkg &> /dev/null; then
+        { opkg update && opkg install git; } | while read line; do
+            print_item "$line" $YELLOW
+        done
+    else
+        print_item "No suitable package manager found. Please install Git manually." $RED
+        exit 1
+    fi
+
+    # Check if Git was installed successfully
+    if command -v git &> /dev/null; then
         print_item "Git has been installed." $GREEN
     else
         print_item "Failed to install Git." $RED
         exit 1
     fi
+else
+    print_item "Git is already installed." $GREEN
 fi
 
 # Define default installation directory and repository URL
