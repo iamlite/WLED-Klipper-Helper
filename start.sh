@@ -149,32 +149,35 @@ print_ascii_art
 print_spacer
 
 # Check if Git is installed
-if ! command -v git &> /dev/null; then
+if ! command -v git &>/dev/null; then
     print_item "Git is not installed. Installing..." $YELLOW
 
-    # Detect package manager and install git
-    if command -v apt-get &> /dev/null; then
-        apt-get update -qq && apt-get install -y git
-    elif command -v yum &> /dev/null; then
-        yum install -y -q git
-    elif command -v dnf &> /dev/null; then
-        dnf install -y -q git
-    elif command -v pacman &> /dev/null; then
-        pacman -Sy --noconfirm git
-    elif command -v zypper &> /dev/null; then
-        zypper install -y -q git
-    elif command -v opkg &> /dev/null; then
-        opkg update && opkg install git
+    # Try to identify and use the correct package manager
+    if command -v apt-get &>/dev/null; then
+        # Using apt-get to update and install git
+        apt-get update &>/dev/null
+        apt-get install -y git &>/dev/null && print_item "Git has been successfully installed." $GREEN || {
+            print_item "Failed to install Git with apt-get." $RED
+            exit 1
+        }
+    elif command -v yum &>/dev/null; then
+        yum install -y git &>/dev/null && print_item "Git has been successfully installed." $GREEN || {
+            print_item "Failed to install Git with yum." $RED
+            exit 1
+        }
+    elif command -v dnf &>/dev/null; then
+        dnf install -y git &>/dev/null && print_item "Git has been successfully installed." $GREEN || {
+            print_item "Failed to install Git with dnf." $RED
+            exit 1
+        }
+    elif command -v opkg &>/dev/null; then
+        opkg update &>/dev/null
+        opkg install git &>/dev/null && print_item "Git has been successfully installed." $GREEN || {
+            print_item "Failed to install Git with opkg." $RED
+            exit 1
+        }
     else
         print_item "No suitable package manager found. Please install Git manually." $RED
-        exit 1
-    fi
-
-    # Check if Git was installed successfully
-    if command -v git &> /dev/null; then
-        print_item "Git has been installed." $GREEN
-    else
-        print_item "Failed to install Git." $RED
         exit 1
     fi
 else
