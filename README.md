@@ -4,10 +4,12 @@ Klipper-WLED-Helper is a helper script designed to assist users in integrating W
 
 ## Features
 
-- **Configuration Management:** Check and manage Klipper configuration files.
-- **Symlink Creation:** Create necessary symlinks for WLED integration.
-- **G-code Macro Editing:** Insert calls to the WLED control macro in G-code files.
-- **WLED Control:** Automate WLED control based on printer status or events.
+- **Easy Setup Wizard:** Fully guided setup to integrate WLED with klipper/moonraker.
+- **Configuration Management:** Check, create, and manage Klipper configuration files needed for WLED integration.
+- **Symlink Creation:** Creates necessary symlinks
+- **Automated Search and Injection of Macros:** Automatically search for macros and inject them into your configuration.
+- **QOL Features:** Lots of small QOL features related to WLED
+- **Automate progress macro generation:** Automate progress macro generation macro. (Coming soon)
 
 ---
 
