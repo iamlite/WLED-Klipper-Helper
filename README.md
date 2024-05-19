@@ -16,6 +16,8 @@ WLED-Klipper-Helper is a helper script designed to assist users in integrating W
 
 ## Installation
 
+Please note that you need to have Guilouz helper script installed to run curl. You can get it [here](https://github.com/Guilouz/Creality-Helper-Script)!
+
 For Creality K1, K1C, (Probably) K2, Ender 3 V3 KE, and Ender 3 V3 Core XZ, as well as anything using the creality nebula pad
 
 ```shell
