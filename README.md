@@ -15,8 +15,8 @@ WLED-Klipper-Helper is a helper script designed to assist users in integrating W
 
 ##### Planned Features
 
-- **Automate progress macro generation:** Automate progress macro generation macro.
-- **Add ability to edit macros:** Add ability to edit macros.
+- **Automate progress macro generation:** Some kind of way to automate the generation of the progress macro that will update WLED status based on print progress. 
+- **Add ability to edit macros:**
 
 ---
 
