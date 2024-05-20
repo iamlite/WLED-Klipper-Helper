@@ -17,7 +17,7 @@ WLED-Klipper-Helper is a helper script designed to assist users in integrating W
 ## Installation
 
 For Creality K1, K1C, (Probably) K2, Ender 3 V3 KE, and Ender 3 V3 Core XZ, as well as anything using the creality nebula pad
-Please note that you need to have Guilouz helper script installed to run curl. You can get it [here](https://github.com/Guilouz/Creality-Helper-Script)!
+Please note that you need to have Guilouz helper script installed to run curl properly. You can get it [here](https://github.com/Guilouz/Creality-Helper-Script).
 
 ```shell
 curl -sSL "https://raw.githubusercontent.com/iamlite/WLED-Klipper-Helper/main/start.sh" | sudo sh
@@ -31,6 +31,8 @@ curl -sSL "https://raw.githubusercontent.com/iamlite/WLED-Klipper-Helper/main/st
 
 This will install the script and set everything up for you.
 
+If the method above doesn't work, you can clone the repository and run the script manually.
+
 ---
 
 ## Quick Start
@@ -43,11 +45,7 @@ To start the script, run:
 sh /usr/data/WLED-Klipper-Helper/Scripts/menu.sh
 ```
 
-or if you installed it in a custom path, run:
-
-```shell
-sh /YOUR/INSTALL/PATH/Scripts/menu.sh
-```
+If you installed in a different directory, change the path to suit your needs. 
 
 ### Step 2
 
