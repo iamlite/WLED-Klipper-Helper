@@ -2,6 +2,9 @@
 
 WLED-Klipper-Helper is a helper script designed to assist users in integrating WLED instances with Klipper & Moonraker for 3D printers. The script manages configuration files, creates symlinks, and edits G-code macro files to insert calls to a macro that controls LEDs via WLED based on printer statuses or events.
 
+[Discord](https://discord.gg/uYBuFXUmcU)
+
+
 ## Features
 
 - **Easy Setup Wizard:** Fully guided setup to integrate WLED with klipper/moonraker.
@@ -68,6 +71,7 @@ Shiny lights!
 ## Contributing
 
 Contributions are welcome! Please fork the repository and submit a pull request with your improvements.
+Join our [Discord](https://discord.gg/uYBuFXUmcU)
 
 ---
 
