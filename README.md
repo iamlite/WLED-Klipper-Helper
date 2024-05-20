@@ -8,13 +8,19 @@ WLED-Klipper-Helper is a helper script designed to assist users in integrating W
 - **Configuration Management:** Check, create, and manage Klipper configuration files needed for WLED integration.
 - **Symlink Creation:** Creates necessary symlinks
 - **Automated Search and Injection of Macros:** Automatically search for macros and inject them into your configuration.
-- **QOL Features:** Lots of small QOL features related to WLED
 - **Moonraker Update Manager:** Update manager built into your UI to keep script up to date.
-- **Automate progress macro generation:** Automate progress macro generation macro. (Coming soon)
+- **QOL Features:** Lots of small QOL features related to WLED
 
 ---
 
-## Installation
+##### Planned Features
+
+- **Automate progress macro generation:** Automate progress macro generation macro.
+- **Add ability to edit macros:** Add ability to edit macros.
+
+---
+
+### Installation
 
 For Creality K1, K1C, (Probably) K2, Ender 3 V3 KE, and Ender 3 V3 Core XZ, as well as anything using the creality nebula pad
 Please note that you need to have Guilouz helper script installed to run curl properly. You can get it [here](https://github.com/Guilouz/Creality-Helper-Script).
@@ -35,9 +41,9 @@ If the method above doesn't work, you can clone the repository and run the scrip
 
 ---
 
-## Quick Start
+### Quick Start
 
-### Step 1
+#### Step 1
 
 To start the script, run:
 
@@ -47,13 +53,13 @@ sh /usr/data/WLED-Klipper-Helper/Scripts/menu.sh
 
 If you installed in a different directory, change the path to suit your needs. 
 
-### Step 2
+#### Step 2
 
 First run will prompt you to configure the klipper config directory.
 
 Select (1) **Easy Setup Wizard** and follow the instructions.
 
-### Step 3
+#### Step 3
 
 Shiny lights!
 
