@@ -69,7 +69,6 @@ Shiny lights!
 
 Contributions are welcome! Please fork the repository and submit a pull request with your improvements.
 
-
 ## Acknowledgements
 
 - [WLED](https://github.com/Aircoookie/WLED)
