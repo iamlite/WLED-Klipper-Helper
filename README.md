@@ -1,12 +1,19 @@
+<div align="center">
+<img align="center" width="30%" alt="image" src="/assets/logo.png">
+</div>
+
 # WLED-Klipper-Helper
 
-WLED-Klipper-Helper is a helper script designed to assist users in integrating WLED instances with Klipper & Moonraker for 3D printers. The script manages configuration files, creates symlinks, and edits G-code macro files to insert calls to a macro that controls LEDs via WLED based on printer statuses or events.
-
+<div align="center">
 ![Downloads](https://img.shields.io/github/downloads/iamlite/WLED-Klipper-Helper/total?style=for-the-badge)
 ![GitHub stars](https://img.shields.io/github/stars/iamlite/WLED-Klipper-Helper?style=for-the-badge)
 ![GitHub Release](https://img.shields.io/github/v/release/iamlite/WLED-Klipper-Helper?style=for-the-badge)
 ![GitHub last commit](https://img.shields.io/github/last-commit/iamlite/WLED-Klipper-Helper?style=for-the-badge)
 ![Discord](https://img.shields.io/discord/640575167772491786?style=for-the-badge&logo=discord&label=Discord)
+
+</div>
+
+WLED-Klipper-Helper is a helper script designed to assist users in integrating WLED instances with Klipper & Moonraker for 3D printers. The script manages configuration files, creates symlinks, and edits G-code macro files to insert calls to a macro that controls LEDs via WLED based on printer statuses or events.
 
 ## Features
 
