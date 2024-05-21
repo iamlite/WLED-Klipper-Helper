@@ -1,6 +1,9 @@
 <div align="center">
 <img align="center" width="75%" alt="logo" src="/assets/logo.png">
 </div>
+
+---
+
 <div align="center">
 
   <img src="https://vbr.nathanchung.dev/badge?page_id=iamlite.wledklipperhelper.visitor-badge&style=for-the-badge&color=blue">
@@ -11,7 +14,6 @@
 </div>
 
 ---
-
 
 WLED-Klipper-Helper is a helper script designed to assist users in integrating WLED instances with Klipper & Moonraker for 3D printers. The script manages configuration files, creates symlinks, and edits G-code macro files to insert calls to a macro that controls LEDs via WLED based on printer statuses or events.
 
