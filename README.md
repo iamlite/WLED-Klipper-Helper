@@ -10,7 +10,10 @@
   <img src="https://img.shields.io/github/stars/iamlite/WLED-Klipper-Helper?style=for-the-badge&color=yellow" alt="stars"/>
   <img src="https://img.shields.io/github/v/release/iamlite/WLED-Klipper-Helper?style=for-the-badge&color=red" alt="version"/>
   <img src="https://img.shields.io/github/last-commit/iamlite/WLED-Klipper-Helper?style=for-the-badge" alt="last-commit"/>
-  <img src="https://img.shields.io/discord/640575167772491786?style=for-the-badge&logo=discord&label=Discord&color=gold&link=https%3A%2F%2Fdiscord.gg%2FuYBuFXUmcU" alt="Discord"/>
+  <a href="https://discord.gg/uYBuFXUmcU">
+    <img src="https://img.shields.io/discord/640575167772491786?style=for-the-badge&logo=discord&label=Discord&color=gold" alt="Discord"/>
+  </a>
+
 </div>
 
 ---
