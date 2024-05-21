@@ -6,12 +6,12 @@
 
 <div align="center">
 
-  <img src="https://vbr.nathanchung.dev/badge?page_id=iamlite.wledklipperhelper.visitor-badge&style=for-the-badge&color=blue" alt="visitors" />
-  <img src="https://img.shields.io/github/stars/iamlite/WLED-Klipper-Helper?style=for-the-badge&color=yellow" alt="stars"/>
-  <img src="https://img.shields.io/github/v/release/iamlite/WLED-Klipper-Helper?style=for-the-badge&color=red" alt="version"/>
-  <img src="https://img.shields.io/github/last-commit/iamlite/WLED-Klipper-Helper?style=for-the-badge" alt="last-commit"/>
+  <img src="https://vbr.nathanchung.dev/badge?page_id=iamlite.wledklipperhelper.visitor-badge&style=for-the-badge&color=blue" alt="visitors" style="margin: 5px;" />
+  <img src="https://img.shields.io/github/stars/iamlite/WLED-Klipper-Helper?style=for-the-badge&color=yellow" alt="stars" style="margin: 5px;" />
+  <img src="https://img.shields.io/github/v/release/iamlite/WLED-Klipper-Helper?style=for-the-badge&color=red" alt="version" style="margin: 5px;" />
+  <img src="https://img.shields.io/github/last-commit/iamlite/WLED-Klipper-Helper?style=for-the-badge" alt="last-commit" style="margin: 5px;" />
   <a href="https://discord.gg/uYBuFXUmcU">
-    <img src="https://img.shields.io/discord/640575167772491786?style=for-the-badge&logo=discord&label=Discord&color=gold" alt="Discord"/>
+    <img src="https://img.shields.io/discord/640575167772491786?style=for-the-badge&logo=discord&label=Discord&color=gold" alt="Discord" style="margin: 5px;" />
   </a>
 
 </div>
