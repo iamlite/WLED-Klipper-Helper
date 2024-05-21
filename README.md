@@ -6,11 +6,11 @@
 
 <div align="center">
 
-  <img src="https://vbr.nathanchung.dev/badge?page_id=iamlite.wledklipperhelper.visitor-badge&style=for-the-badge&color=blue">
-  <img src="https://img.shields.io/github/stars/iamlite/WLED-Klipper-Helper?style=for-the-badge&color=yellow" />
-  <img src="https://img.shields.io/github/v/release/iamlite/WLED-Klipper-Helper?style=for-the-badge&color=red" />
-  <img src="https://img.shields.io/github/last-commit/iamlite/WLED-Klipper-Helper?style=for-the-badge" />
-  <img src="https://img.shields.io/discord/640575167772491786?style=for-the-badge&logo=discord&label=Discord&color=gold&link=https%3A%2F%2Fdiscord.gg%2FuYBuFXUmcU" />
+  <img src="https://vbr.nathanchung.dev/badge?page_id=iamlite.wledklipperhelper.visitor-badge&style=for-the-badge&color=blue" alt="visitors" />
+  <img src="https://img.shields.io/github/stars/iamlite/WLED-Klipper-Helper?style=for-the-badge&color=yellow" alt="stars"/>
+  <img src="https://img.shields.io/github/v/release/iamlite/WLED-Klipper-Helper?style=for-the-badge&color=red" alt="version"/>
+  <img src="https://img.shields.io/github/last-commit/iamlite/WLED-Klipper-Helper?style=for-the-badge" alt="last-commit"/>
+  <img src="https://img.shields.io/discord/640575167772491786?style=for-the-badge&logo=discord&label=Discord&color=gold&link=https%3A%2F%2Fdiscord.gg%2FuYBuFXUmcU" alt="Discord"/>
 </div>
 
 ---
@@ -30,7 +30,7 @@ WLED-Klipper-Helper is a helper script designed to assist users in integrating W
 
 #### Planned Features
 
-- 🔥**Automate progress macro generation -** Some kind of way to automate the generation of the progress macro that will update WLED status based on print progress. 
+- 🔥**Automate progress macro generation -** Some kind of way to automate the generation of the progress macro that will update WLED status based on print progress.
 - **Add ability to edit macros**
 
 ---
@@ -66,7 +66,7 @@ To start the script, run:
 sh /usr/data/WLED-Klipper-Helper/Scripts/menu.sh
 ```
 
-If you installed in a different directory, change the path to suit your needs. 
+If you installed in a different directory, change the path to suit your needs.
 
 #### Step 2
 
