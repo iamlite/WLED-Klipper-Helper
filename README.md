@@ -2,11 +2,12 @@
 <img align="center" width="75%" alt="logo" src="/assets/logo.png">
 </div>
 <div align="center">
-  <img src="https://img.shields.io/github/downloads/iamlite/WLED-Klipper-Helper/total?style=for-the-badge" />
-  <img src="https://img.shields.io/github/stars/iamlite/WLED-Klipper-Helper?style=for-the-badge" />
-  <img src="https://img.shields.io/github/v/release/iamlite/WLED-Klipper-Helper?style=for-the-badge" />
+
+  <img src="https://vbr.nathanchung.dev/badge?page_id=iamlite.wledklipperhelper.visitor-badge&style=for-the-badge&color=blue">
+  <img src="https://img.shields.io/github/stars/iamlite/WLED-Klipper-Helper?style=for-the-badge&color=yellow" />
+  <img src="https://img.shields.io/github/v/release/iamlite/WLED-Klipper-Helper?style=for-the-badge&color=red" />
   <img src="https://img.shields.io/github/last-commit/iamlite/WLED-Klipper-Helper?style=for-the-badge" />
-  <img src="https://img.shields.io/discord/640575167772491786?style=for-the-badge&logo=discord&label=Discord" />
+  <img src="https://img.shields.io/discord/640575167772491786?style=for-the-badge&logo=discord&label=Discord&color=gold&link=https%3A%2F%2Fdiscord.gg%2FuYBuFXUmcU" />
 </div>
 
 ---
@@ -14,7 +15,7 @@
 
 WLED-Klipper-Helper is a helper script designed to assist users in integrating WLED instances with Klipper & Moonraker for 3D printers. The script manages configuration files, creates symlinks, and edits G-code macro files to insert calls to a macro that controls LEDs via WLED based on printer statuses or events.
 
-## Features
+#### Features
 
 - **Easy Setup Wizard:** Fully guided setup to integrate WLED with klipper/moonraker.
 - **Configuration Management:** Check, create, and manage Klipper configuration files needed for WLED integration.
@@ -25,7 +26,7 @@ WLED-Klipper-Helper is a helper script designed to assist users in integrating W
 
 ---
 
-##### Planned Features
+#### Planned Features
 
 - 🔥**Automate progress macro generation -** Some kind of way to automate the generation of the progress macro that will update WLED status based on print progress. 
 - **Add ability to edit macros**
